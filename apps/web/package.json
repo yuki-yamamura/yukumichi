@@ -8,6 +8,7 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy --env production",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env production",
     "start": "next start",
+    "check-types": "tsc --noEmit",
     "lint": "eslint"
   },
   "dependencies": {
