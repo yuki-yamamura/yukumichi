@@ -1,0 +1,26 @@
+{
+  "name": "@sanpo/api",
+  "exports": {
+    ".": "./src/app.ts"
+  },
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node24 --format=cjs --alias:@=./src src/lambda.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.11",
+    "@hono/zod-validator": "^0.7.6",
+    "hono": "^4.12.5",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "24.11.0",
+    "esbuild": "^0.27.3",
+    "tsx": "^4.21.0",
+    "typescript": "5.9.3"
+  }
+}
