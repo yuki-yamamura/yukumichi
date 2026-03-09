@@ -1,6 +1,6 @@
 import { hc } from "hono/client";
 
-import type { AppType } from "../../../api/src/app";
+import type { AppType } from "@sanpo/api";
 
 export default async function Home() {
   const client = hc<AppType>("http://localhost:3010");
