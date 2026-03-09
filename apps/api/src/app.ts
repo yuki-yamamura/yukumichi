@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 
-import { helloRoute } from "@/presentation/routes/hello";
+import { helloRoute } from "./presentation/routes/hello";
 
 const app = new Hono();
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello, Hono!" });
-});
-
-const route = app.route("/", helloRoute);
+const route = app
+  .get("/", (c) => {
+    return c.json({ message: "Hello, Hono!" });
+  })
+  .route("/", helloRoute);
 
 type AppType = typeof route;
 
