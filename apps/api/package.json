@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node24 src/lambda.ts",
+    "check-types": "tsc --noEmit"
+  }
+}
