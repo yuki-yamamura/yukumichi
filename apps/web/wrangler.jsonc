@@ -12,6 +12,7 @@
     "production": {
       "vars": {
         "ENVIRONMENT": "production",
+        "API_BASE_URL": "https://pxvlaar5s42mkmb7rkg5gric2y0hrrxq.lambda-url.ap-northeast-1.on.aws",
       },
     },
   },
