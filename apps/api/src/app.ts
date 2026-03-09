@@ -14,5 +14,5 @@ const route = app
 
 type AppType = typeof route;
 
-export default app;
+export default route;
 export type { AppType };
