@@ -1,13 +1,15 @@
-import { hc } from "hono/client";
-
-import type { AppType } from "@sanpo/api";
+import { fetchClient } from "../libs/hono";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const client = hc<AppType>(process.env.API_BASE_URL!);
-  const res = await client.hello.$get({ query: { name: "yuki" } });
+  const res = await fetchClient.hello.$get({ query: { name: "yuki" } });
   const { message } = await res.json();
 
-  return <div>{message}</div>;
+  return (
+    <main>
+      <h1>Hello World App</h1>
+      <p>{message}</p>
+    </main>
+  );
 }
