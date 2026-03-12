@@ -6,13 +6,13 @@ export const publicRouteSpots = pgTable(
   "public_route_spots",
   {
     id: uuid().defaultRandom().primaryKey(),
-    routeId: uuid()
+    publicRouteId: uuid()
       .notNull()
       .references(() => publicRoutes.id),
     spotId: uuid()
       .notNull()
       .references(() => spots.id),
-    order: integer().notNull(),
+    sortOrder: integer().notNull(),
   },
-  (t) => [unique().on(t.routeId, t.spotId)],
+  (t) => [unique().on(t.publicRouteId, t.spotId)],
 );

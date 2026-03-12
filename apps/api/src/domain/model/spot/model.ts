@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UserId } from "@/domain/model/user/model";
 
-export const SpotId = z.uuid().brand<"SpotId">();
+export const SpotId = z.guid().brand<"SpotId">();
 export type SpotId = z.infer<typeof SpotId>;
 
 export const Spot = z.object({

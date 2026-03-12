@@ -22,16 +22,16 @@ export function createPublicRouteRepository(): PublicRouteRepository {
         .select({
           route: publicRoutes,
           spot: spots,
-          order: publicRouteSpots.order,
+          order: publicRouteSpots.sortOrder,
         })
         .from(publicRoutes)
         .innerJoin(
           publicRouteSpots,
-          eq(publicRoutes.id, publicRouteSpots.routeId),
+          eq(publicRoutes.id, publicRouteSpots.publicRouteId),
         )
         .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
         .where(eq(publicRoutes.id, routeId as string))
-        .orderBy(publicRouteSpots.order);
+        .orderBy(publicRouteSpots.sortOrder);
 
       if (rows.length === 0) return undefined;
 
@@ -48,24 +48,24 @@ export function createPublicRouteRepository(): PublicRouteRepository {
         .select({
           route: publicRoutes,
           spot: spots,
-          order: publicRouteSpots.order,
+          order: publicRouteSpots.sortOrder,
           bookmarkId: bookmarks.id,
         })
         .from(publicRoutes)
         .innerJoin(
           publicRouteSpots,
-          eq(publicRoutes.id, publicRouteSpots.routeId),
+          eq(publicRoutes.id, publicRouteSpots.publicRouteId),
         )
         .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
         .leftJoin(
           bookmarks,
           and(
-            eq(bookmarks.routeId, publicRoutes.id),
+            eq(bookmarks.publicRouteId, publicRoutes.id),
             eq(bookmarks.userId, userId as string),
           ),
         )
         .where(eq(publicRoutes.id, routeId as string))
-        .orderBy(publicRouteSpots.order);
+        .orderBy(publicRouteSpots.sortOrder);
 
       if (rows.length === 0) return undefined;
 

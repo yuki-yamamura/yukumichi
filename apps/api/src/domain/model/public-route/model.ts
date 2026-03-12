@@ -2,13 +2,13 @@ import { z } from "zod";
 import { UserId } from "@/domain/model/user/model";
 import { Spot } from "@/domain/model/spot/model";
 
-export const PublicRouteId = z.uuid().brand<"PublicRouteId">();
+export const PublicRouteId = z.guid().brand<"PublicRouteId">();
 export type PublicRouteId = z.infer<typeof PublicRouteId>;
 
 export const PublicRoute = z.object({
   id: PublicRouteId,
   userId: UserId,
-  name: z.string(),
+  title: z.string(),
   description: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),

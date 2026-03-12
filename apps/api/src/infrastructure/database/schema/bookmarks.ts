@@ -9,10 +9,10 @@ export const bookmarks = pgTable(
     userId: uuid()
       .notNull()
       .references(() => users.id),
-    routeId: uuid()
+    publicRouteId: uuid()
       .notNull()
       .references(() => publicRoutes.id),
     createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
   },
-  (t) => [unique().on(t.userId, t.routeId)],
+  (t) => [unique().on(t.userId, t.publicRouteId)],
 );
