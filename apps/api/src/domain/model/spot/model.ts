@@ -1,20 +1,16 @@
 import { z } from "zod";
-import { UserId } from "@/domain/model/user/model";
+import type { UserId } from "@/domain/model/user/model";
 
 export const SpotId = z.guid().brand<"SpotId">();
+
 export type SpotId = z.infer<typeof SpotId>;
 
-export const Spot = z.object({
-  id: SpotId,
-  userId: UserId,
-  name: z.string(),
-  latitude: z.number(),
-  longitude: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-export type Spot = z.infer<typeof Spot>;
-
-export function createSpot(input: unknown): Spot {
-  return Spot.parse(input);
-}
+export type Spot = {
+  id: SpotId;
+  userId: UserId;
+  name: string;
+  latitude: number;
+  longitude: number;
+  createdAt: Date;
+  updatedAt: Date;
+};

@@ -5,6 +5,7 @@ import type { UserId } from "@/domain/model/user/model";
 export function getPublicRouteDetailForUser(deps: {
   publicRouteRepository: PublicRouteRepository;
 }) {
-  return (routeId: PublicRouteId, userId: UserId) =>
-    deps.publicRouteRepository.findDetailForUser(routeId, userId);
+  return function execute(routeId: PublicRouteId, userId: UserId) {
+    return deps.publicRouteRepository.findDetailForUser(routeId, userId);
+  };
 }

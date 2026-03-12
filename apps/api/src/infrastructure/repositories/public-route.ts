@@ -6,13 +6,13 @@ import {
   publicRoutes,
   spots,
 } from "../database/schema";
-import { createSpot } from "@/domain/model/spot/model";
-import {
-  createPublicRouteDetail,
-  createPersonalizedRouteDetail,
+import type { Spot } from "@/domain/model/spot/model";
+import type {
+  PublicRouteDetail,
+  PublicRouteId,
+  PersonalizedRouteDetail,
 } from "@/domain/model/public-route/model";
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
-import type { PublicRouteId } from "@/domain/model/public-route/model";
 import type { UserId } from "@/domain/model/user/model";
 
 export function createPublicRouteRepository(): PublicRouteRepository {
@@ -37,10 +37,10 @@ export function createPublicRouteRepository(): PublicRouteRepository {
 
       const { route } = rows[0];
 
-      return createPublicRouteDetail({
+      return {
         ...route,
-        spots: rows.map((r) => createSpot(r.spot)),
-      });
+        spots: rows.map((r) => r.spot),
+      } as PublicRouteDetail;
     },
 
     async findDetailForUser(routeId: PublicRouteId, userId: UserId) {
@@ -72,11 +72,11 @@ export function createPublicRouteRepository(): PublicRouteRepository {
       const { route } = rows[0];
       const isBookmarked = rows[0].bookmarkId !== null;
 
-      return createPersonalizedRouteDetail({
+      return {
         ...route,
-        spots: rows.map((r) => createSpot(r.spot)),
+        spots: rows.map((r) => r.spot) as Spot[],
         isBookmarked,
-      });
+      } as PersonalizedRouteDetail;
     },
   };
 }
