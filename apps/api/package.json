@@ -9,16 +9,23 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node24 --format=cjs --alias:@=./src src/lambda.ts",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.11",
     "@hono/zod-validator": "^0.7.6",
+    "drizzle-orm": "^0.45.1",
     "hono": "^4.12.5",
+    "postgres": "^3.4.8",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "24.11.0",
+    "@types/pg": "^8.18.0",
+    "drizzle-kit": "^0.31.9",
     "esbuild": "^0.27.3",
     "tsx": "^4.21.0",
     "typescript": "5.9.3"
