@@ -1,5 +1,4 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "../database/client";
 import {
   bookmarks,
   publicRouteSpots,
@@ -11,11 +10,12 @@ import {
   createPersonalizedRouteDetail,
 } from "@/domain/model/public-route/model";
 import { createSpot } from "@/domain/model/spot/model";
+import type { Database } from "../database/client";
 import type { PublicRouteId } from "@/domain/model/public-route/model";
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
 import type { UserId } from "@/domain/model/user/model";
 
-export function createPublicRouteRepository(): PublicRouteRepository {
+export function createPublicRouteRepository(db: Database): PublicRouteRepository {
   return {
     async findDetail(routeId: PublicRouteId) {
       const rows = await db
