@@ -1,15 +1,16 @@
 import { Hono } from "hono";
-import { ListSpotsByUserUseCase } from "@/application/usecase/spot/list-by-user";
-import { DrizzleSpotRepository } from "@/infrastructure/repositories/spot";
+import { UserId } from "@/domain/model/user/model";
+import { listSpotsByUser } from "@/application/usecase/spot/list-by-user";
+import { createSpotRepository } from "@/infrastructure/repositories/spot";
 
 const app = new Hono();
 
-const spotRepository = new DrizzleSpotRepository();
-const listSpotsByUser = new ListSpotsByUserUseCase(spotRepository);
+const spotRepository = createSpotRepository();
+const listSpots = listSpotsByUser({ spotRepository });
 
 export const spotsRoute = app.get("/users/:userId/spots", async (c) => {
-  const userId = c.req.param("userId");
-  const spots = await listSpotsByUser.execute(userId);
+  const userId = UserId.parse(c.req.param("userId"));
+  const spots = await listSpots(userId);
 
   return c.json(spots);
 });

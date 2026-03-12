@@ -1,20 +1,20 @@
 import { Hono } from "hono";
-import { GetPublicRouteWithBookmarkUseCase } from "@/application/usecase/public-route/get-with-bookmark";
-import { GetPublicRouteWithSpotsUseCase } from "@/application/usecase/public-route/get-with-spots";
-import { DrizzlePublicRouteRepository } from "@/infrastructure/repositories/public-route";
+import { PublicRouteId } from "@/domain/model/public-route/model";
+import { UserId } from "@/domain/model/user/model";
+import { getPublicRouteDetail } from "@/application/usecase/public-route/get-detail";
+import { getPublicRouteDetailForUser } from "@/application/usecase/public-route/get-detail-for-user";
+import { createPublicRouteRepository } from "@/infrastructure/repositories/public-route";
 
 const app = new Hono();
 
-const publicRouteRepository = new DrizzlePublicRouteRepository();
-const getWithSpots = new GetPublicRouteWithSpotsUseCase(publicRouteRepository);
-const getWithBookmark = new GetPublicRouteWithBookmarkUseCase(
-  publicRouteRepository,
-);
+const publicRouteRepository = createPublicRouteRepository();
+const getDetail = getPublicRouteDetail({ publicRouteRepository });
+const getDetailForUser = getPublicRouteDetailForUser({ publicRouteRepository });
 
 export const publicRoutesRoute = app
   .get("/public-routes/:routeId", async (c) => {
-    const routeId = c.req.param("routeId");
-    const route = await getWithSpots.execute(routeId);
+    const routeId = PublicRouteId.parse(c.req.param("routeId"));
+    const route = await getDetail(routeId);
 
     if (!route) {
       return c.json({ error: "Route not found" }, 404);
@@ -23,14 +23,10 @@ export const publicRoutesRoute = app
     return c.json(route);
   })
   .get("/public-routes/:routeId/with-bookmark", async (c) => {
-    const routeId = c.req.param("routeId");
-    const userId = c.req.query("userId");
+    const routeId = PublicRouteId.parse(c.req.param("routeId"));
+    const userId = UserId.parse(c.req.query("userId"));
 
-    if (!userId) {
-      return c.json({ error: "userId query parameter is required" }, 400);
-    }
-
-    const route = await getWithBookmark.execute(routeId, userId);
+    const route = await getDetailForUser(routeId, userId);
 
     if (!route) {
       return c.json({ error: "Route not found" }, 404);

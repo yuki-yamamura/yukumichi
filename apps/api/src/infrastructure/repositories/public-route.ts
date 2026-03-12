@@ -1,78 +1,82 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../database/client";
-import { bookmarks, publicRouteSpots, publicRoutes, spots } from "../database/schema";
+import {
+  bookmarks,
+  publicRouteSpots,
+  publicRoutes,
+  spots,
+} from "../database/schema";
+import { createSpot } from "@/domain/model/spot/model";
+import {
+  createPublicRouteDetail,
+  createPersonalizedRouteDetail,
+} from "@/domain/model/public-route/model";
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
-import type {
-  PublicRouteWithBookmark,
-  PublicRouteWithSpots,
-} from "@/domain/model/public-route/type";
-import type { Spot } from "@/domain/model/spot/type";
+import type { PublicRouteId } from "@/domain/model/public-route/model";
+import type { UserId } from "@/domain/model/user/model";
 
-export class DrizzlePublicRouteRepository implements PublicRouteRepository {
-  async findWithSpots(
-    routeId: string,
-  ): Promise<PublicRouteWithSpots | undefined> {
-    const rows = await db
-      .select({
-        route: publicRoutes,
-        spot: spots,
-        order: publicRouteSpots.order,
-      })
-      .from(publicRoutes)
-      .innerJoin(
-        publicRouteSpots,
-        eq(publicRoutes.id, publicRouteSpots.routeId),
-      )
-      .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
-      .where(eq(publicRoutes.id, routeId))
-      .orderBy(publicRouteSpots.order);
+export function createPublicRouteRepository(): PublicRouteRepository {
+  return {
+    async findDetail(routeId: PublicRouteId) {
+      const rows = await db
+        .select({
+          route: publicRoutes,
+          spot: spots,
+          order: publicRouteSpots.order,
+        })
+        .from(publicRoutes)
+        .innerJoin(
+          publicRouteSpots,
+          eq(publicRoutes.id, publicRouteSpots.routeId),
+        )
+        .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
+        .where(eq(publicRoutes.id, routeId as string))
+        .orderBy(publicRouteSpots.order);
 
-    if (rows.length === 0) return undefined;
+      if (rows.length === 0) return undefined;
 
-    const { route } = rows[0];
+      const { route } = rows[0];
 
-    return {
-      ...route,
-      spots: rows.map((r): Spot => r.spot),
-    };
-  }
+      return createPublicRouteDetail({
+        ...route,
+        spots: rows.map((r) => createSpot(r.spot)),
+      });
+    },
 
-  async findWithSpotsAndBookmark(
-    routeId: string,
-    userId: string,
-  ): Promise<PublicRouteWithBookmark | undefined> {
-    const rows = await db
-      .select({
-        route: publicRoutes,
-        spot: spots,
-        order: publicRouteSpots.order,
-        bookmarkId: bookmarks.id,
-      })
-      .from(publicRoutes)
-      .innerJoin(
-        publicRouteSpots,
-        eq(publicRoutes.id, publicRouteSpots.routeId),
-      )
-      .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
-      .leftJoin(
-        bookmarks,
-        and(
-          eq(bookmarks.routeId, publicRoutes.id),
-          eq(bookmarks.userId, userId),
-        ),
-      )
-      .where(eq(publicRoutes.id, routeId))
-      .orderBy(publicRouteSpots.order);
+    async findDetailForUser(routeId: PublicRouteId, userId: UserId) {
+      const rows = await db
+        .select({
+          route: publicRoutes,
+          spot: spots,
+          order: publicRouteSpots.order,
+          bookmarkId: bookmarks.id,
+        })
+        .from(publicRoutes)
+        .innerJoin(
+          publicRouteSpots,
+          eq(publicRoutes.id, publicRouteSpots.routeId),
+        )
+        .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
+        .leftJoin(
+          bookmarks,
+          and(
+            eq(bookmarks.routeId, publicRoutes.id),
+            eq(bookmarks.userId, userId as string),
+          ),
+        )
+        .where(eq(publicRoutes.id, routeId as string))
+        .orderBy(publicRouteSpots.order);
 
-    if (rows.length === 0) return undefined;
+      if (rows.length === 0) return undefined;
 
-    const { route } = rows[0];
-    const isBookmarked = rows[0].bookmarkId !== null;
+      const { route } = rows[0];
+      const isBookmarked = rows[0].bookmarkId !== null;
 
-    return {
-      ...route,
-      spots: rows.map((r): Spot => r.spot),
-      isBookmarked,
-    };
-  }
+      return createPersonalizedRouteDetail({
+        ...route,
+        spots: rows.map((r) => createSpot(r.spot)),
+        isBookmarked,
+      });
+    },
+  };
 }

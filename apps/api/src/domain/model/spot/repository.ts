@@ -1,5 +1,6 @@
-import type { Spot } from "./type";
+import type { UserId } from "@/domain/model/user/model";
+import type { Spot } from "./model";
 
-export interface SpotRepository {
-  findByUserId(userId: string): Promise<Spot[]>;
-}
+export type SpotRepository = {
+  findByUserId: (userId: UserId) => Promise<Spot[]>;
+};
