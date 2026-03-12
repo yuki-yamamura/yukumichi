@@ -14,3 +14,7 @@ export type Spot = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export function createSpot(params: Spot): Spot {
+  return params;
+}

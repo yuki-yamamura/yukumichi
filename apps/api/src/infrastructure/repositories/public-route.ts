@@ -6,12 +6,12 @@ import {
   publicRoutes,
   spots,
 } from "../database/schema";
-import type { Spot } from "@/domain/model/spot/model";
-import type {
-  PublicRouteDetail,
-  PublicRouteId,
-  PersonalizedRouteDetail,
+import {
+  createPublicRouteDetail,
+  createPersonalizedRouteDetail,
 } from "@/domain/model/public-route/model";
+import { createSpot } from "@/domain/model/spot/model";
+import type { PublicRouteId } from "@/domain/model/public-route/model";
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
 import type { UserId } from "@/domain/model/user/model";
 
@@ -30,17 +30,17 @@ export function createPublicRouteRepository(): PublicRouteRepository {
           eq(publicRoutes.id, publicRouteSpots.publicRouteId),
         )
         .innerJoin(spots, eq(publicRouteSpots.spotId, spots.id))
-        .where(eq(publicRoutes.id, routeId as string))
+        .where(eq(publicRoutes.id, routeId))
         .orderBy(publicRouteSpots.sortOrder);
 
       if (rows.length === 0) return undefined;
 
       const { route } = rows[0];
 
-      return {
+      return createPublicRouteDetail({
         ...route,
-        spots: rows.map((r) => r.spot),
-      } as PublicRouteDetail;
+        spots: rows.map((r) => createSpot(r.spot)),
+      });
     },
 
     async findDetailForUser(routeId: PublicRouteId, userId: UserId) {
@@ -61,10 +61,10 @@ export function createPublicRouteRepository(): PublicRouteRepository {
           bookmarks,
           and(
             eq(bookmarks.publicRouteId, publicRoutes.id),
-            eq(bookmarks.userId, userId as string),
+            eq(bookmarks.userId, userId),
           ),
         )
-        .where(eq(publicRoutes.id, routeId as string))
+        .where(eq(publicRoutes.id, routeId))
         .orderBy(publicRouteSpots.sortOrder);
 
       if (rows.length === 0) return undefined;
@@ -72,11 +72,11 @@ export function createPublicRouteRepository(): PublicRouteRepository {
       const { route } = rows[0];
       const isBookmarked = rows[0].bookmarkId !== null;
 
-      return {
+      return createPersonalizedRouteDetail({
         ...route,
-        spots: rows.map((r) => r.spot) as Spot[],
+        spots: rows.map((r) => createSpot(r.spot)),
         isBookmarked,
-      } as PersonalizedRouteDetail;
+      });
     },
   };
 }

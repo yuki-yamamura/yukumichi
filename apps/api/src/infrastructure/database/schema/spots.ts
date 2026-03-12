@@ -5,11 +5,13 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import type { SpotId } from "@/domain/model/spot/model";
+import type { UserId } from "@/domain/model/user/model";
 import { users } from "./users";
 
 export const spots = pgTable("spots", {
-  id: uuid().defaultRandom().primaryKey(),
-  userId: uuid()
+  id: uuid().$type<SpotId>().defaultRandom().primaryKey(),
+  userId: uuid().$type<UserId>()
     .notNull()
     .references(() => users.id),
   name: text().notNull(),

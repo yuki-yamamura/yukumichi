@@ -22,3 +22,11 @@ export type PublicRouteDetail = PublicRoute & {
 export type PersonalizedRouteDetail = PublicRouteDetail & {
   isBookmarked: boolean;
 };
+
+export function createPublicRouteDetail(params: PublicRouteDetail): PublicRouteDetail {
+  return params;
+}
+
+export function createPersonalizedRouteDetail(params: PersonalizedRouteDetail): PersonalizedRouteDetail {
+  return params;
+}

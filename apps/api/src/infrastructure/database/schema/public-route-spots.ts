@@ -1,4 +1,6 @@
 import { integer, pgTable, unique, uuid } from "drizzle-orm/pg-core";
+import type { PublicRouteId } from "@/domain/model/public-route/model";
+import type { SpotId } from "@/domain/model/spot/model";
 import { publicRoutes } from "./public-routes";
 import { spots } from "./spots";
 
@@ -6,10 +8,10 @@ export const publicRouteSpots = pgTable(
   "public_route_spots",
   {
     id: uuid().defaultRandom().primaryKey(),
-    publicRouteId: uuid()
+    publicRouteId: uuid().$type<PublicRouteId>()
       .notNull()
       .references(() => publicRoutes.id),
-    spotId: uuid()
+    spotId: uuid().$type<SpotId>()
       .notNull()
       .references(() => spots.id),
     sortOrder: integer().notNull(),

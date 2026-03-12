@@ -1,4 +1,6 @@
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { z } from "zod";
 import { PublicRouteId } from "@/domain/model/public-route/model";
 import { UserId } from "@/domain/model/user/model";
 import type { GetPublicRouteDetailUsecase } from "@/application/usecase/public-route/get-detail";
@@ -16,26 +18,35 @@ export function createPublicRoutesRoute({
   const app = new Hono();
 
   return app
-    .get("/public-routes/:routeId", async (c) => {
-      const routeId = PublicRouteId.parse(c.req.param("routeId"));
-      const route = await getPublicRouteDetailUsecase.execute(routeId);
+    .get(
+      "/public-routes/:routeId",
+      zValidator("param", z.object({ routeId: PublicRouteId })),
+      async (c) => {
+        const { routeId } = c.req.valid("param");
+        const route = await getPublicRouteDetailUsecase.execute(routeId);
 
-      if (!route) {
-        return c.json({ error: "Route not found" }, 404);
-      }
+        if (!route) {
+          return c.json({ error: "Route not found" }, 404);
+        }
 
-      return c.json(route);
-    })
-    .get("/public-routes/:routeId/with-bookmark", async (c) => {
-      const routeId = PublicRouteId.parse(c.req.param("routeId"));
-      const userId = UserId.parse(c.req.query("userId"));
+        return c.json(route);
+      },
+    )
+    .get(
+      "/public-routes/:routeId/with-bookmark",
+      zValidator("param", z.object({ routeId: PublicRouteId })),
+      zValidator("query", z.object({ userId: UserId })),
+      async (c) => {
+        const { routeId } = c.req.valid("param");
+        const { userId } = c.req.valid("query");
 
-      const route = await getPublicRouteDetailForUserUsecase.execute(routeId, userId);
+        const route = await getPublicRouteDetailForUserUsecase.execute(routeId, userId);
 
-      if (!route) {
-        return c.json({ error: "Route not found" }, 404);
-      }
+        if (!route) {
+          return c.json({ error: "Route not found" }, 404);
+        }
 
-      return c.json(route);
-    });
+        return c.json(route);
+      },
+    );
 }
