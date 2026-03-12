@@ -1,16 +1,18 @@
 import { Hono } from "hono";
 import { UserId } from "@/domain/model/user/model";
-import { createListSpotsByUserUsecase } from "@/application/usecase/spot/list-by-user";
-import { createSpotRepository } from "@/infrastructure/repositories/spot";
+import type { ListSpotsByUserUsecase } from "@/application/usecase/spot/list-by-user";
 
-const app = new Hono();
+type SpotsRouteDeps = {
+  listSpotsByUserUsecase: ListSpotsByUserUsecase;
+};
 
-const spotRepository = createSpotRepository();
-const listSpotsByUserUsecase = createListSpotsByUserUsecase({ spotRepository });
+export function createSpotsRoute({ listSpotsByUserUsecase }: SpotsRouteDeps) {
+  const app = new Hono();
 
-export const spotsRoute = app.get("/users/:userId/spots", async (c) => {
-  const userId = UserId.parse(c.req.param("userId"));
-  const spots = await listSpotsByUserUsecase.execute(userId);
+  return app.get("/users/:userId/spots", async (c) => {
+    const userId = UserId.parse(c.req.param("userId"));
+    const spots = await listSpotsByUserUsecase.execute(userId);
 
-  return c.json(spots);
-});
+    return c.json(spots);
+  });
+}

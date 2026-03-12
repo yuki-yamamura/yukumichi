@@ -6,7 +6,7 @@ type CreateListSpotsByUserUsecaseInput = {
   spotRepository: SpotRepository;
 };
 
-type ListSpotsByUserUsecase = {
+export type ListSpotsByUserUsecase = {
   execute: (userId: UserId) => Promise<Spot[]>;
 };
 

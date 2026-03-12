@@ -1,10 +1,20 @@
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
-import type { PublicRouteId } from "@/domain/model/public-route/model";
+import type { PublicRouteDetail, PublicRouteId } from "@/domain/model/public-route/model";
 
-export function getPublicRouteDetail(deps: {
+type GetPublicRouteDetailUsecaseInput = {
   publicRouteRepository: PublicRouteRepository;
-}) {
-  return function execute(routeId: PublicRouteId) {
-    return deps.publicRouteRepository.findDetail(routeId);
+};
+
+export type GetPublicRouteDetailUsecase = {
+  execute: (routeId: PublicRouteId) => Promise<PublicRouteDetail | undefined>;
+};
+
+export function createGetPublicRouteDetailUsecase({
+  publicRouteRepository,
+}: GetPublicRouteDetailUsecaseInput): GetPublicRouteDetailUsecase {
+  return {
+    execute: (routeId: PublicRouteId) => {
+      return publicRouteRepository.findDetail(routeId);
+    },
   };
 }

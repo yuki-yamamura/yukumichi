@@ -1,9 +1,17 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
+import { createGetPublicRouteDetailUsecase } from "@/application/usecase/public-route/get-detail";
+import { createGetPublicRouteDetailForUserUsecase } from "@/application/usecase/public-route/get-detail-for-user";
+import { createListSpotsByUserUsecase } from "@/application/usecase/spot/list-by-user";
+import { createPublicRouteRepository } from "@/infrastructure/repositories/public-route";
+import { createSpotRepository } from "@/infrastructure/repositories/spot";
 import { helloRoute } from "./presentation/routes/hello";
-import { publicRoutesRoute } from "./presentation/routes/public-routes";
-import { spotsRoute } from "./presentation/routes/spots";
+import { createPublicRoutesRoute } from "./presentation/routes/public-routes";
+import { createSpotsRoute } from "./presentation/routes/spots";
+
+const publicRouteRepository = createPublicRouteRepository();
+const spotRepository = createSpotRepository();
 
 const app = new Hono();
 app.use(cors());
@@ -13,8 +21,23 @@ const route = app
     return c.json({ message: "Hello, Hono!" });
   })
   .route("/", helloRoute)
-  .route("/", spotsRoute)
-  .route("/", publicRoutesRoute);
+  .route(
+    "/",
+    createSpotsRoute({
+      listSpotsByUserUsecase: createListSpotsByUserUsecase({ spotRepository }),
+    }),
+  )
+  .route(
+    "/",
+    createPublicRoutesRoute({
+      getPublicRouteDetailUsecase: createGetPublicRouteDetailUsecase({
+        publicRouteRepository,
+      }),
+      getPublicRouteDetailForUserUsecase: createGetPublicRouteDetailForUserUsecase({
+        publicRouteRepository,
+      }),
+    }),
+  );
 
 type AppType = typeof route;
 

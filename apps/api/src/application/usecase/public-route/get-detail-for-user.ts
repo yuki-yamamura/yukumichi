@@ -6,7 +6,7 @@ type CreateGetPublicRouteDetailForUserUsecaseInput = {
   publicRouteRepository: PublicRouteRepository;
 };
 
-type GetPublicRouteDetailForUserUsecase = {
+export type GetPublicRouteDetailForUserUsecase = {
   execute: (routeId: PublicRouteId, userId: UserId) => Promise<PersonalizedRouteDetail | undefined>;
 };
 
