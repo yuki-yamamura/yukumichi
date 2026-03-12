@@ -1,11 +1,21 @@
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
-import type { PublicRouteId } from "@/domain/model/public-route/model";
+import type { PersonalizedRouteDetail, PublicRouteId } from "@/domain/model/public-route/model";
 import type { UserId } from "@/domain/model/user/model";
 
-export function getPublicRouteDetailForUser(deps: {
+type CreateGetPublicRouteDetailForUserUsecaseInput = {
   publicRouteRepository: PublicRouteRepository;
-}) {
-  return function execute(routeId: PublicRouteId, userId: UserId) {
-    return deps.publicRouteRepository.findDetailForUser(routeId, userId);
+};
+
+type GetPublicRouteDetailForUserUsecase = {
+  execute: (routeId: PublicRouteId, userId: UserId) => Promise<PersonalizedRouteDetail | undefined>;
+};
+
+export function createGetPublicRouteDetailForUserUsecase({
+  publicRouteRepository,
+}: CreateGetPublicRouteDetailForUserUsecaseInput): GetPublicRouteDetailForUserUsecase {
+  return {
+    execute: (routeId: PublicRouteId, userId: UserId) => {
+      return publicRouteRepository.findDetailForUser(routeId, userId);
+    },
   };
 }
