@@ -10,12 +10,13 @@ import {
   createPersonalizedRouteDetail,
 } from "@/domain/model/public-route/model";
 import { createSpot } from "@/domain/model/spot/model";
-import type { Database } from "../database/client";
+import type { DbClient } from "../database/client";
 import type { PublicRouteId } from "@/domain/model/public-route/model";
 import type { PublicRouteRepository } from "@/domain/model/public-route/repository";
+import type { SpotId } from "@/domain/model/spot/model";
 import type { UserId } from "@/domain/model/user/model";
 
-export function createPublicRouteRepository(db: Database): PublicRouteRepository {
+export function createPublicRouteRepository(db: DbClient): PublicRouteRepository {
   return {
     async findDetail(routeId: PublicRouteId) {
       const rows = await db
@@ -77,6 +78,24 @@ export function createPublicRouteRepository(db: Database): PublicRouteRepository
         spots: rows.map((r) => createSpot(r.spot)),
         isBookmarked,
       });
+    },
+
+    async create(input) {
+      const [row] = await db.insert(publicRoutes).values(input).returning();
+
+      return row;
+    },
+
+    async addSpots(routeId: PublicRouteId, spotIds: SpotId[]) {
+      if (spotIds.length === 0) return;
+
+      await db.insert(publicRouteSpots).values(
+        spotIds.map((spotId, index) => ({
+          publicRouteId: routeId,
+          spotId,
+          sortOrder: index + 1,
+        })),
+      );
     },
   };
 }
