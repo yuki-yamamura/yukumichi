@@ -1,50 +1,77 @@
-import { and, eq, gte, lte, like, type SQL } from "drizzle-orm";
-import { spots } from "../database/schema";
-import { createSpot } from "@/domain/model/spot/model";
-import type { DbClient } from "../database/client";
-import type { SpotRepository, SpotSearchFilter } from "@/domain/model/spot/repository";
-import type { UserId } from "@/domain/model/user/model";
+import { archivedSpots, spots } from "../database/schema";
+import { Spot, SpotId } from "@/domain/model/spot/spot";
+import type { SpotRepository } from "@/domain/model/spot/repository";
+import { Database } from "../database/client";
+import { err, ok, Result } from "neverthrow";
+import { and, eq, notExists } from "drizzle-orm";
 
-export function createSpotRepository(db: DbClient): SpotRepository {
+export function SpotRepository(db: Database): SpotRepository {
   return {
-    async findByUserId(userId: UserId) {
-      const rows = await db.select().from(spots).where(eq(spots.userId, userId));
+    async create(input) {
+      const {
+        id,
+        name,
+        coordinate: { latitude, longitude },
+      } = input;
+      const rows = await db
+        .insert(spots)
+        .values({
+          id,
+          name,
+          latitude,
+          longitude,
+        })
+        .returning({ id: spots.id });
+      const spotId = SpotId.parse(rows[0].id);
 
-      return rows.map(createSpot);
+      return ok(spotId);
     },
 
-    async search(filter: SpotSearchFilter) {
+    findMany: async () => {
+      const rows = await db
+        .select()
+        .from(spots)
+        .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))));
+      const spotsResult = Result.combine(rows.map(Spot));
+      if (spotsResult.isErr()) {
+        throw new Error(spotsResult.error.message);
+      }
+
+      return ok(spotsResult.value);
+    },
+
+    findById: async (id: SpotId) => {
       const rows = await db
         .select()
         .from(spots)
         .where(
-          and(
-            eq(spots.userId, filter.userId),
-            filter.name !== undefined
-              ? like(spots.name, `%${filter.name}%`)
-              : undefined,
-            filter.latitudeRange !== undefined
-              ? gte(spots.latitude, filter.latitudeRange.min)
-              : undefined,
-            filter.latitudeRange !== undefined
-              ? lte(spots.latitude, filter.latitudeRange.max)
-              : undefined,
-            filter.longitudeRange !== undefined
-              ? gte(spots.longitude, filter.longitudeRange.min)
-              : undefined,
-            filter.longitudeRange !== undefined
-              ? lte(spots.longitude, filter.longitudeRange.max)
-              : undefined,
-          ),
+          and(eq(spots.id, id), notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id)))),
         );
 
-      return rows.map(createSpot);
+      if (rows.length === 0) {
+        return err({ kind: "not_found" });
+      }
+
+      const spotResult = Spot(rows[0]);
+      if (spotResult.isErr()) {
+        throw new Error(spotResult.error.message);
+      }
+
+      return ok(spotResult.value);
     },
 
-    async create(input) {
-      const [row] = await db.insert(spots).values(input).returning();
+    archive: async (archivedSpot) => {
+      const rows = await db
+        .insert(archivedSpots)
+        .values({
+          spotId: archivedSpot.id as string,
+          archivedAt: archivedSpot.archivedAt,
+        })
+        .returning({
+          spotId: archivedSpots.spotId,
+        });
 
-      return createSpot(row);
+      return ok(SpotId.parse(rows[0].spotId));
     },
   };
 }
