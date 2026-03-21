@@ -1,63 +1,30 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { createGetPublicRouteDetailUsecase } from "@/application/usecase/public-route/get-detail";
-import { createGetPublicRouteDetailForUserUsecase } from "@/application/usecase/public-route/get-detail-for-user";
-import { createPublishPublicRouteUsecase } from "@/application/usecase/public-route/publish";
-import { createSearchPublicRoutesUsecase } from "@/application/usecase/public-route/search";
-import { createListSpotsByUserUsecase } from "@/application/usecase/spot/list-by-user";
-import { createSearchSpotsUsecase } from "@/application/usecase/spot/search";
+import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
-import { createTransactionRunner } from "@/infrastructure/database/transaction-runner";
-import { createRouteSearchQueryService } from "@/infrastructure/query-service/route-search";
-import { createPublicRouteRepository } from "@/infrastructure/repositories/public-route";
-import { createSpotRepository } from "@/infrastructure/repositories/spot";
-import { helloRoute } from "./presentation/routes/hello";
-import { createPublicRoutesRoute } from "./presentation/routes/public-routes";
-import { createSpotsRoute } from "./presentation/routes/spots";
-import { createDebugRoute } from "./presentation/routes/debug";
+import { createSpotRoute } from "./presentation/routes/spot";
+import { SpotRepository } from "./infrastructure/repositories/spot";
+import { CreateSpotUsecase } from "./application/usecase/spot/create";
+import { GetSpotUsecase } from "./application/usecase/spot/get";
+import { ArchiveSpotUsecase } from "./application/usecase/spot/archive";
 
 const db = createDatabase(process.env.DATABASE_URL!);
-const transactionRunner = createTransactionRunner(db);
-const routeSearchQueryService = createRouteSearchQueryService(db);
-const publicRouteRepository = createPublicRouteRepository(db);
-const spotRepository = createSpotRepository(db);
+const spotRepository = SpotRepository(db);
 
 const app = new Hono();
 app.use(cors());
 
-const route = app
-  .get("/", (c) => {
-    return c.json({ message: "Hello, Hono!" });
-  })
-  .route("/", helloRoute)
-  .route(
-    "/",
-    createSpotsRoute({
-      listSpotsByUserUsecase: createListSpotsByUserUsecase({ spotRepository }),
-      searchSpotsUsecase: createSearchSpotsUsecase({ spotRepository }),
-    }),
-  )
-  .route(
-    "/",
-    createPublicRoutesRoute({
-      getPublicRouteDetailUsecase: createGetPublicRouteDetailUsecase({
-        publicRouteRepository,
-      }),
-      getPublicRouteDetailForUserUsecase: createGetPublicRouteDetailForUserUsecase({
-        publicRouteRepository,
-      }),
-      publishPublicRouteUsecase: createPublishPublicRouteUsecase({
-        transactionRunner,
-      }),
-      searchPublicRoutesUsecase: createSearchPublicRoutesUsecase({
-        routeSearchQueryService,
-      }),
-    }),
-  )
-  .route("/", createDebugRoute(db));
+const routes = app.route(
+  "/",
+  createSpotRoute({
+    createSpotUsecase: CreateSpotUsecase({ spotRepository }),
+    listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
+    getSpotUsecase: GetSpotUsecase({ spotRepository }),
+    archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
+  }),
+);
 
-type AppType = typeof route;
+export type AppType = typeof routes;
 
-export default route;
-export type { AppType };
+export { routes as app };
