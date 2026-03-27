@@ -9,7 +9,8 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env production",
     "start": "next start",
     "check-types": "tsc --noEmit",
-    "lint": "eslint"
+    "lint": "eslint",
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@sanpo/api": "workspace:*",
@@ -27,6 +28,10 @@
     "eslint": "9.39.3",
     "eslint-config-next": "16.1.6",
     "typescript": "5.9.3",
-    "wrangler": "4.69.0"
+    "wrangler": "4.69.0",
+    "storybook": "^10.3.3",
+    "@storybook/nextjs-vite": "^10.3.3",
+    "vite": "^8.0.3",
+    "eslint-plugin-storybook": "^10.3.3"
   }
 }
