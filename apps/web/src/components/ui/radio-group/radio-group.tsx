@@ -1,30 +1,32 @@
 "use client";
 
-import type { ComponentProps } from "react";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import clsx from "clsx";
+
+import type { ComponentProps } from "react";
+
 import styles from "./radio-group.module.css";
 
-type RadioGroupProps = ComponentProps<typeof RadioGroupPrimitive> & {
+type RootProps = ComponentProps<typeof RadioGroupPrimitive> & {
   className?: string;
 };
 
-type RadioGroupItemProps = ComponentProps<typeof RadioPrimitive.Root> & {
+type ItemProps = ComponentProps<typeof RadioPrimitive.Root> & {
   className?: string;
 };
 
-function RadioGroup({ className, ...props }: RadioGroupProps) {
+export function Root({ className, ...props }: RootProps) {
   return (
     <RadioGroupPrimitive
       data-slot="radio-group"
-      className={clsx(styles.group, className)}
+      className={clsx(styles.base, className)}
       {...props}
     />
   );
 }
 
-function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
+export function Item({ className, ...props }: ItemProps) {
   return (
     <RadioPrimitive.Root
       data-slot="radio-group-item"
@@ -40,5 +42,3 @@ function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
     </RadioPrimitive.Root>
   );
 }
-
-export { RadioGroup, RadioGroupItem };

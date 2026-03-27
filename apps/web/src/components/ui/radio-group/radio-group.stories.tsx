@@ -1,14 +1,15 @@
+import { Root, Item } from "./radio-group";
+
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { RadioGroup, RadioGroupItem } from "./radio-group";
 
 const meta = {
   title: "UI/RadioGroup",
-  component: RadioGroup,
+  component: Root,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof RadioGroup>;
+} satisfies Meta<typeof Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -16,15 +17,15 @@ type Story = StoryObj<typeof meta>;
 const DefaultRadioItems = () => (
   <>
     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      <RadioGroupItem value="default" id="r1" />
+      <Item value="default" id="r1" />
       <label htmlFor="r1">Default</label>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      <RadioGroupItem value="comfortable" id="r2" />
+      <Item value="comfortable" id="r2" />
       <label htmlFor="r2">Comfortable</label>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      <RadioGroupItem value="compact" id="r3" />
+      <Item value="compact" id="r3" />
       <label htmlFor="r3">Compact</label>
     </div>
   </>
@@ -32,83 +33,83 @@ const DefaultRadioItems = () => (
 
 export const Default: Story = {
   render: () => (
-    <RadioGroup defaultValue="comfortable">
+    <Root defaultValue="comfortable">
       <DefaultRadioItems />
-    </RadioGroup>
+    </Root>
   ),
 };
 
 export const WithPreselection: Story = {
   render: () => (
-    <RadioGroup defaultValue="default">
+    <Root defaultValue="default">
       <DefaultRadioItems />
-    </RadioGroup>
+    </Root>
   ),
 };
 
 export const Disabled: Story = {
   render: () => (
-    <RadioGroup defaultValue="comfortable" disabled>
+    <Root defaultValue="comfortable" disabled>
       <DefaultRadioItems />
-    </RadioGroup>
+    </Root>
   ),
 };
 
 export const SingleDisabledItem: Story = {
   render: () => (
-    <RadioGroup defaultValue="comfortable">
+    <Root defaultValue="comfortable">
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="default" id="r4" />
+        <Item value="default" id="r4" />
         <label htmlFor="r4">Default</label>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="comfortable" id="r5" />
+        <Item value="comfortable" id="r5" />
         <label htmlFor="r5">Comfortable</label>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="compact" id="r6" disabled />
+        <Item value="compact" id="r6" disabled />
         <label htmlFor="r6" style={{ opacity: 0.5 }}>
           Compact (disabled)
         </label>
       </div>
-    </RadioGroup>
+    </Root>
   ),
 };
 
 export const Horizontal: Story = {
   render: () => (
-    <RadioGroup
+    <Root
       defaultValue="comfortable"
       style={{ display: "flex", flexDirection: "row", gap: "1rem" }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="default" id="r7" />
+        <Item value="default" id="r7" />
         <label htmlFor="r7">Default</label>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="comfortable" id="r8" />
+        <Item value="comfortable" id="r8" />
         <label htmlFor="r8">Comfortable</label>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <RadioGroupItem value="compact" id="r9" />
+        <Item value="compact" id="r9" />
         <label htmlFor="r9">Compact</label>
       </div>
-    </RadioGroup>
+    </Root>
   ),
 };
 
 export const ManyOptions: Story = {
   render: () => (
-    <RadioGroup defaultValue="option1">
+    <Root defaultValue="option1">
       {Array.from({ length: 6 }, (_, i) => (
         <div
           key={i}
           style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
         >
-          <RadioGroupItem value={`option${i + 1}`} id={`rm${i}`} />
+          <Item value={`option${i + 1}`} id={`rm${i}`} />
           <label htmlFor={`rm${i}`}>Option {i + 1}</label>
         </div>
       ))}
-    </RadioGroup>
+    </Root>
   ),
 };

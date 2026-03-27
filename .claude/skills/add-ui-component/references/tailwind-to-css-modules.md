@@ -360,25 +360,28 @@ Also watch for Base UI's `render` prop pattern — some components accept a `ren
 Use `class-variance-authority` (CVA) to define variant-driven class mappings. CVA pairs naturally with CSS Modules — it maps variant values to CSS Module class names and returns the correct combination. This replaces manual lookup maps and keeps variant types and styles in sync.
 
 ```tsx
-import { cva, type VariantProps } from 'class-variance-authority';
-import clsx from 'clsx';
-import styles from './Button.module.css';
+import { cva } from 'class-variance-authority';
 
-const buttonVariants = cva(styles.root, {
+import type { VariantProps } from 'class-variance-authority';
+
+import styles from './button.module.css';
+
+// Name the variant function the same as the component
+const button = cva(styles.base, {
   variants: {
     variant: {
-      default: styles.variantDefault,
-      destructive: styles.variantDestructive,
-      outline: styles.variantOutline,
-      secondary: styles.variantSecondary,
-      ghost: styles.variantGhost,
-      link: styles.variantLink,
+      default: styles.default,
+      destructive: styles.destructive,
+      outline: styles.outline,
+      secondary: styles.secondary,
+      ghost: styles.ghost,
+      link: styles.link,
     },
     size: {
-      default: styles.sizeDefault,
-      sm: styles.sizeSm,
-      lg: styles.sizeLg,
-      icon: styles.sizeIcon,
+      default: styles.medium,
+      sm: styles.small,
+      lg: styles.large,
+      icon: styles.icon,
     },
   },
   defaultVariants: {
@@ -387,23 +390,18 @@ const buttonVariants = cva(styles.root, {
   },
 });
 
-// Derive variant props from the cva definition — no manual type duplication
-type ButtonProps = React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants>;
+type Props = VariantProps<typeof button>;
 
-function Button({ variant, size, className, ...props }: ButtonProps) {
+export function Button({ variant, size }: Props) {
   return (
-    <button
-      className={clsx(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
+    <button className={button({ variant, size })} />
   );
 }
 ```
 
 ```css
-/* Button.module.css */
-.root {
+/* button.module.css */
+.base {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -413,47 +411,50 @@ function Button({ variant, size, className, ...props }: ButtonProps) {
   transition: color 150ms, background-color 150ms, border-color 150ms;
 }
 
-.root:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+.base {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }
 
-.root:disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* Variants — prefix with "variant" to avoid name collisions with sizes */
-.variantDefault {
+/* Variants */
+.default {
   background-color: var(--primary);
   color: var(--primary-foreground);
-}
-.variantDefault:hover {
-  background-color: color-mix(in srgb, var(--primary) 90%, transparent);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary) 90%, transparent);
+  }
 }
 
-.variantDestructive { /* ... */ }
-.variantOutline { /* ... */ }
-.variantSecondary { /* ... */ }
-.variantGhost { /* ... */ }
-.variantLink { /* ... */ }
+.destructive { /* ... */ }
+.outline { /* ... */ }
+.secondary { /* ... */ }
+.ghost { /* ... */ }
+.link { /* ... */ }
 
-/* Sizes — prefix with "size" */
-.sizeDefault {
+/* Sizes */
+.medium {
   height: 2.25rem;
   padding: 0.5rem 1rem;
 }
-.sizeSm {
+.small {
   height: 2rem;
   padding: 0.25rem 0.75rem;
   font-size: 0.8125rem;
 }
-.sizeLg {
+.large {
   height: 2.75rem;
   padding: 0.5rem 1.5rem;
   font-size: 1rem;
 }
-.sizeIcon {
+.icon {
   height: 2.25rem;
   width: 2.25rem;
   padding: 0;

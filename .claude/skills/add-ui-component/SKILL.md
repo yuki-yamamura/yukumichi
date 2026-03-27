@@ -9,6 +9,32 @@ Add a shadcn/ui component (Base UI variant) to the project by fetching its sourc
 
 This project uses **Base UI** (`@base-ui/react`) as the headless primitive layer — not Radix UI. Base UI is styling-agnostic by design: it exposes `data-*` attributes for state, accepts `className` props natively, and has no opinion on how styles are applied. This makes CSS Modules conversion straightforward because the behavioral layer already supports it.
 
+## Coding Guidelines
+
+Before creating any component, read the frontend guidelines at `wiki/guideline/frontend/` — they define the project's conventions for CSS, React, and TypeScript. The key rules that affect component creation are summarized below. When in doubt, refer to the full guideline files.
+
+### CSS (`wiki/guideline/frontend/css.md`)
+- Use `.base` as the top-level class name (not `.root` or the component name)
+- Use camelCase for CSS class names (e.g., `.headerTitle`, `.iconWrapper`)
+- Use kebab-case for keyframe names and CSS custom properties
+- Use CSS nesting for interactive states, ARIA states, data attributes, and media queries
+- Place `@keyframes` at the bottom of the CSS file, after all class definitions
+- Use ARIA attributes or custom data attributes for state styling (not separate classes)
+
+### React (`wiki/guideline/frontend/react.md`)
+- Follow the import order: `"use client"` → external libs → internal absolute (`@/`) → internal relative (`./`) → type imports → style imports
+- Use `type Props = { ... }` for props definition (not `interface`)
+- Use named exports (not default exports)
+- Export sub-components with short names (`Root`, `Trigger`, `Content`) — they're imported with namespace: `import * as Dialog from "@/components/ui/dialog"`
+- Use CVA for variant definitions, naming the variant function the same as the component
+- Define event handlers with `handle` prefix, props with `on` prefix
+
+### TypeScript (`wiki/guideline/frontend/typescript.md`)
+- Use `type` instead of `interface`
+- Use function declarations for exported functions, arrow functions for inner functions
+- Use affirmative prefixes for booleans (`is`, `has`, `can`, `should`)
+- Prefer `Pick<Type, Keys>` and indexed access types (`User["id"]`) over broad types
+
 ## Output Directory
 
 All components go in `apps/web/src/components/ui/`, each in its own directory:
@@ -65,22 +91,23 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
 
 3. **Create the component** (`component-name.tsx`):
    - Import the CSS Module: `import styles from './component-name.module.css'`
-   - Use `cva` (class-variance-authority) for defining variant-driven class mappings with CSS Modules:
+   - Use `cva` for variant-driven class mappings. Name the variant function the same as the component (per guideline):
      ```tsx
-     import { cva, type VariantProps } from 'class-variance-authority';
+     import { cva } from 'class-variance-authority';
+     import type { VariantProps } from 'class-variance-authority';
      import styles from './button.module.css';
 
-     const buttonVariants = cva(styles.root, {
+     const button = cva(styles.base, {
        variants: {
          variant: {
-           default: styles.variantDefault,
-           destructive: styles.variantDestructive,
-           outline: styles.variantOutline,
+           default: styles.default,
+           destructive: styles.destructive,
+           outline: styles.outline,
          },
          size: {
-           default: styles.sizeDefault,
-           sm: styles.sizeSm,
-           lg: styles.sizeLg,
+           default: styles.medium,
+           sm: styles.small,
+           lg: styles.large,
          },
        },
        defaultVariants: {
@@ -88,13 +115,15 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
          size: 'default',
        },
      });
+
+     type Props = {
+       label: string;
+     } & VariantProps<typeof button>;
+
+     export function Button({ label, variant, size }: Props) {
+       return <button className={button({ variant, size })}>{label}</button>;
+     }
      ```
-   - Use `clsx` alongside `cva` when you need to merge the cva output with an external `className` prop:
-     ```tsx
-     import clsx from 'clsx';
-     className={clsx(buttonVariants({ variant, size }), className)}
-     ```
-   - Derive the component's variant props from `cva` using `VariantProps<typeof buttonVariants>` — this keeps the type definition and the style mapping in sync automatically.
    - Preserve the exact same public API (props, composition) as the shadcn original.
    - Import Base UI primitives from their sub-paths:
      ```tsx
