@@ -1,5 +1,5 @@
 ---
-paths: "apps/frontend/src/**/*.{ts,tsx}"
+paths: "apps/web/src/**/*.{ts,tsx}"
 ---
 
 # TypeScript Coding Guidelines

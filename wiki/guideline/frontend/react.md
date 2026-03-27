@@ -1,5 +1,5 @@
 ---
-paths: "apps/frontend/src/**/*.tsx"
+paths: "apps/web/src/**/*.tsx"
 ---
 
 # React Guidelines

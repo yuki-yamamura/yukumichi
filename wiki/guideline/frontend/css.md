@@ -1,5 +1,5 @@
 ---
-paths: "apps/frontend/src/**/*.css"
+paths: "apps/web/src/**/*.css"
 ---
 
 # CSS Guidelines
