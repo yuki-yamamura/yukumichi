@@ -9,7 +9,7 @@ function getAbsolutePath(value: string) {
 }
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
-  addons: [],
+  addons: [getAbsolutePath("@storybook/addon-mcp")],
   framework: getAbsolutePath("@storybook/nextjs-vite"),
   staticDirs: ["../public"],
 };

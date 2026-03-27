@@ -28,6 +28,10 @@
     "chrome-devtools": {
       "command": "npx",
       "args": ["-y", "--autoConnect", "chrome-devtools-mcp@latest"]
+    },
+    "storybook": {
+      "type": "http",
+      "url": "http://localhost:6006/mcp"
     }
   }
 }
