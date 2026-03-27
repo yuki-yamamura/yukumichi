@@ -11,29 +11,11 @@ This project uses **Base UI** (`@base-ui/react`) as the headless primitive layer
 
 ## Coding Guidelines
 
-Before creating any component, read the frontend guidelines at `wiki/guideline/frontend/` — they define the project's conventions for CSS, React, and TypeScript. The key rules that affect component creation are summarized below. When in doubt, refer to the full guideline files.
+Before creating any component, read and follow the frontend guidelines:
 
-### CSS (`wiki/guideline/frontend/css.md`)
-- Use `.base` as the top-level class name (not `.root` or the component name)
-- Use camelCase for CSS class names (e.g., `.headerTitle`, `.iconWrapper`)
-- Use kebab-case for keyframe names and CSS custom properties
-- Use CSS nesting for interactive states, ARIA states, data attributes, and media queries
-- Place `@keyframes` at the bottom of the CSS file, after all class definitions
-- Use ARIA attributes or custom data attributes for state styling (not separate classes)
-
-### React (`wiki/guideline/frontend/react.md`)
-- Follow the import order: `"use client"` → external libs → internal absolute (`@/`) → internal relative (`./`) → type imports → style imports
-- Use `type Props = { ... }` for props definition (not `interface`)
-- Use named exports (not default exports)
-- Export sub-components with short names (`Root`, `Trigger`, `Content`) — they're imported with namespace: `import * as Dialog from "@/components/ui/dialog"`
-- Use CVA for variant definitions, naming the variant function the same as the component
-- Define event handlers with `handle` prefix, props with `on` prefix
-
-### TypeScript (`wiki/guideline/frontend/typescript.md`)
-- Use `type` instead of `interface`
-- Use function declarations for exported functions, arrow functions for inner functions
-- Use affirmative prefixes for booleans (`is`, `has`, `can`, `should`)
-- Prefer `Pick<Type, Keys>` and indexed access types (`User["id"]`) over broad types
+- `wiki/guideline/frontend/css.md` — CSS Modules conventions
+- `wiki/guideline/frontend/react.md` — React component structure and patterns
+- `wiki/guideline/frontend/typescript.md` — TypeScript naming and style rules
 
 ## Output Directory
 
