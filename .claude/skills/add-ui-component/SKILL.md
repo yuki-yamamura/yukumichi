@@ -16,13 +16,13 @@ All components go in `apps/web/src/components/ui/`, each in its own directory:
 ```
 apps/web/src/components/ui/
 └── button/
-    ├── Button.tsx
-    ├── Button.module.css
-    ├── Button.stories.tsx
+    ├── button.tsx
+    ├── button.module.css
+    ├── button.stories.tsx
     └── index.ts
 ```
 
-Use PascalCase for component files. Directories use kebab-case.
+Use kebab-case for all file names. Directories also use kebab-case.
 
 ## Workflow
 
@@ -52,7 +52,7 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
 
 1. **Analyze the component** — identify all props, variants, states, and sub-components from the shadcn source. Pay attention to `data-slot` attributes — Base UI components use these extensively for styling hooks.
 
-2. **Create the CSS Module** (`ComponentName.module.css`):
+2. **Create the CSS Module** (`component-name.module.css`):
    - Map each Tailwind utility class to its CSS equivalent in semantic class names.
    - Use the project's existing design tokens (CSS custom properties) from `apps/web/src/app/globals.css` wherever possible. If a shadcn token is missing, add it to `globals.css` (both light and dark mode).
    - Leverage Base UI's `data-*` attributes for state styling — these work naturally with CSS Module selectors:
@@ -63,12 +63,12 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
    - Handle interactive states (hover, focus, active, disabled) with pseudo-classes.
    - Handle dark mode consistently with the project's existing approach (check `globals.css` for the pattern).
 
-3. **Create the component** (`ComponentName.tsx`):
-   - Import the CSS Module: `import styles from './ComponentName.module.css'`
+3. **Create the component** (`component-name.tsx`):
+   - Import the CSS Module: `import styles from './component-name.module.css'`
    - Use `cva` (class-variance-authority) for defining variant-driven class mappings with CSS Modules:
      ```tsx
      import { cva, type VariantProps } from 'class-variance-authority';
-     import styles from './Button.module.css';
+     import styles from './button.module.css';
 
      const buttonVariants = cva(styles.root, {
        variants: {
@@ -124,13 +124,13 @@ Use the Storybook MCP to generate story files for the component.
 3. Each variant combination should be its own named Story for clarity in the Storybook sidebar.
 4. Add a "Playground" story with all controls exposed via `argTypes` so developers can experiment interactively.
 
-Story file location: `apps/web/src/components/ui/<component-name>/ComponentName.stories.tsx`
+Story file location: `apps/web/src/components/ui/<component-name>/component-name.stories.tsx`
 
 #### Story structure example
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import { Button } from './button';
 
 const meta = {
   title: 'UI/Button',
