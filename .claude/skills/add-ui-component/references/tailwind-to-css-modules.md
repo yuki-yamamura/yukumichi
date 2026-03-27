@@ -355,23 +355,46 @@ Also watch for Base UI's `render` prop pattern — some components accept a `ren
 />
 ```
 
-## 14. Variant Pattern with clsx
+## 14. Variant Pattern with CVA
 
-For components with multiple variants (like Button), use a lookup from the `styles` object:
+Use `class-variance-authority` (CVA) to define variant-driven class mappings. CVA pairs naturally with CSS Modules — it maps variant values to CSS Module class names and returns the correct combination. This replaces manual lookup maps and keeps variant types and styles in sync.
 
 ```tsx
+import { cva, type VariantProps } from 'class-variance-authority';
 import clsx from 'clsx';
 import styles from './Button.module.css';
 
-interface ButtonProps {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-}
+const buttonVariants = cva(styles.root, {
+  variants: {
+    variant: {
+      default: styles.variantDefault,
+      destructive: styles.variantDestructive,
+      outline: styles.variantOutline,
+      secondary: styles.variantSecondary,
+      ghost: styles.variantGhost,
+      link: styles.variantLink,
+    },
+    size: {
+      default: styles.sizeDefault,
+      sm: styles.sizeSm,
+      lg: styles.sizeLg,
+      icon: styles.sizeIcon,
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
-function Button({ variant = 'default', size = 'default', className, ...props }: ButtonProps) {
+// Derive variant props from the cva definition — no manual type duplication
+type ButtonProps = React.ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants>;
+
+function Button({ variant, size, className, ...props }: ButtonProps) {
   return (
     <button
-      className={clsx(styles.root, styles[variant], styles[size], className)}
+      className={clsx(buttonVariants({ variant, size }), className)}
       {...props}
     />
   );
@@ -400,35 +423,41 @@ function Button({ variant = 'default', size = 'default', className, ...props }: 
   opacity: 0.5;
 }
 
-/* Variants */
-.default {
+/* Variants — prefix with "variant" to avoid name collisions with sizes */
+.variantDefault {
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
-.default:hover {
+.variantDefault:hover {
   background-color: color-mix(in srgb, var(--primary) 90%, transparent);
 }
 
-.destructive { /* ... */ }
-.outline { /* ... */ }
+.variantDestructive { /* ... */ }
+.variantOutline { /* ... */ }
+.variantSecondary { /* ... */ }
+.variantGhost { /* ... */ }
+.variantLink { /* ... */ }
 
-/* Sizes */
-.default { /* already used for variant — rename to avoid collision */ }
+/* Sizes — prefix with "size" */
+.sizeDefault {
+  height: 2.25rem;
+  padding: 0.5rem 1rem;
+}
+.sizeSm {
+  height: 2rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+}
+.sizeLg {
+  height: 2.75rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+}
+.sizeIcon {
+  height: 2.25rem;
+  width: 2.25rem;
+  padding: 0;
+}
 ```
 
-**Naming collision warning**: If a variant name collides with a size name (e.g., both have `default`), use distinct prefixes:
-
-```css
-/* Use prefixed names */
-.variantDefault { /* ... */ }
-.sizeDefault { /* ... */ }
-.sizeSm { /* ... */ }
-.sizeLg { /* ... */ }
-.sizeIcon { /* ... */ }
-```
-
-```tsx
-const variantClass = styles[`variant${variant.charAt(0).toUpperCase()}${variant.slice(1)}`];
-const sizeClass = styles[`size${size.charAt(0).toUpperCase()}${size.slice(1)}`];
-className={clsx(styles.root, variantClass, sizeClass, className)}
-```
+**Why CVA over plain clsx lookups**: CVA centralizes the variant definition — the variant names, their allowed values, and their defaults live in one place. `VariantProps` extracts the type automatically, so you never have a mismatch between the props interface and the available styles. For components without variants (e.g., Card, Separator), plain `clsx` is sufficient — CVA is for components with variant/size matrices.

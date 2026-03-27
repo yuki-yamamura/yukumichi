@@ -65,11 +65,36 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
 
 3. **Create the component** (`ComponentName.tsx`):
    - Import the CSS Module: `import styles from './ComponentName.module.css'`
-   - Use `clsx` for combining classes and conditional variant application:
+   - Use `cva` (class-variance-authority) for defining variant-driven class mappings with CSS Modules:
+     ```tsx
+     import { cva, type VariantProps } from 'class-variance-authority';
+     import styles from './Button.module.css';
+
+     const buttonVariants = cva(styles.root, {
+       variants: {
+         variant: {
+           default: styles.variantDefault,
+           destructive: styles.variantDestructive,
+           outline: styles.variantOutline,
+         },
+         size: {
+           default: styles.sizeDefault,
+           sm: styles.sizeSm,
+           lg: styles.sizeLg,
+         },
+       },
+       defaultVariants: {
+         variant: 'default',
+         size: 'default',
+       },
+     });
+     ```
+   - Use `clsx` alongside `cva` when you need to merge the cva output with an external `className` prop:
      ```tsx
      import clsx from 'clsx';
-     className={clsx(styles.root, variantClass, sizeClass, className)}
+     className={clsx(buttonVariants({ variant, size }), className)}
      ```
+   - Derive the component's variant props from `cva` using `VariantProps<typeof buttonVariants>` — this keeps the type definition and the style mapping in sync automatically.
    - Preserve the exact same public API (props, composition) as the shadcn original.
    - Import Base UI primitives from their sub-paths:
      ```tsx
@@ -80,7 +105,7 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
    - Re-export from an `index.ts` barrel file in the component directory.
 
 4. **What NOT to do**:
-   - Don't use `tailwind-merge` or `class-variance-authority` — they're unnecessary with CSS Modules.
+   - Don't use `tailwind-merge` — it's unnecessary with CSS Modules.
    - Don't import from `@radix-ui/react-*` — this project uses Base UI exclusively.
    - Don't change the component's behavioral logic or accessibility attributes.
    - Don't invent new props or variants that aren't in the original.
