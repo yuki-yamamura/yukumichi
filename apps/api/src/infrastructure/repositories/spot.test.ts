@@ -1,94 +1,104 @@
+import { eq } from "drizzle-orm";
 import { uuidv7 } from "uuidv7";
 import { inject } from "vitest";
 
-import { Spot, SpotId } from "@/domain/model/spot/spot";
-import { createTestDatabase, truncateTables } from "@/test/helpers/database";
-import { createCoordinate } from "@/test/helpers/spot";
+import { SpotId } from "@/domain/model/spot/spot";
+import { archivedSpots, spots } from "@/infrastructure/database/schema";
+import { createTestDatabase } from "@/test/database/helpers";
+import { createCoordinate, createSpot } from "@/test/fixtures/spot";
 
 import { SpotRepository } from "./spot";
 
-import type { SpotRepository as SpotRepositoryType } from "@/domain/model/spot/repository";
-import type { TestDatabase } from "@/test/helpers/database";
+const databaseUrl = inject("databaseUrl");
+const testDb = createTestDatabase(databaseUrl);
+const repository = SpotRepository(testDb.db);
 
 describe("SpotRepository", () => {
-  let testDb: TestDatabase;
-  let repository: SpotRepositoryType;
-
-  beforeAll(() => {
-    const databaseUrl = inject("databaseUrl");
-    testDb = createTestDatabase(databaseUrl);
-    repository = SpotRepository(testDb.db);
-  });
-
   beforeEach(async () => {
-    await truncateTables(testDb.db);
+    await testDb.truncateTables();
   });
 
   afterAll(async () => {
     await testDb.cleanup();
   });
 
-  it("should create a spot and find it by ID", async () => {
-    // Given
-    const id = SpotId.parse(uuidv7());
-    const coordinate = createCoordinate();
-    const spot = Spot({
-      id,
-      name: "Test Park",
-      ...coordinate,
-    })._unsafeUnwrap();
+  describe("create", () => {
+    it("should store a spot and return its id", async () => {
+      // Given
+      const id = SpotId.parse(uuidv7());
+      const spot = createSpot({
+        id,
+        name: "Test Park",
+        coordinate: createCoordinate({
+          latitude: 0,
+          longitude: 0,
+        }),
+      });
 
-    // When
-    const createResult = await repository.create(spot);
+      // When
+      const result = await repository.create(spot);
 
-    // Then
-    expect(createResult.isOk()).toBe(true);
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toBe(id);
 
-    // When
-    const findResult = await repository.findById(id);
-
-    // Then
-    expect(findResult.isOk()).toBe(true);
-    const found = findResult._unsafeUnwrap();
-    expect(found.name).toBe("Test Park");
-    expect(found.coordinate.latitude).toBe(coordinate.latitude);
-    expect(found.coordinate.longitude).toBe(coordinate.longitude);
+      // Postcondition
+      const rows = await testDb.db.select().from(spots).where(eq(spots.id, id));
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toEqual({
+        id: spot.id,
+        name: spot.name,
+        latitude: spot.coordinate.latitude,
+        longitude: spot.coordinate.longitude,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
   });
 
-  it("should list all non-archived spots", async () => {
-    // Given
-    const id = SpotId.parse(uuidv7());
-    const spot = Spot({
-      id,
-      name: "Listed Park",
-      ...createCoordinate(),
-    })._unsafeUnwrap();
-    await repository.create(spot);
+  describe("findMany", () => {
+    it("should list all non-archived spots", async () => {
+      // Given
+      const expected = [createSpot(), createSpot()];
 
-    // When
-    const result = await repository.findMany();
+      for (const spot of expected) {
+        const {
+          id,
+          name,
+          coordinate: { latitude, longitude },
+        } = spot;
+        await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+      }
 
-    // Then
-    expect(result.isOk()).toBe(true);
-    expect(result._unsafeUnwrap()).toHaveLength(1);
-  });
+      // When
+      const result = await repository.findMany();
 
-  it("should not find an archived spot by ID", async () => {
-    // Given
-    const id = SpotId.parse(uuidv7());
-    const spot = Spot({
-      id,
-      name: "Archived Park",
-      ...createCoordinate(),
-    })._unsafeUnwrap();
-    await repository.create(spot);
-    await repository.archive({ ...spot, archivedAt: new Date() });
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual(expected);
+    });
 
-    // When
-    const result = await repository.findById(id);
+    it("should filter an archived spot", async () => {
+      // Given
+      const spotA = createSpot();
+      const spotB = createSpot();
 
-    // Then
-    expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "not_found" });
+      for (const spot of [spotA, spotB]) {
+        const {
+          id,
+          name,
+          coordinate: { latitude, longitude },
+        } = spot;
+        await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+      }
+      await testDb.db.insert(archivedSpots).values({ spotId: spotB.id, archivedAt: new Date() });
+
+      // When
+      const result = await repository.findMany();
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual([spotA]);
+    });
   });
 });

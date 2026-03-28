@@ -17,13 +17,17 @@ export async function setup({ provide }: { provide: (key: "databaseUrl", value: 
   container = await new PostgreSqlContainer("postgres:17-alpine").start();
 
   const url = container.getConnectionUri();
-  const migrationClient = postgres(url, { max: 1 });
-  await migrate(drizzle(migrationClient), { migrationsFolder: "./drizzle" });
-  await migrationClient.end();
+  const client = postgres(url, { max: 1 });
+  await migrate(drizzle(client), { migrationsFolder: "./drizzle" });
+  await client.end();
 
   provide("databaseUrl", url);
 }
 
 export async function teardown() {
-  await container?.stop();
+  if (!container) {
+    return;
+  }
+
+  await container.stop();
 }

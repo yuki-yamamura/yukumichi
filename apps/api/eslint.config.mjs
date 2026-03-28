@@ -13,19 +13,12 @@ export default defineConfig([
       drizzle: drizzlePlugin,
     },
     rules: {
-      "drizzle/enforce-delete-with-where": "error",
-      "drizzle/enforce-update-with-where": "error",
+      ...drizzlePlugin.configs.recommended.rules,
     },
   },
   {
     files: ["**/*.test.ts"],
     ...vitestConfig,
-  },
-  {
-    files: ["**/*.test.ts"],
-    rules: {
-      "drizzle/enforce-delete-with-where": "off",
-    },
   },
   prettierConfig,
 ]);

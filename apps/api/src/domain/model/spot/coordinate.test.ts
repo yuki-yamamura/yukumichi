@@ -1,4 +1,4 @@
-import { createCoordinate } from "@/test/helpers/spot";
+import { createCoordinate } from "@/test/fixtures/spot";
 
 import { Coordinate } from "./coordinate";
 

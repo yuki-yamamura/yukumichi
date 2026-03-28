@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { getTableName, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
@@ -6,9 +6,12 @@ import * as schema from "@/infrastructure/database/schema";
 
 import type { Database } from "@/infrastructure/database/client";
 
-export type TestDatabase = {
+const tableNames = Object.values(schema).map((table) => getTableName(table));
+
+type TestDatabase = {
   db: Database;
   cleanup: () => Promise<void>;
+  truncateTables: () => Promise<void>;
 };
 
 export function createTestDatabase(url: string): TestDatabase {
@@ -18,9 +21,8 @@ export function createTestDatabase(url: string): TestDatabase {
   return {
     db,
     cleanup: () => client.end(),
+    truncateTables: async () => {
+      await db.execute(sql.raw(`TRUNCATE TABLE ${tableNames.join(", ")} CASCADE`));
+    },
   };
-}
-
-export async function truncateTables(db: Database) {
-  await db.execute(sql`TRUNCATE TABLE archived_spots, spots CASCADE`);
 }
