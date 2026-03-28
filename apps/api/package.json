@@ -14,6 +14,7 @@
     "test:watch": "vitest watch",
     "format": "prettier --check \"./src/**/*.{ts,json,md}\"",
     "lint": "eslint",
+    "knip": "knip --directory ../.. --workspace @sanpo/api",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"

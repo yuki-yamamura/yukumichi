@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreBinaries": ["prettier", "knip", "cmk"],
+  "workspaces": {
+    "apps/api": {
+      "entry": ["src/server.ts", "src/lambda.ts"]
+    },
+    "apps/web": {
+      "entry": ["src/app/**/*.{ts,tsx}", "open-next.config.ts", "!src/app/**/*.test.*"]
+    }
+  }
+}
