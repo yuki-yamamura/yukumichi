@@ -1,4 +1,4 @@
-import { and, eq, notExists } from "drizzle-orm";
+import { and, desc, eq, notExists } from "drizzle-orm";
 import { err, ok, Result } from "neverthrow";
 
 import { Spot, SpotId } from "@/domain/model/spot/spot";
@@ -33,9 +33,8 @@ export function SpotRepository(db: Database): SpotRepository {
       const rows = await db
         .select()
         .from(spots)
-        .where(
-          notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
-        );
+        .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))))
+        .orderBy(desc(spots.createdAt));
       const spotsResult = Result.combine(rows.map((row) => Spot(row)));
       if (spotsResult.isErr()) {
         throw new Error(spotsResult.error.message);
