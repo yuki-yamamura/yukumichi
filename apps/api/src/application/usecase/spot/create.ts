@@ -1,7 +1,7 @@
 import { err, ok, Result } from "neverthrow";
 
-import { SpotRepository } from "@/domain/model/spot/repository";
-import { SpotValidationError } from "@/domain/model/spot/error";
+import { SpotRepository } from "../../../domain/model/spot/repository";
+import { SpotValidationError } from "../../../domain/model/spot/error";
 import { Spot } from "../../../domain/model/spot/spot";
 import { uuidv7 } from "uuidv7";
 

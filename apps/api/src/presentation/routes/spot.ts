@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { ListSpotsUsecase } from "@/application/usecase/spot/list";
+import type { ListSpotsUsecase } from "../../application/usecase/spot/list";
 import { CreateSpotUsecase } from "../../application/usecase/spot/create";
 import { zValidator } from "@hono/zod-validator";
 import z from "zod";
@@ -48,9 +48,11 @@ export function createSpotRoute({
     )
     .get("/spots", async (context) => {
       const result = await listSpotsUsecase.execute();
-      if (result.isOk()) {
-        return context.json({ spots: result.value });
-      }
+
+      return result.match(
+        (spots) => context.json({ spots }),
+        () => context.json({ spots: [] as never[] }),
+      );
     })
     .get(
       "/spots/:spotId",

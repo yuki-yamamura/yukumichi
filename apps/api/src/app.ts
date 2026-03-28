@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { ListSpotsUsecase } from "@/application/usecase/spot/list";
-import { createDatabase } from "@/infrastructure/database/client";
+import { ListSpotsUsecase } from "./application/usecase/spot/list";
+import { createDatabase } from "./infrastructure/database/client";
 import { createSpotRoute } from "./presentation/routes/spot";
 import { SpotRepository } from "./infrastructure/repositories/spot";
 import { CreateSpotUsecase } from "./application/usecase/spot/create";
