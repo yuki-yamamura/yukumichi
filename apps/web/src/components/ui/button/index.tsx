@@ -36,8 +36,7 @@ const button = cva(styles.base, {
   },
 });
 
-type Props = ComponentProps<typeof ButtonPrimitive> &
-  VariantProps<typeof button>;
+type Props = ComponentProps<typeof ButtonPrimitive> & VariantProps<typeof button>;
 
 export function Button({
   className,

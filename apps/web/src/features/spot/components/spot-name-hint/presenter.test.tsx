@@ -15,9 +15,7 @@ describe("SpotNameHintPresenter", () => {
     const user = userEvent.setup();
     render(<SpotNameHintPresenter spot={spot} />);
 
-    expect(
-      screen.getByText(/Click the button to show the spot name/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Click the button to show the spot name/)).toBeInTheDocument();
     expect(screen.queryByText("東京タワー")).not.toBeInTheDocument();
 
     // When

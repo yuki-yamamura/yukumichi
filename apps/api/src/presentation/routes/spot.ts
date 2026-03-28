@@ -64,10 +64,7 @@ export function createSpotRoute({
           (error) => {
             switch (error.kind) {
               case "not_found": {
-                return context.json(
-                  { error: `spot is not found by ${spotId}` },
-                  404,
-                );
+                return context.json({ error: `spot is not found by ${spotId}` }, 404);
               }
             }
           },
@@ -86,10 +83,7 @@ export function createSpotRoute({
           (error) => {
             switch (error.kind) {
               case "not_found": {
-                return context.json(
-                  { error: `spot is not found by ${spotId}` },
-                  404,
-                );
+                return context.json({ error: `spot is not found by ${spotId}` }, 404);
               }
             }
           },

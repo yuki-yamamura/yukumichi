@@ -21,16 +21,8 @@ export function SpotNameHintPresenter({ spot }: Props) {
 
   return (
     <div className={styles.base}>
-      <div>
-        {isSpotNameDisplayed
-          ? spot.name
-          : "<Click the button to show the spot name>"}
-      </div>
-      <Button
-        type="button"
-        disabled={isSpotNameDisplayed}
-        onClick={handleButtonClick}
-      >
+      <div>{isSpotNameDisplayed ? spot.name : "<Click the button to show the spot name>"}</div>
+      <Button type="button" disabled={isSpotNameDisplayed} onClick={handleButtonClick}>
         Show
       </Button>
     </div>

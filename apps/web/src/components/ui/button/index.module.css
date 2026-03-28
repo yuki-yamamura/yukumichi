@@ -30,8 +30,7 @@
 
   &[aria-invalid="true"] {
     border-color: var(--destructive);
-    box-shadow: 0 0 0 3px
-      color-mix(in srgb, var(--destructive) 20%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
   }
 
   & svg {
@@ -65,8 +64,7 @@
 
   &:focus-visible {
     border-color: color-mix(in srgb, var(--destructive) 40%, transparent);
-    box-shadow: 0 0 0 3px
-      color-mix(in srgb, var(--destructive) 20%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -77,8 +75,7 @@
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px
-        color-mix(in srgb, var(--destructive) 40%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 40%, transparent);
     }
   }
 }

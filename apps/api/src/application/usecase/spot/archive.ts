@@ -2,10 +2,7 @@ import { err, ok } from "neverthrow";
 
 import { archiveSpot, SpotId } from "@/domain/model/spot/spot";
 
-import type {
-  SpotAlreadyArchivedError,
-  SpotNotFoundError,
-} from "@/domain/model/spot/error";
+import type { SpotAlreadyArchivedError, SpotNotFoundError } from "@/domain/model/spot/error";
 import type { SpotRepository } from "@/domain/model/spot/repository";
 import type { Result } from "neverthrow";
 
@@ -23,9 +20,7 @@ export type ArchiveSpotUsecase = {
   ) => Promise<Result<void, SpotAlreadyArchivedError | SpotNotFoundError>>;
 };
 
-export function ArchiveSpotUsecase({
-  spotRepository,
-}: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
+export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
     execute: async (input) => {
       const spotId = SpotId.parse(input.spotId);

@@ -34,12 +34,7 @@ export function SpotRepository(db: Database): SpotRepository {
         .select()
         .from(spots)
         .where(
-          notExists(
-            db
-              .select()
-              .from(archivedSpots)
-              .where(eq(archivedSpots.spotId, spots.id)),
-          ),
+          notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
         );
       const spotsResult = Result.combine(rows.map((row) => Spot(row)));
       if (spotsResult.isErr()) {
@@ -56,12 +51,7 @@ export function SpotRepository(db: Database): SpotRepository {
         .where(
           and(
             eq(spots.id, id),
-            notExists(
-              db
-                .select()
-                .from(archivedSpots)
-                .where(eq(archivedSpots.spotId, spots.id)),
-            ),
+            notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
           ),
         );
 
