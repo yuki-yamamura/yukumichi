@@ -11,17 +11,48 @@ on:
       - main
 
 jobs:
-  ci:
+  static-checks:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: jdx/mise-action@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store/v10
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @sanpo/web run format
       - run: pnpm --filter @sanpo/web run lint
       - run: pnpm --filter @sanpo/web run check-types
       - run: pnpm --filter @sanpo/web run knip
+
+  test:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store/v10
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install chromium
       - run: pnpm --filter @sanpo/web run test
+
+  storybook:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store/v10
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @sanpo/web run storybook:build
