@@ -36,10 +36,22 @@ const button = cva(styles.base, {
   },
 });
 
-type Props = ComponentProps<typeof ButtonPrimitive> & VariantProps<typeof button>;
+type Props = ComponentProps<typeof ButtonPrimitive> &
+  VariantProps<typeof button>;
 
-export function Button({ className, variant, size, ref, ...props }: Props & { ref?: React.Ref<HTMLButtonElement> }) {
+export function Button({
+  className,
+  variant,
+  size,
+  ref,
+  ...props
+}: Props & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
-    <ButtonPrimitive ref={ref} data-slot="button" className={clsx(button({ variant, size }), className)} {...props} />
+    <ButtonPrimitive
+      ref={ref}
+      data-slot="button"
+      className={clsx(button({ variant, size }), className)}
+      {...props}
+    />
   );
 }

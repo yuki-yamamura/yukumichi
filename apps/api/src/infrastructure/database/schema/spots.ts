@@ -1,4 +1,11 @@
-import { doublePrecision, index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  doublePrecision,
+  index,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const spots = pgTable("spots", {
   id: uuid().primaryKey(),

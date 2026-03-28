@@ -34,10 +34,26 @@ describe("Coordinate", () => {
     });
 
     it.each([
-      { label: "latitude is negatively out of range", latitude: -91, longitude: 0 },
-      { label: "latitude is positively out of range", latitude: 91, longitude: 0 },
-      { label: "longitude is negatively out of range", latitude: 0, longitude: -181 },
-      { label: "longitude is positively out of range", latitude: 0, longitude: 181 },
+      {
+        label: "latitude is negatively out of range",
+        latitude: -91,
+        longitude: 0,
+      },
+      {
+        label: "latitude is positively out of range",
+        latitude: 91,
+        longitude: 0,
+      },
+      {
+        label: "longitude is negatively out of range",
+        latitude: 0,
+        longitude: -181,
+      },
+      {
+        label: "longitude is positively out of range",
+        latitude: 0,
+        longitude: 181,
+      },
     ])("should return an error when $label", ({ latitude, longitude }) => {
       // When
       const result = Coordinate(createCoordinate({ latitude, longitude }));

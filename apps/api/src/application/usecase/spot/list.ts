@@ -11,7 +11,9 @@ export type ListSpotsUsecase = {
   execute: () => Promise<Result<Spot[], never>>;
 };
 
-export function ListSpotsUsecase({ spotRepository }: ListSpotsUsecaseDeps): ListSpotsUsecase {
+export function ListSpotsUsecase({
+  spotRepository,
+}: ListSpotsUsecaseDeps): ListSpotsUsecase {
   return {
     execute: () => {
       return spotRepository.findMany();

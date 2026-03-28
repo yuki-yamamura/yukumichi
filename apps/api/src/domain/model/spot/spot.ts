@@ -26,7 +26,12 @@ type SpotParams = {
   longitude: number;
 };
 
-export function Spot({ id, name, latitude, longitude }: SpotParams): Result<Spot, SpotValidationError> {
+export function Spot({
+  id,
+  name,
+  latitude,
+  longitude,
+}: SpotParams): Result<Spot, SpotValidationError> {
   const spotIdResult = SpotId.safeParse(id);
   if (!spotIdResult.success) {
     return err({

@@ -52,34 +52,48 @@ export function createSpotRoute({
         return context.json({ spots: result.value });
       }
     })
-    .get("/spots/:spotId", zValidator("param", z.object({ spotId: z.uuidv7() })), async (context) => {
-      const { spotId } = context.req.valid("param");
-      const result = await getSpotUsecase.execute({ spotId });
+    .get(
+      "/spots/:spotId",
+      zValidator("param", z.object({ spotId: z.uuidv7() })),
+      async (context) => {
+        const { spotId } = context.req.valid("param");
+        const result = await getSpotUsecase.execute({ spotId });
 
-      return result.match(
-        (spot) => context.json({ spot }),
-        (error) => {
-          switch (error.kind) {
-            case "not_found": {
-              return context.json({ error: `spot is not found by ${spotId}` }, 404);
+        return result.match(
+          (spot) => context.json({ spot }),
+          (error) => {
+            switch (error.kind) {
+              case "not_found": {
+                return context.json(
+                  { error: `spot is not found by ${spotId}` },
+                  404,
+                );
+              }
             }
-          }
-        },
-      );
-    })
-    .post("/spots/:spotId/archive", zValidator("param", z.object({ spotId: z.uuidv7() })), async (context) => {
-      const { spotId } = context.req.valid("param");
-      const result = await archiveSpotUsecase.execute({ spotId });
+          },
+        );
+      },
+    )
+    .post(
+      "/spots/:spotId/archive",
+      zValidator("param", z.object({ spotId: z.uuidv7() })),
+      async (context) => {
+        const { spotId } = context.req.valid("param");
+        const result = await archiveSpotUsecase.execute({ spotId });
 
-      return result.match(
-        () => context.body(null, 204),
-        (error) => {
-          switch (error.kind) {
-            case "not_found": {
-              return context.json({ error: `spot is not found by ${spotId}` }, 404);
+        return result.match(
+          () => context.body(null, 204),
+          (error) => {
+            switch (error.kind) {
+              case "not_found": {
+                return context.json(
+                  { error: `spot is not found by ${spotId}` },
+                  404,
+                );
+              }
             }
-          }
-        },
-      );
-    });
+          },
+        );
+      },
+    );
 }

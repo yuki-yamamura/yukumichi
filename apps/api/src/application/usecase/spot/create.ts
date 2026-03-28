@@ -16,10 +16,14 @@ type CreateSpotUsecaseInput = {
 };
 
 export type CreateSpotUsecase = {
-  execute: (input: CreateSpotUsecaseInput) => Promise<Result<void, SpotValidationError>>;
+  execute: (
+    input: CreateSpotUsecaseInput,
+  ) => Promise<Result<void, SpotValidationError>>;
 };
 
-export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): CreateSpotUsecase {
+export function CreateSpotUsecase({
+  spotRepository,
+}: CreateSpotUsecaseDeps): CreateSpotUsecase {
   return {
     execute: async (input) => {
       const spotResult = Spot({ id: uuidv7(), ...input });
@@ -27,7 +31,9 @@ export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): Cr
         return err(spotResult.error);
       }
 
-      return (await spotRepository.create(spotResult.value)).andThen(() => ok());
+      return (await spotRepository.create(spotResult.value)).andThen(() =>
+        ok(),
+      );
     },
   };
 }

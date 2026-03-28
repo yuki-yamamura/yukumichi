@@ -12,10 +12,14 @@ type GetSpotUsecaseInput = {
 };
 
 export type GetSpotUsecase = {
-  execute: (input: GetSpotUsecaseInput) => Promise<Result<Spot, SpotNotFoundError>>;
+  execute: (
+    input: GetSpotUsecaseInput,
+  ) => Promise<Result<Spot, SpotNotFoundError>>;
 };
 
-export function GetSpotUsecase({ spotRepository }: GetSpotUsecaseDeps): GetSpotUsecase {
+export function GetSpotUsecase({
+  spotRepository,
+}: GetSpotUsecaseDeps): GetSpotUsecase {
   return {
     execute: async ({ spotId }) => {
       return await spotRepository.findById(SpotId.parse(spotId));
