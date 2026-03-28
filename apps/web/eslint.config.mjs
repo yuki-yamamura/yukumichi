@@ -9,7 +9,7 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", ".open-next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", ".open-next/**", "out/**", "build/**", "next-env.d.ts", "generated/**", "storybook-static/**"]),
   ...storybook.configs["flat/recommended"],
   {
     files: ["**/*.test.{ts,tsx}"],
