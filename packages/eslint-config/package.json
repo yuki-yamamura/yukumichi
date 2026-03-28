@@ -1,0 +1,12 @@
+{
+  "name": "@sanpo/eslint",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./vitest": "./vitest.mjs"
+  },
+  "dependencies": {
+    "@vitest/eslint-plugin": "catalog:"
+  }
+}

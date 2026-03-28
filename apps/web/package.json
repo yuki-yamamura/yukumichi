@@ -9,6 +9,8 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env production",
     "start": "next start",
     "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "lint": "eslint",
     "storybook": "storybook dev -p 6006"
   },
@@ -24,19 +26,28 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "catalog:",
     "@opennextjs/cloudflare": "1.17.1",
+    "@sanpo/eslint": "workspace:*",
     "@storybook/addon-mcp": "^0.4.2",
     "@storybook/nextjs-vite": "^10.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "24.11.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@vitest/browser-playwright": "^4.1.2",
     "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "9.39.3",
+    "eslint": "catalog:",
     "eslint-config-next": "16.1.6",
     "eslint-plugin-storybook": "^10.3.3",
+    "eslint-plugin-testing-library": "^7.16.2",
     "storybook": "^10.3.3",
     "typescript": "5.9.3",
+    "uuidv7": "catalog:",
     "vite": "^8.0.3",
+    "vitest": "catalog:",
     "wrangler": "4.69.0"
   }
 }
