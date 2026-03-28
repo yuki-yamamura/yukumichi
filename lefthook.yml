@@ -1,7 +1,7 @@
 pre-commit:
   parallel: true
   jobs:
-    # === web (frontend) ===
+    # web
     - name: web-format
       root: "apps/web/"
       glob: "*.{ts,tsx,css,json,md}"
@@ -22,7 +22,7 @@ pre-commit:
       root: "apps/web/"
       glob: "*.{ts,tsx}"
       run: pnpm run test
-    # === api (backend) ===
+    # api
     - name: api-format
       root: "apps/api/"
       glob: "*.{ts,json,md}"
@@ -47,11 +47,11 @@ pre-push:
       root: "apps/web/"
       glob: "*.{ts,tsx}"
       run: pnpm run knip
-    - name: web-storybook
-      root: "apps/web/"
-      glob: "*.{ts,tsx,css}"
-      run: pnpm run storybook:build
     - name: api-knip
       root: "apps/api/"
       glob: "*.ts"
       run: pnpm run knip
+    - name: web-storybook
+      root: "apps/web/"
+      glob: "*.{ts,tsx,css}"
+      run: pnpm run storybook:build
