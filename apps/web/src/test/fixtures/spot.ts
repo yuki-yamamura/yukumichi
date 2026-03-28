@@ -2,7 +2,7 @@ import { faker, fakerJA } from "@faker-js/faker";
 
 import type { Coordinate, Spot } from "@/features/spot/types/api";
 
-function createCoordinate(overwrite?: Partial<Coordinate>): Coordinate {
+function createCoordinate(overrides?: Partial<Coordinate>): Coordinate {
   const coordinate: Coordinate = {
     latitude: faker.location.latitude(),
     longitude: faker.location.longitude(),
@@ -10,11 +10,11 @@ function createCoordinate(overwrite?: Partial<Coordinate>): Coordinate {
 
   return {
     ...coordinate,
-    ...overwrite,
+    ...overrides,
   };
 }
 
-export function createSpot(overwrite?: Partial<Spot>): Spot {
+export function createSpot(overrides?: Partial<Spot>): Spot {
   const spot: Spot = {
     id: faker.string.uuid({ version: 7 }) as Spot["id"],
     name: fakerJA.lorem.words(2),
@@ -23,6 +23,6 @@ export function createSpot(overwrite?: Partial<Spot>): Spot {
 
   return {
     ...spot,
-    ...overwrite,
+    ...overrides,
   };
 }

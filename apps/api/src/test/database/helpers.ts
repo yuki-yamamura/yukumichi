@@ -1,4 +1,4 @@
-import { getTableName, sql } from "drizzle-orm";
+import { getTableName, isTable, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
@@ -6,7 +6,9 @@ import * as schema from "@/infrastructure/database/schema";
 
 import type { Database } from "@/infrastructure/database/client";
 
-const tableNames = Object.values(schema).map((table) => getTableName(table));
+const tableNames = Object.values(schema)
+  .filter(isTable)
+  .map((table) => getTableName(table));
 
 type TestDatabase = {
   db: Database;
