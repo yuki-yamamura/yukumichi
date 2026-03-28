@@ -31,15 +31,18 @@
   },
   "devDependencies": {
     "@faker-js/faker": "catalog:",
+    "@sanpo/eslint": "workspace:*",
+    "@testcontainers/postgresql": "^11.13.0",
     "@types/node": "24.11.0",
     "@types/pg": "^8.18.0",
     "drizzle-kit": "^0.31.9",
     "esbuild": "^0.27.3",
-    "tsx": "^4.21.0",
-    "@sanpo/eslint": "workspace:*",
     "eslint": "catalog:",
+    "eslint-plugin-drizzle": "^0.2.3",
     "knip": "catalog:",
     "prettier": "catalog:",
+    "testcontainers": "^11.13.0",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3",
     "vitest": "catalog:"
   }
