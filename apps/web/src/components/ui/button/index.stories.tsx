@@ -1,4 +1,4 @@
-import { MailIcon, ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
+import { ChevronRightIcon, LoaderCircleIcon, MailIcon } from "lucide-react";
 
 import { Button } from ".";
 

@@ -1,7 +1,6 @@
-import { Result } from "neverthrow";
-
 import type { SpotRepository } from "@/domain/model/spot/repository";
 import type { Spot } from "@/domain/model/spot/spot";
+import type { Result } from "neverthrow";
 
 type ListSpotsUsecaseDeps = {
   spotRepository: SpotRepository;

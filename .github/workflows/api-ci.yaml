@@ -1,0 +1,35 @@
+name: API CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "apps/api/**"
+      - "packages/**"
+    branches:
+      - main
+
+jobs:
+  ci:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @sanpo/api run format
+      - run: pnpm --filter @sanpo/api run lint
+      - run: pnpm --filter @sanpo/api run check-types
+      - run: pnpm --filter @sanpo/api run knip
+      - run: pnpm --filter @sanpo/api run test

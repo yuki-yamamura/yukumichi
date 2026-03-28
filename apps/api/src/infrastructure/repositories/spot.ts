@@ -1,9 +1,11 @@
-import { archivedSpots, spots } from "../database/schema";
-import { Spot, SpotId } from "@/domain/model/spot/spot";
-import type { SpotRepository } from "@/domain/model/spot/repository";
-import { Database } from "../database/client";
-import { err, ok, Result } from "neverthrow";
 import { and, eq, notExists } from "drizzle-orm";
+import { err, ok, Result } from "neverthrow";
+
+import { Spot, SpotId } from "@/domain/model/spot/spot";
+import { archivedSpots, spots } from "@/infrastructure/database/schema";
+
+import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { Database } from "@/infrastructure/database/client";
 
 export function SpotRepository(db: Database): SpotRepository {
   return {
@@ -31,8 +33,10 @@ export function SpotRepository(db: Database): SpotRepository {
       const rows = await db
         .select()
         .from(spots)
-        .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))));
-      const spotsResult = Result.combine(rows.map(Spot));
+        .where(
+          notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
+        );
+      const spotsResult = Result.combine(rows.map((row) => Spot(row)));
       if (spotsResult.isErr()) {
         throw new Error(spotsResult.error.message);
       }
@@ -45,7 +49,10 @@ export function SpotRepository(db: Database): SpotRepository {
         .select()
         .from(spots)
         .where(
-          and(eq(spots.id, id), notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id)))),
+          and(
+            eq(spots.id, id),
+            notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
+          ),
         );
 
       if (rows.length === 0) {

@@ -1,6 +1,8 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { createSpot } from "@/test/helpers/spot";
+
 import { SpotNameHintPresenter } from "./presenter";
-import { createSpot } from "../../../../test/helpers/spot";
+
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta<typeof SpotNameHintPresenter> = {
   title: "SpotNameHintPresenter",

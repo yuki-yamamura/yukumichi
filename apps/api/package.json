@@ -9,10 +9,12 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node24 --format=cjs --alias:@=./src src/lambda.ts",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "format": "prettier --check \"./src/**/*.{ts,json,md}\"",
     "lint": "eslint",
+    "knip": "knip --directory ../.. --workspace @sanpo/api",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
@@ -36,6 +38,8 @@
     "tsx": "^4.21.0",
     "@sanpo/eslint": "workspace:*",
     "eslint": "catalog:",
+    "knip": "catalog:",
+    "prettier": "catalog:",
     "typescript": "5.9.3",
     "vitest": "catalog:"
   }

@@ -1,18 +1,20 @@
-import { err, ok, Result } from "neverthrow";
-
-import { SpotRepository } from "@/domain/model/spot/repository";
-import { SpotValidationError } from "@/domain/model/spot/error";
-import { Spot } from "../../../domain/model/spot/spot";
+import { err, ok } from "neverthrow";
 import { uuidv7 } from "uuidv7";
+
+import { Spot } from "@/domain/model/spot/spot";
+
+import type { SpotValidationError } from "@/domain/model/spot/error";
+import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { Result } from "neverthrow";
 
 type CreateSpotUsecaseDeps = {
   spotRepository: SpotRepository;
 };
 
 type CreateSpotUsecaseInput = {
-  name: string;
   latitude: number;
   longitude: number;
+  name: string;
 };
 
 export type CreateSpotUsecase = {
@@ -27,7 +29,9 @@ export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): Cr
         return err(spotResult.error);
       }
 
-      return (await spotRepository.create(spotResult.value)).andThen(() => ok());
+      const createResult = await spotRepository.create(spotResult.value);
+
+      return createResult.andThen(() => ok());
     },
   };
 }

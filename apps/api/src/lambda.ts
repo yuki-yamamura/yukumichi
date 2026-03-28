@@ -1,5 +1,5 @@
 import { handle } from "hono/aws-lambda";
 
-import { routes } from "@/app";
+import { app } from "@/app";
 
-export const handler = handle(routes);
+export const handler = handle(app);

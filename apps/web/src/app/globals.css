@@ -1,5 +1,5 @@
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
   --primary: #171717;
   --primary-foreground: #fafafa;
@@ -38,9 +38,9 @@ body {
 }
 
 body {
+  font-family: Arial, Helvetica, sans-serif;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

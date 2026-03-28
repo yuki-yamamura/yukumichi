@@ -8,3 +8,5 @@ catalog:
   vitest: ^4.1.2
   uuidv7: ^1.1.0
   "@vitest/eslint-plugin": ^1.6.13
+  prettier: ^3.8.1
+  knip: ^6.0.6

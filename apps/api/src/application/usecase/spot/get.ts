@@ -1,7 +1,9 @@
-import { Result } from "neverthrow";
-import { SpotRepository } from "../../../domain/model/spot/repository";
-import { Spot, SpotId } from "../../../domain/model/spot/spot";
-import { SpotNotFoundError } from "../../../domain/model/spot/error";
+import { SpotId } from "@/domain/model/spot/spot";
+
+import type { SpotNotFoundError } from "@/domain/model/spot/error";
+import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { Spot } from "@/domain/model/spot/spot";
+import type { Result } from "neverthrow";
 
 type GetSpotUsecaseDeps = {
   spotRepository: SpotRepository;

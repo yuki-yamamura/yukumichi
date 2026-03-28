@@ -1,8 +1,9 @@
 import { faker, fakerJA } from "@faker-js/faker";
 import { uuidv7 } from "uuidv7";
-import { Coordinate, Spot } from "../../features/spot/types/api";
 
-export function createCoordinate(overwrite?: Partial<Coordinate>): Coordinate {
+import type { Coordinate, Spot } from "@/features/spot/types/api";
+
+function createCoordinate(overwrite?: Partial<Coordinate>): Coordinate {
   const coordinate: Coordinate = {
     latitude: faker.location.latitude(),
     longitude: faker.location.longitude(),
