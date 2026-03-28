@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@css-modules-kit/codegen": "^0.10.0",
+    "@css-modules-kit/stylelint-plugin": "^0.10.0",
     "@faker-js/faker": "catalog:",
     "@opennextjs/cloudflare": "1.17.1",
     "@sanpo/eslint": "workspace:*",
@@ -56,6 +57,8 @@
     "prettier": "catalog:",
     "storybook": "^10.3.3",
     "stylelint": "^17.6.0",
+    "stylelint-config-css-modules": "^4.6.0",
+    "stylelint-config-recess-order": "^7.7.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "5.9.3",
     "uuidv7": "catalog:",

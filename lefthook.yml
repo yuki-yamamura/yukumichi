@@ -22,14 +22,6 @@ pre-commit:
       root: "apps/web/"
       glob: "*.{ts,tsx}"
       run: pnpm run test
-    - name: web-knip
-      root: "apps/web/"
-      glob: "*.{ts,tsx}"
-      run: pnpm run knip
-    - name: web-storybook
-      root: "apps/web/"
-      glob: "*.{ts,tsx,css}"
-      run: pnpm run storybook:build
     # === api (backend) ===
     - name: api-format
       root: "apps/api/"
@@ -47,6 +39,18 @@ pre-commit:
       root: "apps/api/"
       glob: "*.ts"
       run: pnpm run test
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: web-knip
+      root: "apps/web/"
+      glob: "*.{ts,tsx}"
+      run: pnpm run knip
+    - name: web-storybook
+      root: "apps/web/"
+      glob: "*.{ts,tsx,css}"
+      run: pnpm run storybook:build
     - name: api-knip
       root: "apps/api/"
       glob: "*.ts"
