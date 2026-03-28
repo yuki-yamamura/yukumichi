@@ -8,7 +8,8 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy --env production",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env production",
     "start": "next start",
-    "check-types": "tsc --noEmit",
+    "codegen:cmk": "cmk",
+    "check-types": "cmk && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "format": "prettier --check \"./src/**/*.{ts,tsx,css,json,md}\"",
@@ -28,6 +29,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@css-modules-kit/codegen": "^0.10.0",
     "@faker-js/faker": "catalog:",
     "@opennextjs/cloudflare": "1.17.1",
     "@sanpo/eslint": "workspace:*",
@@ -39,6 +41,7 @@
     "@types/node": "24.11.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@vitest/browser": "^4.1.2",
     "@vitest/browser-playwright": "^4.1.2",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "catalog:",
