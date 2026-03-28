@@ -7,7 +7,7 @@ import clsx from "clsx";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
-import styles from "./button.module.css";
+import styles from "./index.module.css";
 
 const button = cva(styles.base, {
   variants: {
@@ -36,22 +36,10 @@ const button = cva(styles.base, {
   },
 });
 
-type Props = ComponentProps<typeof ButtonPrimitive> &
-  VariantProps<typeof button>;
+type Props = ComponentProps<typeof ButtonPrimitive> & VariantProps<typeof button>;
 
-export function Button({
-  className,
-  variant,
-  size,
-  ref,
-  ...props
-}: Props & { ref?: React.Ref<HTMLButtonElement> }) {
+export function Button({ className, variant, size, ref, ...props }: Props & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
-    <ButtonPrimitive
-      ref={ref}
-      data-slot="button"
-      className={clsx(button({ variant, size }), className)}
-      {...props}
-    />
+    <ButtonPrimitive ref={ref} data-slot="button" className={clsx(button({ variant, size }), className)} {...props} />
   );
 }

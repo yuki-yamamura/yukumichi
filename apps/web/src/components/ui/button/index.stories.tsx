@@ -1,6 +1,6 @@
 import { MailIcon, ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
 
-import { Button } from "./button";
+import { Button } from ".";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
