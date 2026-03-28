@@ -9,9 +9,6 @@ catalogs:
     '@faker-js/faker':
       specifier: ^10.4.0
       version: 10.4.0
-    '@vitest/eslint-plugin':
-      specifier: ^1.6.13
-      version: 1.6.13
     eslint:
       specifier: 9.39.3
       version: 9.39.3
@@ -96,9 +93,6 @@ importers:
       prettier:
         specifier: 'catalog:'
         version: 3.8.1
-      testcontainers:
-        specifier: ^11.13.0
-        version: 11.13.0
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
