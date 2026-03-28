@@ -6,10 +6,10 @@ pre-commit:
       root: "apps/web/"
       glob: "*.{ts,tsx,css,json,md}"
       run: pnpm run format
-    - name: web-lint
+    - name: web-lint-es
       root: "apps/web/"
       glob: "*.{ts,tsx}"
-      run: pnpm run lint
+      run: pnpm run lint:es
     - name: web-lint-style
       root: "apps/web/"
       glob: "*.css"

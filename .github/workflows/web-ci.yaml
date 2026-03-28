@@ -20,7 +20,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @sanpo/web run format
       - run: pnpm --filter @sanpo/web run lint
-      - run: pnpm --filter @sanpo/web run lint:style
       - run: pnpm --filter @sanpo/web run check-types
       - run: pnpm --filter @sanpo/web run knip
       - run: pnpm exec playwright install chromium
