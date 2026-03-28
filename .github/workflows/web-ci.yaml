@@ -1,0 +1,24 @@
+name: Web CI
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths: ["apps/web/**"]
+    branches: [main]
+
+jobs:
+  ci:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F @sanpo/web run format
+      - run: pnpm -F @sanpo/web run lint
+      - run: pnpm -F @sanpo/web run lint:style
+      - run: pnpm -F @sanpo/web run check-types
+      - run: pnpm -F @sanpo/web run knip
+      - run: pnpm exec playwright install chromium
+      - run: pnpm -F @sanpo/web run test
+      - run: pnpm -F @sanpo/web run storybook:build

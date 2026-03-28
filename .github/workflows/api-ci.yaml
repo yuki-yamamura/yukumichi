@@ -1,0 +1,21 @@
+name: API CI
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths: ["apps/api/**"]
+    branches: [main]
+
+jobs:
+  ci:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F @sanpo/api run format
+      - run: pnpm -F @sanpo/api run lint
+      - run: pnpm -F @sanpo/api run check-types
+      - run: pnpm -F @sanpo/api run knip
+      - run: pnpm -F @sanpo/api run test
