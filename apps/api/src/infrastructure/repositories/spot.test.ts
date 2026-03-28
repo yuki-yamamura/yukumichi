@@ -1,31 +1,27 @@
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { uuidv7 } from "uuidv7";
 import { inject } from "vitest";
 
 import { Spot, SpotId } from "@/domain/model/spot/spot";
-import { createTestDatabase, truncateTables } from "@/test/helpers/database";
+import * as schema from "@/infrastructure/database/schema";
+import { truncateTables } from "@/test/helpers/database";
 import { createCoordinate } from "@/test/helpers/spot";
 
 import { SpotRepository } from "./spot";
 
-import type { SpotRepository as SpotRepositoryType } from "@/domain/model/spot/repository";
-import type { TestDatabase } from "@/test/helpers/database";
+const client = postgres(inject("databaseUrl"));
+const db = drizzle(client, { schema, casing: "snake_case" });
 
 describe("SpotRepository", () => {
-  let testDb: TestDatabase;
-  let repository: SpotRepositoryType;
-
-  beforeAll(() => {
-    const databaseUrl = inject("databaseUrl");
-    testDb = createTestDatabase(databaseUrl);
-    repository = SpotRepository(testDb.db);
-  });
+  const repository = SpotRepository(db);
 
   beforeEach(async () => {
-    await truncateTables(testDb.db);
+    await truncateTables(db);
   });
 
   afterAll(async () => {
-    await testDb.cleanup();
+    await client.end();
   });
 
   it("should create a spot and find it by ID", async () => {
