@@ -1,4 +1,4 @@
-import { createSpot } from "@/test/helpers/spot";
+import { createSpot } from "@/test/fixtures/spot";
 
 import { SpotNameHintPresenter } from "./presenter";
 

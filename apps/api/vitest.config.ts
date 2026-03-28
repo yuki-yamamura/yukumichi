@@ -5,6 +5,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     globals: true,
+    globalSetup: "./src/test/database/vitest.setup.ts",
+    hookTimeout: 30_000,
   },
   resolve: {
     alias: {
