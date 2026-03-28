@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import { Spot } from "../../types/api";
+import type { Spot } from "@/features/spot/types/api";
 
 import styles from "./presenter.module.css";
 

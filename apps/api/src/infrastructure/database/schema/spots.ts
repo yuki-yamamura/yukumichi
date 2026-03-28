@@ -1,6 +1,5 @@
 import {
   doublePrecision,
-  index,
   pgTable,
   text,
   timestamp,

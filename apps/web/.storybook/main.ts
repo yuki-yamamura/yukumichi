@@ -1,11 +1,10 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { StorybookConfig } from "@storybook/nextjs-vite";
 
-import { dirname } from "path";
-
-import { fileURLToPath } from "url";
-
 function getAbsolutePath(value: string) {
-  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+  return path.dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
 }
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],

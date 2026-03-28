@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import { SpotNameHintPresenter } from "./presenter";
-import { createSpot } from "../../../../test/helpers/spot";
 import userEvent from "@testing-library/user-event";
+
+import { createSpot } from "@/test/helpers/spot";
+
+import { SpotNameHintPresenter } from "./presenter";
 
 describe("SpotNameHintPresenter", () => {
   it("should display place name and disable button after button is clicked", async () => {

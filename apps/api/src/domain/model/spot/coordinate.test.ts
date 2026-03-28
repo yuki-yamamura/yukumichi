@@ -1,4 +1,5 @@
-import { createCoordinate } from "../../../test/helpers/spot";
+import { createCoordinate } from "@/test/helpers/spot";
+
 import { Coordinate } from "./coordinate";
 
 describe("Coordinate", () => {

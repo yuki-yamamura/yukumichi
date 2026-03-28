@@ -1,6 +1,8 @@
+import { err, ok } from "neverthrow";
 import z from "zod";
-import { SpotValidationError } from "./error";
-import { err, ok, Result } from "neverthrow";
+
+import type { SpotValidationError } from "./error";
+import type { Result } from "neverthrow";
 
 const latitudeSchema = z.number().min(-90).max(90);
 const longitudeSchema = z.number().min(-180).max(180);

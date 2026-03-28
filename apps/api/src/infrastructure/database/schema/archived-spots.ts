@@ -1,4 +1,5 @@
 import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+
 import { spots } from "./spots";
 
 export const archivedSpots = pgTable("archived_spots", {
