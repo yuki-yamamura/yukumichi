@@ -9,6 +9,9 @@ catalogs:
     '@faker-js/faker':
       specifier: ^10.4.0
       version: 10.4.0
+    '@vitest/eslint-plugin':
+      specifier: ^1.6.13
+      version: 1.6.13
     eslint:
       specifier: 9.39.3
       version: 9.39.3
@@ -18,9 +21,6 @@ catalogs:
     prettier:
       specifier: ^3.8.1
       version: 3.8.1
-    uuidv7:
-      specifier: ^1.1.0
-      version: 1.1.0
     vitest:
       specifier: ^4.1.2
       version: 4.1.2
@@ -54,7 +54,7 @@ importers:
         specifier: ^3.4.8
         version: 3.4.8
       uuidv7:
-        specifier: 'catalog:'
+        specifier: ^1.1.0
         version: 1.1.0
       zod:
         specifier: ^4.3.6
@@ -220,9 +220,6 @@ importers:
       typescript:
         specifier: 5.9.3
         version: 5.9.3
-      uuidv7:
-        specifier: 'catalog:'
-        version: 1.1.0
       vite:
         specifier: ^8.0.3
         version: 8.0.3(@types/node@24.11.0)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.2)
@@ -8920,8 +8917,8 @@ snapshots:
 
   '@vitest/eslint-plugin@1.6.13(@typescript-eslint/eslint-plugin@8.57.2(@typescript-eslint/parser@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)(vitest@4.1.2)':
     dependencies:
-      '@typescript-eslint/scope-manager': 8.56.1
-      '@typescript-eslint/utils': 8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/scope-manager': 8.57.2
+      '@typescript-eslint/utils': 8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.3(jiti@2.6.1)
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.57.2(@typescript-eslint/parser@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)
