@@ -1,0 +1,53 @@
+pre-commit:
+  parallel: true
+  jobs:
+    # === web (frontend) ===
+    - name: web-format
+      root: "apps/web/"
+      glob: "*.{ts,tsx,css,json,md}"
+      run: pnpm run format
+    - name: web-lint
+      root: "apps/web/"
+      glob: "*.{ts,tsx}"
+      run: pnpm run lint
+    - name: web-lint-style
+      root: "apps/web/"
+      glob: "*.css"
+      run: pnpm run lint:style
+    - name: web-check-types
+      root: "apps/web/"
+      glob: "*.{ts,tsx,css}"
+      run: pnpm run check-types
+    - name: web-test
+      root: "apps/web/"
+      glob: "*.{ts,tsx}"
+      run: pnpm run test
+    - name: web-knip
+      root: "apps/web/"
+      glob: "*.{ts,tsx}"
+      run: pnpm run knip
+    - name: web-storybook
+      root: "apps/web/"
+      glob: "*.{ts,tsx,css}"
+      run: pnpm run storybook:build
+    # === api (backend) ===
+    - name: api-format
+      root: "apps/api/"
+      glob: "*.{ts,json,md}"
+      run: pnpm run format
+    - name: api-lint
+      root: "apps/api/"
+      glob: "*.ts"
+      run: pnpm run lint
+    - name: api-check-types
+      root: "apps/api/"
+      glob: "*.ts"
+      run: pnpm run check-types
+    - name: api-test
+      root: "apps/api/"
+      glob: "*.ts"
+      run: pnpm run test
+    - name: api-knip
+      root: "apps/api/"
+      glob: "*.ts"
+      run: pnpm run knip
