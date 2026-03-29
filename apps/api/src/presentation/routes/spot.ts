@@ -1,6 +1,13 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { describeRoute, resolver } from "hono-openapi";
 import z from "zod";
+
+import {
+  ErrorResponseSchema,
+  GetSpotResponseSchema,
+  ListSpotsResponseSchema,
+} from "@/presentation/schemas/spot";
 
 import type { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
 import type { CreateSpotUsecase } from "@/application/usecase/spot/create";
@@ -23,6 +30,19 @@ export function createSpotRoute({
   return new Hono()
     .post(
       "/spots",
+      describeRoute({
+        tags: ["Spots"],
+        description: "Create a new spot",
+        responses: {
+          201: { description: "Spot created successfully" },
+          500: {
+            description: "Domain validation error",
+            content: {
+              "application/json": { schema: resolver(ErrorResponseSchema) },
+            },
+          },
+        },
+      }),
       zValidator(
         "json",
         z.object({
@@ -47,13 +67,50 @@ export function createSpotRoute({
         );
       },
     )
-    .get("/spots", async (context) => {
-      const result = await listSpotsUsecase.execute();
+    .get(
+      "/spots",
+      describeRoute({
+        tags: ["Spots"],
+        description: "List all spots",
+        responses: {
+          200: {
+            description: "Returns a list of spots",
+            content: {
+              "application/json": {
+                schema: resolver(ListSpotsResponseSchema),
+              },
+            },
+          },
+        },
+      }),
+      async (context) => {
+        const result = await listSpotsUsecase.execute();
 
-      return context.json({ spots: result._unsafeUnwrap() });
-    })
+        return context.json({ spots: result._unsafeUnwrap() });
+      },
+    )
     .get(
       "/spots/:spotId",
+      describeRoute({
+        tags: ["Spots"],
+        description: "Get a spot by ID",
+        responses: {
+          200: {
+            description: "Returns the spot",
+            content: {
+              "application/json": {
+                schema: resolver(GetSpotResponseSchema),
+              },
+            },
+          },
+          404: {
+            description: "Spot not found",
+            content: {
+              "application/json": { schema: resolver(ErrorResponseSchema) },
+            },
+          },
+        },
+      }),
       zValidator("param", z.object({ spotId: z.uuidv7() })),
       async (context) => {
         const { spotId } = context.req.valid("param");
@@ -73,6 +130,19 @@ export function createSpotRoute({
     )
     .post(
       "/spots/:spotId/archive",
+      describeRoute({
+        tags: ["Spots"],
+        description: "Archive a spot",
+        responses: {
+          204: { description: "Spot archived successfully" },
+          404: {
+            description: "Spot not found",
+            content: {
+              "application/json": { schema: resolver(ErrorResponseSchema) },
+            },
+          },
+        },
+      }),
       zValidator("param", z.object({ spotId: z.uuidv7() })),
       async (context) => {
         const { spotId } = context.req.valid("param");
