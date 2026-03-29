@@ -128,7 +128,7 @@ export function createSpotRoute({
         description: "Archive a spot",
         responses: {
           204: { description: "Spot archived successfully" },
-          400: {
+          409: {
             description: "Already archived",
             content: {
               "application/json": { schema: resolver(errorResponseSchema) },

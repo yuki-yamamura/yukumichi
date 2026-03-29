@@ -3,7 +3,7 @@ import z from "zod";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 export const errorResponseSchema = z.object({
-  code: z.enum(["NOT_FOUND_ERROR", "VALIDATION_ERROR", "UNKNOWN_ERROR"]),
+  code: z.enum(["CONFLICT_ERROR", "NOT_FOUND_ERROR", "VALIDATION_ERROR", "UNKNOWN_ERROR"]),
   message: z.string(),
 });
 
@@ -22,13 +22,16 @@ export function toApiError(error: { kind: ErrorKind; message: string }): ApiErro
       return { code: "VALIDATION_ERROR", message: error.message };
     }
     case "already_archived": {
-      return { code: "VALIDATION_ERROR", message: error.message };
+      return { code: "CONFLICT_ERROR", message: error.message };
     }
   }
 }
 
 export function toHttpStatus(code: ErrorCode): ContentfulStatusCode {
   switch (code) {
+    case "CONFLICT_ERROR": {
+      return 409;
+    }
     case "NOT_FOUND_ERROR": {
       return 404;
     }
