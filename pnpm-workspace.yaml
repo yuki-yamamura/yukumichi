@@ -9,3 +9,4 @@ catalog:
   "@vitest/eslint-plugin": ^1.6.13
   prettier: ^3.8.1
   knip: ^6.0.6
+  typescript: 5.9.3
