@@ -17,6 +17,9 @@ describe("ArchiveSpotUsecase", () => {
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spot.id)),
         create: vi.fn(),
+        findArchivedSpotById: vi
+          .fn()
+          .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(ok(spot)),
         findMany: vi.fn(),
       };
@@ -40,8 +43,11 @@ describe("ArchiveSpotUsecase", () => {
       const message = faker.lorem.sentence();
 
       const spotRepository: SpotRepository = {
-        archive: vi.fn().mockResolvedValue(ok(spotId)),
+        archive: vi.fn(),
         create: vi.fn(),
+        findArchivedSpotById: vi
+          .fn()
+          .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         findMany: vi.fn(),
       };
@@ -61,13 +67,15 @@ describe("ArchiveSpotUsecase", () => {
 
     it("should return an error when a spot is already archived", async () => {
       // Given
-      const spotId = faker.string.uuid({ version: 7 });
-      const message = faker.lorem.sentence();
+      const spot = createSpot();
+      const spotId = spot.id;
+      const archivedSpot = { ...spot, archivedAt: faker.date.past() };
 
       const spotRepository: SpotRepository = {
-        archive: vi.fn().mockResolvedValue(ok(spotId)),
+        archive: vi.fn(),
         create: vi.fn(),
-        findById: vi.fn().mockResolvedValue(err({ kind: "conflict", message })),
+        findArchivedSpotById: vi.fn().mockResolvedValue(ok(archivedSpot)),
+        findById: vi.fn(),
         findMany: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
@@ -81,10 +89,7 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "conflict",
-        message,
-      });
+      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "conflict" });
     });
   });
 });

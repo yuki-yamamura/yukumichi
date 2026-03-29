@@ -257,5 +257,33 @@ describe("createSpotRoute", () => {
         message,
       });
     });
+
+    it("should return 409 status code when a spot is already archived", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: {
+          execute: vi.fn().mockResolvedValue(err({ kind: "conflict", message })),
+        },
+        createSpotUsecase: { execute: vi.fn() },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+      });
+
+      const client = testClient(spotRoute);
+      const spotId = faker.string.uuid({ version: 7 });
+
+      // When
+      const response = await client.spots[":spotId"].archive.$post({
+        param: { spotId },
+      });
+
+      // Then
+      expect(response.status).toBe(409);
+      expect(await response.json()).toEqual({
+        code: "CONFLICT_ERROR",
+        message,
+      });
+    });
   });
 });

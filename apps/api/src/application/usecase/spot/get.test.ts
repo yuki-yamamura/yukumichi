@@ -17,6 +17,7 @@ describe("GetSpotUsecase", () => {
       const spotRepository: SpotRepository = {
         archive: vi.fn(),
         create: vi.fn(),
+        findArchivedSpotById: vi.fn(),
         findById: vi.fn().mockResolvedValue(ok(spot)),
         findMany: vi.fn(),
       };
@@ -40,6 +41,7 @@ describe("GetSpotUsecase", () => {
       const spotRepository: SpotRepository = {
         archive: vi.fn(),
         create: vi.fn(),
+        findArchivedSpotById: vi.fn(),
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         findMany: vi.fn(),
       };
