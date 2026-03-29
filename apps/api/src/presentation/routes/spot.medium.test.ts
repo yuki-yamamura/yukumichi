@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { eq } from "drizzle-orm";
 import { testClient } from "hono/testing";
 import { inject } from "vitest";
 
@@ -13,34 +14,45 @@ const testDb = createTestDatabase(databaseUrl);
 const app = createApp({ databaseUrl });
 const client = testClient(app);
 
-describe("post /spots", () => {
-  const coordinate = createCoordinate({
-    latitude: 34.0522,
-    longitude: 118.2437,
-  });
-  const spotId = SpotId.parse(faker.string.uuid({ version: 7 }));
-  const spot = createSpot({
-    id: spotId,
-    name: "Test Spot",
-    coordinate,
-  });
+const coordinateA = createCoordinate({
+  latitude: 34.0522,
+  longitude: 118.2437,
+});
+const spotA = createSpot({
+  id: SpotId.parse(faker.string.uuid({ version: 7 })),
+  name: "Test Spot A",
+  coordinate: coordinateA,
+});
 
-  beforeEach(async () => {
-    await testDb.truncateTables();
+const coordinateB = createCoordinate({
+  latitude: 40.7128,
+  longitude: 74.006,
+});
+const spotB = createSpot({
+  id: SpotId.parse(faker.string.uuid({ version: 7 })),
+  name: "Test Spot B",
+  coordinate: coordinateB,
+});
 
-    const {
-      id,
-      name,
-      coordinate: { latitude, longitude },
-    } = spot;
+beforeEach(async () => {
+  await testDb.truncateTables();
+
+  const fakeSpots = [spotA, spotB];
+  for (const {
+    id,
+    name,
+    coordinate: { latitude, longitude },
+  } of fakeSpots) {
     await testDb.db.insert(spots).values({ id, name, latitude, longitude });
-  });
+  }
+});
 
-  afterAll(async () => {
-    await testDb.cleanup();
-  });
+afterAll(async () => {
+  await testDb.cleanup();
+});
 
-  it("should create a new spot and return success response", async () => {
+describe("post /spots", () => {
+  it("should create a new spot and return created status", async () => {
     // When
     const response = await client.spots.$post({
       json: {
@@ -56,12 +68,65 @@ describe("post /spots", () => {
 
     // Postcondition
     const rows = await testDb.db.select().from(spots);
-    expect(rows).toHaveLength(2);
-    expect(rows[1]).toEqual({
+    expect(rows).toHaveLength(3);
+    expect(rows[2]).toEqual({
       id: expect.any(String),
       name: "Test Spot",
       latitude: 37.7749,
       longitude: -122.4194,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    });
+  });
+});
+
+describe("get /spots", () => {
+  it("should return a success response with a list of spots", async () => {
+    // When
+    const response = await client.spots.$get();
+
+    // Then
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ spots: [spotB, spotA] });
+  });
+});
+
+describe("get /spots:spotId", () => {
+  it("should return a success response with a specified spot", async () => {
+    // When
+    const response = await client.spots[":spotId"].$get({
+      param: {
+        spotId: spotA.id,
+      },
+    });
+
+    // Then
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ spot: spotA });
+  });
+});
+
+describe("post /spots:postId/archive", () => {
+  it("should archive a specified spot and return a success response", async () => {
+    // When
+    const response = await client.spots[":spotId"].archive.$post({
+      param: {
+        spotId: spotA.id,
+      },
+    });
+
+    // Then
+    expect(response.status).toBe(204);
+    expect(await response.text()).toBe("");
+
+    // Postcondition
+    const rows = await testDb.db.select().from(spots).where(eq(spots.id, spotA.id));
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toEqual({
+      id: spotA.id,
+      name: spotA.name,
+      latitude: spotA.coordinate.latitude,
+      longitude: spotA.coordinate.longitude,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
