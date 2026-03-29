@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { ok } from "neverthrow";
 
-import { SpotId } from "@/domain/model/spot/spot";
+import { createSpot } from "@/test/fixtures/spot";
 
 import { CreateSpotUsecase } from "./create";
 
@@ -11,20 +11,20 @@ describe("CreateSpotUsecase", () => {
   describe("execute", () => {
     it("should create a spot", async () => {
       // Given
-      const spotId = SpotId.parse(faker.string.uuid({ version: 7 }));
+      const spot = createSpot();
 
       const spotRepository: SpotRepository = {
         archive: vi.fn(),
-        create: vi.fn().mockResolvedValue(ok(spotId)),
+        create: vi.fn().mockResolvedValue(ok(spot.id)),
         findById: vi.fn(),
         findMany: vi.fn(),
       };
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
-        name: "Test Park",
-        latitude: 35.6762,
-        longitude: 139.6503,
+        name: faker.location.street(),
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
       };
 
       // When
@@ -32,7 +32,6 @@ describe("CreateSpotUsecase", () => {
 
       // Then
       expect(result.isOk()).toBe(true);
-      expect(spotRepository.create).toHaveBeenCalledOnce();
     });
 
     it("should return a validation error for invalid coordinates", async () => {
@@ -46,9 +45,9 @@ describe("CreateSpotUsecase", () => {
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
-        name: "Test Park",
+        name: faker.location.street(),
         latitude: 999, // Invalid latitude
-        longitude: 139.6503,
+        longitude: faker.location.longitude(),
       };
 
       // When

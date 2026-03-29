@@ -31,7 +31,7 @@ describe("Spot", () => {
     // Given
     const params = {
       id: "not-a-uuid",
-      name: "Test Park",
+      name: faker.location.street(),
       latitude: 0,
       longitude: 0,
     };
@@ -48,7 +48,7 @@ describe("Spot", () => {
     // Given
     const params = {
       id: faker.string.uuid({ version: 7 }),
-      name: "Test Park",
+      name: faker.location.street(),
       latitude: 0,
       longitude: 999, // Invalid longitude
     };
