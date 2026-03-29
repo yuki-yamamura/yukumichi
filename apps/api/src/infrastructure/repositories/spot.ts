@@ -43,6 +43,29 @@ export function SpotRepository(db: Database): SpotRepository {
       return ok(spotsResult.value);
     },
 
+    findArchivedSpotById: async (id: SpotId) => {
+      const rows = await db
+        .select()
+        .from(spots)
+        .innerJoin(archivedSpots, eq(archivedSpots.spotId, spots.id))
+        .where(eq(spots.id, id));
+
+      if (rows.length === 0) {
+        return err({ kind: "not_found", message: `archived spot not found: ${id}` });
+      }
+
+      const row = rows[0];
+      const spotResult = Spot(row.spots);
+      if (spotResult.isErr()) {
+        throw new Error(spotResult.error.message);
+      }
+
+      return ok({
+        ...spotResult.value,
+        archivedAt: row.archived_spots.archivedAt,
+      });
+    },
+
     findById: async (id: SpotId) => {
       const rows = await db
         .select()
@@ -55,7 +78,7 @@ export function SpotRepository(db: Database): SpotRepository {
         );
 
       if (rows.length === 0) {
-        return err({ kind: "not_found" });
+        return err({ kind: "not_found", message: `spot not found: ${id}` });
       }
 
       const spotResult = Spot(rows[0]);

@@ -7,6 +7,7 @@ export type SpotRepository = {
     archivedSpot: ArchivedSpot,
   ) => Promise<Result<SpotId, SpotAlreadyArchivedError | SpotNotFoundError>>;
   create: (spot: Spot) => Promise<Result<SpotId, never>>;
+  findArchivedSpotById: (id: SpotId) => Promise<Result<ArchivedSpot, SpotNotFoundError>>;
   findById: (id: SpotId) => Promise<Result<Spot, SpotNotFoundError>>;
   findMany: () => Promise<Result<Spot[], never>>;
 };

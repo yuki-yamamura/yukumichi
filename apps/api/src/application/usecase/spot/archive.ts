@@ -24,13 +24,18 @@ export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): 
   return {
     execute: async (input) => {
       const spotId = SpotId.parse(input.spotId);
+
+      const archivedResult = await spotRepository.findArchivedSpotById(spotId);
+      if (archivedResult.isOk()) {
+        return err({ kind: "conflict", message: `spot is already archived: ${spotId}` });
+      }
+
       const spotResult = await spotRepository.findById(spotId);
       if (spotResult.isErr()) {
         return err(spotResult.error);
       }
 
       const archivedSpot = archiveSpot(spotResult.value);
-
       const archiveResult = await spotRepository.archive(archivedSpot);
 
       return archiveResult.andThen(() => ok());

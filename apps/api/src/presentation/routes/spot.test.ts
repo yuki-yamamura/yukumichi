@@ -57,12 +57,13 @@ describe("createSpotRoute", () => {
       expect(response.status).toBe(400);
     });
 
-    it("should return 500 status code when invalid parameters are specified", async () => {
+    it("should return 400 status code when invalid parameters are specified", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message: "error message" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message })),
         },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
@@ -80,8 +81,11 @@ describe("createSpotRoute", () => {
       });
 
       // Then
-      expect(response.status).toBe(500);
-      expect(await response.json()).toEqual({ error: "failed to parse spot" });
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message,
+      });
     });
   });
 
@@ -154,11 +158,12 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         },
         listSpotsUsecase: { execute: vi.fn() },
       });
@@ -175,7 +180,8 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
-        error: `spot is not found by ${spotId}`,
+        code: "NOT_FOUND_ERROR",
+        message,
       });
     });
   });
@@ -226,9 +232,10 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
@@ -246,7 +253,36 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
-        error: `spot is not found by ${spotId}`,
+        code: "NOT_FOUND_ERROR",
+        message,
+      });
+    });
+
+    it("should return 409 status code when a spot is already archived", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: {
+          execute: vi.fn().mockResolvedValue(err({ kind: "conflict", message })),
+        },
+        createSpotUsecase: { execute: vi.fn() },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+      });
+
+      const client = testClient(spotRoute);
+      const spotId = faker.string.uuid({ version: 7 });
+
+      // When
+      const response = await client.spots[":spotId"].archive.$post({
+        param: { spotId },
+      });
+
+      // Then
+      expect(response.status).toBe(409);
+      expect(await response.json()).toEqual({
+        code: "CONFLICT_ERROR",
+        message,
       });
     });
   });
