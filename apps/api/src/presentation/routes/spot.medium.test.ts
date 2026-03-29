@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { testClient } from "hono/testing";
 import { inject } from "vitest";
 
@@ -67,9 +67,9 @@ describe("post /spots", () => {
     expect(await response.text()).toBe("");
 
     // Postcondition
-    const rows = await testDb.db.select().from(spots);
+    const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
     expect(rows).toHaveLength(3);
-    expect(rows[2]).toEqual({
+    expect(rows[0]).toEqual({
       id: expect.any(String),
       name: "Test Spot",
       latitude: 37.7749,
