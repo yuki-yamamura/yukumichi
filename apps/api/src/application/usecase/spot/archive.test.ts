@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { err, ok } from "neverthrow";
 
-import { SpotId } from "@/domain/model/spot/spot";
 import { createSpot } from "@/test/fixtures/spot";
 
 import { ArchiveSpotUsecase } from "./archive";
@@ -12,11 +11,11 @@ describe("ArchiveSpotUsecase", () => {
   describe("execute", () => {
     it("should archive a spot related with id", async () => {
       // Given
-      const spotId = SpotId.parse(faker.string.uuid({ version: 7 }));
-      const spot = createSpot({ id: spotId });
+      const spot = createSpot();
+      const spotId = spot.id;
 
       const spotRepository: SpotRepository = {
-        archive: vi.fn().mockResolvedValue(ok(spotId)),
+        archive: vi.fn().mockResolvedValue(ok(spot.id)),
         create: vi.fn(),
         findById: vi.fn().mockResolvedValue(ok(spot)),
         findMany: vi.fn(),
@@ -37,7 +36,7 @@ describe("ArchiveSpotUsecase", () => {
 
     it("should return an error when a spot is not found", async () => {
       // Given
-      const spotId = SpotId.parse(faker.string.uuid({ version: 7 }));
+      const spotId = faker.string.uuid({ version: 7 });
 
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spotId)),
@@ -61,7 +60,7 @@ describe("ArchiveSpotUsecase", () => {
 
     it("should return an error when a spot is already archived", async () => {
       // Given
-      const spotId = SpotId.parse(faker.string.uuid({ version: 7 }));
+      const spotId = faker.string.uuid({ version: 7 });
 
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spotId)),
