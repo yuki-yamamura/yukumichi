@@ -11,7 +11,7 @@ export type ApiError = z.infer<typeof errorResponseSchema>;
 
 type ErrorCode = ApiError["code"];
 
-type ErrorKind = "already_archived" | "not_found" | "validation";
+type ErrorKind = "conflict" | "not_found" | "validation";
 
 export function toApiError(error: { kind: ErrorKind; message: string }): ApiError {
   switch (error.kind) {
@@ -21,7 +21,7 @@ export function toApiError(error: { kind: ErrorKind; message: string }): ApiErro
     case "validation": {
       return { code: "VALIDATION_ERROR", message: error.message };
     }
-    case "already_archived": {
+    case "conflict": {
       return { code: "CONFLICT_ERROR", message: error.message };
     }
   }

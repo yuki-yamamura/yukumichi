@@ -67,7 +67,7 @@ describe("ArchiveSpotUsecase", () => {
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spotId)),
         create: vi.fn(),
-        findById: vi.fn().mockResolvedValue(err({ kind: "already_archived", message })),
+        findById: vi.fn().mockResolvedValue(err({ kind: "conflict", message })),
         findMany: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
@@ -82,7 +82,7 @@ describe("ArchiveSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "already_archived",
+        kind: "conflict",
         message,
       });
     });
