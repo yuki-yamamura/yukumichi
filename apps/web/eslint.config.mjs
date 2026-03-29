@@ -32,7 +32,7 @@ const eslintConfig = defineConfig([
     files: ["**/*.test.{ts,tsx}"],
     ...testingLibrary.configs["flat/react"],
   },
-  {
+{
     files: ["**/*.tsx"],
     rules: {
       "react/jsx-curly-brace-presence": [

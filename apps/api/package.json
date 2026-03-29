@@ -45,7 +45,7 @@
     "knip": "catalog:",
     "prettier": "catalog:",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   }
 }
