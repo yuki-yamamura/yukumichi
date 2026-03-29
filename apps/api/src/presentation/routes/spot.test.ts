@@ -56,33 +56,33 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(400);
     });
-  });
 
-  it("should return 500 status code when invalid parameters are specified", async () => {
-    // Given
-    const spotRoute = createSpotRoute({
-      archiveSpotUsecase: { execute: vi.fn() },
-      createSpotUsecase: {
-        execute: vi.fn().mockResolvedValue(err({ kind: "validation", message: "error message" })),
-      },
-      getSpotUsecase: { execute: vi.fn() },
-      listSpotsUsecase: { execute: vi.fn() },
+    it("should return 500 status code when invalid parameters are specified", async () => {
+      // Given
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: { execute: vi.fn() },
+        createSpotUsecase: {
+          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message: "error message" })),
+        },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+      });
+
+      const client = testClient(spotRoute);
+
+      // When
+      const response = await client.spots.$post({
+        json: {
+          name: "Test Spot",
+          latitude: 999, // Invalid latitude
+          longitude: -122.4194,
+        },
+      });
+
+      // Then
+      expect(response.status).toBe(500);
+      expect(await response.json()).toEqual({ error: "failed to parse spot" });
     });
-
-    const client = testClient(spotRoute);
-
-    // When
-    const response = await client.spots.$post({
-      json: {
-        name: "Test Spot",
-        latitude: 999, // Invalid latitude
-        longitude: -122.4194,
-      },
-    });
-
-    // Then
-    expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "failed to parse spot" });
   });
 
   describe("get /spots", () => {

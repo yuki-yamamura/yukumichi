@@ -91,7 +91,7 @@ describe("get /spots", () => {
   });
 });
 
-describe("get /spots:spotId", () => {
+describe("get /spots/:spotId", () => {
   it("should return a success response with a specified spot", async () => {
     // When
     const response = await client.spots[":spotId"].$get({
@@ -106,7 +106,7 @@ describe("get /spots:spotId", () => {
   });
 });
 
-describe("post /spots:postId/archive", () => {
+describe("post /spots/:spotId/archive", () => {
   it("should archive a specified spot and return a success response", async () => {
     // When
     const response = await client.spots[":spotId"].archive.$post({
