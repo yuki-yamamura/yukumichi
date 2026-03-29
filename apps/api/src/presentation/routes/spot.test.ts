@@ -59,10 +59,11 @@ describe("createSpotRoute", () => {
 
     it("should return 400 status code when invalid parameters are specified", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message: "error message" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message })),
         },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
@@ -81,7 +82,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
-      expect(await response.json()).toEqual({ code: "VALIDATION_ERROR", message: "error message" });
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message,
+      });
     });
   });
 
@@ -154,11 +158,12 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         },
         listSpotsUsecase: { execute: vi.fn() },
       });
@@ -176,7 +181,7 @@ describe("createSpotRoute", () => {
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
         code: "NOT_FOUND_ERROR",
-        message: "spot not found",
+        message,
       });
     });
   });
@@ -227,9 +232,10 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
@@ -248,7 +254,7 @@ describe("createSpotRoute", () => {
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
         code: "NOT_FOUND_ERROR",
-        message: "spot not found",
+        message,
       });
     });
   });

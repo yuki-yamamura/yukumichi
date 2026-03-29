@@ -37,11 +37,12 @@ describe("ArchiveSpotUsecase", () => {
     it("should return an error when a spot is not found", async () => {
       // Given
       const spotId = faker.string.uuid({ version: 7 });
+      const message = faker.lorem.sentence();
 
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spotId)),
         create: vi.fn(),
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
+        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         findMany: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
@@ -55,19 +56,18 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: "spot not found" });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message });
     });
 
     it("should return an error when a spot is already archived", async () => {
       // Given
       const spotId = faker.string.uuid({ version: 7 });
+      const message = faker.lorem.sentence();
 
       const spotRepository: SpotRepository = {
         archive: vi.fn().mockResolvedValue(ok(spotId)),
         create: vi.fn(),
-        findById: vi
-          .fn()
-          .mockResolvedValue(err({ kind: "already_archived", message: "spot already archived" })),
+        findById: vi.fn().mockResolvedValue(err({ kind: "already_archived", message })),
         findMany: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
@@ -83,7 +83,7 @@ describe("ArchiveSpotUsecase", () => {
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
         kind: "already_archived",
-        message: "spot already archived",
+        message,
       });
     });
   });

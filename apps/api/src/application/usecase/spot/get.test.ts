@@ -36,10 +36,11 @@ describe("GetSpotUsecase", () => {
 
     it("should return an error when a spot is not found", async () => {
       // Given
+      const message = faker.lorem.sentence();
       const spotRepository: SpotRepository = {
         archive: vi.fn(),
         create: vi.fn(),
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
+        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         findMany: vi.fn(),
       };
       const getSpotUsecase = GetSpotUsecase({
@@ -54,7 +55,7 @@ describe("GetSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: "spot not found" });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message });
     });
   });
 });
