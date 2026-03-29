@@ -5,7 +5,7 @@ import { inject } from "vitest";
 
 import { createApp } from "@/app";
 import { SpotId } from "@/domain/model/spot/spot";
-import { spots } from "@/infrastructure/database/schema";
+import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { createTestDatabase } from "@/test/database/helpers";
 import { createCoordinate, createSpot } from "@/test/fixtures/spot";
 
@@ -120,15 +120,14 @@ describe("post /spots:postId/archive", () => {
     expect(await response.text()).toBe("");
 
     // Postcondition
-    const rows = await testDb.db.select().from(spots).where(eq(spots.id, spotA.id));
+    const rows = await testDb.db
+      .select()
+      .from(archivedSpots)
+      .where(eq(archivedSpots.spotId, spotA.id));
     expect(rows).toHaveLength(1);
     expect(rows[0]).toEqual({
-      id: spotA.id,
-      name: spotA.name,
-      latitude: spotA.coordinate.latitude,
-      longitude: spotA.coordinate.longitude,
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
+      spotId: spotA.id,
+      archivedAt: expect.any(Date),
     });
   });
 });
