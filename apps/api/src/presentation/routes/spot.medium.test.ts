@@ -1,38 +1,19 @@
-import { faker } from "@faker-js/faker";
 import { desc, eq } from "drizzle-orm";
 import { testClient } from "hono/testing";
 import { inject } from "vitest";
 
 import { createApp } from "@/app";
-import { SpotId } from "@/domain/model/spot/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { createTestDatabase } from "@/test/database/helpers";
-import { createCoordinate, createSpot } from "@/test/fixtures/spot";
+import { createSpot } from "@/test/fixtures/spot";
 
 const databaseUrl = inject("databaseUrl");
 const testDb = createTestDatabase(databaseUrl);
 const app = createApp({ databaseUrl });
 const client = testClient(app);
 
-const coordinateA = createCoordinate({
-  latitude: 34.0522,
-  longitude: 118.2437,
-});
-const spotA = createSpot({
-  id: SpotId.parse(faker.string.uuid({ version: 7 })),
-  name: "Test Spot A",
-  coordinate: coordinateA,
-});
-
-const coordinateB = createCoordinate({
-  latitude: 40.7128,
-  longitude: 74.006,
-});
-const spotB = createSpot({
-  id: SpotId.parse(faker.string.uuid({ version: 7 })),
-  name: "Test Spot B",
-  coordinate: coordinateB,
-});
+const spotA = createSpot();
+const spotB = createSpot();
 
 beforeEach(async () => {
   await testDb.truncateTables();
