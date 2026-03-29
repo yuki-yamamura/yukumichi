@@ -3,16 +3,23 @@ import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 import z from "zod";
 
-import {
-  ErrorResponseSchema,
-  GetSpotResponseSchema,
-  ListSpotsResponseSchema,
-} from "@/presentation/schemas/spot";
-
 import type { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
 import type { CreateSpotUsecase } from "@/application/usecase/spot/create";
 import type { GetSpotUsecase } from "@/application/usecase/spot/get";
 import type { ListSpotsUsecase } from "@/application/usecase/spot/list";
+
+const SpotSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  coordinate: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+});
+
+const ErrorResponseSchema = z.object({
+  error: z.string(),
+});
 
 type SpotRouteDeps = {
   archiveSpotUsecase: ArchiveSpotUsecase;
@@ -77,7 +84,7 @@ export function createSpotRoute({
             description: "Returns a list of spots",
             content: {
               "application/json": {
-                schema: resolver(ListSpotsResponseSchema),
+                schema: resolver(z.object({ spots: z.array(SpotSchema) })),
               },
             },
           },
@@ -99,7 +106,7 @@ export function createSpotRoute({
             description: "Returns the spot",
             content: {
               "application/json": {
-                schema: resolver(GetSpotResponseSchema),
+                schema: resolver(z.object({ spot: SpotSchema })),
               },
             },
           },
