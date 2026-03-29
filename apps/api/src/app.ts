@@ -31,10 +31,4 @@ export function createApp({ databaseUrl }: AppDeps) {
   );
 }
 
-const routes = createApp({
-  databaseUrl: process.env.DATABASE_URL!,
-});
-
-export type AppType = typeof routes;
-
-export { routes as app };
+export type AppType = ReturnType<typeof createApp>;

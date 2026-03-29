@@ -1,6 +1,8 @@
 import { serve } from "@hono/node-server";
 
-import { app } from "@/app";
+import { createApp } from "@/app";
+
+const app = createApp({ databaseUrl: process.env.DATABASE_URL! });
 
 serve({
   ...app,
