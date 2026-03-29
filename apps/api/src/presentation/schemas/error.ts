@@ -9,9 +9,9 @@ export const errorResponseSchema = z.object({
 
 export type ApiError = z.infer<typeof errorResponseSchema>;
 
-export type ErrorCode = ApiError["code"];
+type ErrorCode = ApiError["code"];
 
-export type ErrorKind = "already_archived" | "not_found" | "validation";
+type ErrorKind = "already_archived" | "not_found" | "validation";
 
 export function toApiError(error: { kind: ErrorKind; message: string }): ApiError {
   switch (error.kind) {
