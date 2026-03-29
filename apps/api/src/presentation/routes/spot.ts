@@ -2,7 +2,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
-import { errorResponseSchema } from "@/presentation/schemas/error";
+import { errorResponseSchema, toApiError, toHttpStatus } from "@/presentation/schemas/error";
 import {
   archiveSpotRequestParamsSchema,
   createSpotRequestBodySchema,
@@ -37,8 +37,8 @@ export function createSpotRoute({
         description: "Create a new spot",
         responses: {
           201: { description: "Spot created successfully" },
-          500: {
-            description: "Domain validation error",
+          400: {
+            description: "Validation error",
             content: {
               "application/json": {
                 schema: resolver(errorResponseSchema),
@@ -55,11 +55,9 @@ export function createSpotRoute({
         return result.match(
           () => context.body(null, 201),
           (error) => {
-            switch (error.kind) {
-              case "validation": {
-                return context.json({ error: "failed to parse spot" }, 500);
-              }
-            }
+            const apiError = toApiError(error);
+
+            return context.json(apiError, toHttpStatus(apiError.code));
           },
         );
       },
@@ -116,11 +114,9 @@ export function createSpotRoute({
         return result.match(
           (spot) => context.json({ spot }),
           (error) => {
-            switch (error.kind) {
-              case "not_found": {
-                return context.json({ error: `spot is not found by ${spotId}` }, 404);
-              }
-            }
+            const apiError = toApiError(error);
+
+            return context.json(apiError, toHttpStatus(apiError.code));
           },
         );
       },
@@ -132,6 +128,12 @@ export function createSpotRoute({
         description: "Archive a spot",
         responses: {
           204: { description: "Spot archived successfully" },
+          400: {
+            description: "Already archived",
+            content: {
+              "application/json": { schema: resolver(errorResponseSchema) },
+            },
+          },
           404: {
             description: "Spot not found",
             content: {
@@ -148,11 +150,9 @@ export function createSpotRoute({
         return result.match(
           () => context.body(null, 204),
           (error) => {
-            switch (error.kind) {
-              case "not_found": {
-                return context.json({ error: `spot is not found by ${spotId}` }, 404);
-              }
-            }
+            const apiError = toApiError(error);
+
+            return context.json(apiError, toHttpStatus(apiError.code));
           },
         );
       },

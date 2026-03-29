@@ -57,7 +57,7 @@ describe("createSpotRoute", () => {
       expect(response.status).toBe(400);
     });
 
-    it("should return 500 status code when invalid parameters are specified", async () => {
+    it("should return 400 status code when invalid parameters are specified", async () => {
       // Given
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
@@ -80,8 +80,8 @@ describe("createSpotRoute", () => {
       });
 
       // Then
-      expect(response.status).toBe(500);
-      expect(await response.json()).toEqual({ error: "failed to parse spot" });
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({ code: "VALIDATION_ERROR", message: "error message" });
     });
   });
 
@@ -158,7 +158,7 @@ describe("createSpotRoute", () => {
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
         },
         listSpotsUsecase: { execute: vi.fn() },
       });
@@ -175,7 +175,8 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
-        error: `spot is not found by ${spotId}`,
+        code: "NOT_FOUND_ERROR",
+        message: "spot not found",
       });
     });
   });
@@ -228,7 +229,7 @@ describe("createSpotRoute", () => {
       // Given
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found" })),
+          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "spot not found" })),
         },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
@@ -246,7 +247,8 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(404);
       expect(await response.json()).toEqual({
-        error: `spot is not found by ${spotId}`,
+        code: "NOT_FOUND_ERROR",
+        message: "spot not found",
       });
     });
   });

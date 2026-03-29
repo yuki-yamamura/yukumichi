@@ -11,6 +11,8 @@ import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
 
+import type { ApiError } from "@/presentation/schemas/error";
+
 type AppDeps = {
   databaseUrl: string;
 };
@@ -21,6 +23,15 @@ export function createApp({ databaseUrl }: AppDeps) {
 
   const app = new Hono();
   app.use(cors());
+  app.onError((error, c) => {
+    // TODO: replace with structured logger and Sentry integration
+    console.error(error);
+
+    return c.json(
+      { code: "UNKNOWN_ERROR", message: "internal server error" } satisfies ApiError,
+      500,
+    );
+  });
 
   const apiApp = app.route(
     "/",

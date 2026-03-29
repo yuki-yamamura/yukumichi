@@ -55,7 +55,7 @@ export function SpotRepository(db: Database): SpotRepository {
         );
 
       if (rows.length === 0) {
-        return err({ kind: "not_found" });
+        return err({ kind: "not_found", message: `spot not found: ${id}` });
       }
 
       const spotResult = Spot(rows[0]);
