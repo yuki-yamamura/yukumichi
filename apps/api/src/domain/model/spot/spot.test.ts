@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+
 import { createCoordinate, createSpot } from "@/test/fixtures/spot";
 
 import { archiveSpot, Spot } from "./spot";
@@ -5,11 +7,12 @@ import { archiveSpot, Spot } from "./spot";
 describe("Spot", () => {
   it("should create a valid spot", () => {
     // Given
+    const id = faker.string.uuid({ version: 7 });
     const coordinate = createCoordinate({ latitude: 0, longitude: 0 });
 
     // When
     const result = Spot({
-      id: "019654e0-b1b8-7714-9e09-c0a76b5ef7c0",
+      id,
       name: "Test Park",
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
@@ -18,53 +21,70 @@ describe("Spot", () => {
     // Then
     expect(result.isOk()).toBe(true);
     expect(result._unsafeUnwrap()).toEqual({
-      id: "019654e0-b1b8-7714-9e09-c0a76b5ef7c0",
+      id,
       name: "Test Park",
       coordinate,
     });
   });
 
-  it("should return a validation error when id is not a UUIDv7", () => {
-    // When
-    const result = Spot({
+  it("should return a validation error when id is not a UUID v7", () => {
+    // Given
+    const params = {
       id: "not-a-uuid",
       name: "Test Park",
       latitude: 0,
       longitude: 0,
-    });
+    };
+
+    // When
+    const result = Spot(params);
 
     // Then
     expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "validation" });
+    expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
   });
 
   it("should return a validation error when coordinates are invalid", () => {
-    // When
-    const result = Spot({
-      id: "019654e0-b1b8-7714-9e09-c0a76b5ef7c0",
+    // Given
+    const params = {
+      id: faker.string.uuid({ version: 7 }),
       name: "Test Park",
-      latitude: 999,
-      longitude: 0,
-    });
+      latitude: 0,
+      longitude: 999, // Invalid longitude
+    };
+
+    // When
+    const result = Spot(params);
 
     // Then
     expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "validation" });
+    expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
   });
 });
 
 describe("archiveSpot", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("should return a spot with archivedAt set", () => {
     // Given
+    const now = new Date("2026-03-29T00:00:00Z");
+    vi.setSystemTime(now);
+
     const spot = createSpot();
 
     // When
-    const archived = archiveSpot(spot);
+    const archivedSpot = archiveSpot(spot);
 
     // Then
-    expect(archived).toEqual({
+    expect(archivedSpot).toEqual({
       ...spot,
-      archivedAt: expect.any(Date),
+      archivedAt: now,
     });
   });
 });

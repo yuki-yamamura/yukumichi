@@ -10,14 +10,13 @@ describe("ListSpotsUsecase", () => {
   describe("execute", () => {
     it("should return spots", async () => {
       // Given
-      const spotA = createSpot();
-      const spotB = createSpot();
+      const spots = [createSpot(), createSpot()];
 
       const spotRepository: SpotRepository = {
         archive: vi.fn(),
         create: vi.fn(),
         findById: vi.fn(),
-        findMany: vi.fn().mockResolvedValue(ok([spotA, spotB])),
+        findMany: vi.fn().mockResolvedValue(ok(spots)),
       };
       const listSpotsUsecase = ListSpotsUsecase({ spotRepository });
 
@@ -26,7 +25,7 @@ describe("ListSpotsUsecase", () => {
 
       // Then
       expect(result.isOk()).toBe(true);
-      expect(result._unsafeUnwrap()).toEqual([spotA, spotB]);
+      expect(result._unsafeUnwrap()).toEqual(spots);
     });
   });
 });

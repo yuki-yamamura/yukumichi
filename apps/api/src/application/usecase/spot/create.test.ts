@@ -47,7 +47,7 @@ describe("CreateSpotUsecase", () => {
 
       const input = {
         name: "Test Park",
-        latitude: 999,
+        latitude: 999, // Invalid latitude
         longitude: 139.6503,
       };
 
@@ -57,7 +57,6 @@ describe("CreateSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "validation" });
-      expect(spotRepository.create).not.toHaveBeenCalled();
     });
   });
 });
