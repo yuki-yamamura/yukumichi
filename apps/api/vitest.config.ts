@@ -7,6 +7,7 @@ export default defineConfig({
     globals: true,
     globalSetup: "./src/test/database/vitest.setup.ts",
     hookTimeout: 30_000,
+    maxWorkers: 1,
   },
   resolve: {
     alias: {
