@@ -1,6 +1,7 @@
 name: Web CI
 
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - opened
@@ -14,7 +15,7 @@ on:
 
 jobs:
   static-checks:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,7 +36,7 @@ jobs:
       - run: pnpm --filter @sanpo/web run knip
 
   test:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -53,7 +54,7 @@ jobs:
       - run: pnpm --filter @sanpo/web run test
 
   storybook:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
