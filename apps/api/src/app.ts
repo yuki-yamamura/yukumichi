@@ -9,21 +9,31 @@ import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
 
-const db = createDatabase(process.env.DATABASE_URL!);
-const spotRepository = SpotRepository(db);
+type AppDeps = {
+  databaseUrl: string;
+};
 
-const app = new Hono();
-app.use(cors());
+export function createApp({ databaseUrl }: AppDeps) {
+  const db = createDatabase(databaseUrl);
+  const spotRepository = SpotRepository(db);
 
-const routes = app.route(
-  "/",
-  createSpotRoute({
-    createSpotUsecase: CreateSpotUsecase({ spotRepository }),
-    listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
-    getSpotUsecase: GetSpotUsecase({ spotRepository }),
-    archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
-  }),
-);
+  const app = new Hono();
+  app.use(cors());
+
+  return app.route(
+    "/",
+    createSpotRoute({
+      createSpotUsecase: CreateSpotUsecase({ spotRepository }),
+      listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
+      getSpotUsecase: GetSpotUsecase({ spotRepository }),
+      archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
+    }),
+  );
+}
+
+const routes = createApp({
+  databaseUrl: process.env.DATABASE_URL!,
+});
 
 export type AppType = typeof routes;
 
