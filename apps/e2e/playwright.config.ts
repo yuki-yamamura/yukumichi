@@ -18,22 +18,20 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: [
-    ...(process.env.CI
-      ? [
-          {
-            command: "pnpm --filter api run dev",
-            url: "http://localhost:3010",
-            reuseExistingServer: false,
-            timeout: 120_000,
-          },
-        ]
-      : []),
-    {
-      command: "pnpm --filter web run dev",
-      url: "http://localhost:3000",
-      reuseExistingServer: !process.env.CI,
-      timeout: 120_000,
-    },
-  ],
+  webServer: process.env.CI
+    ? []
+    : [
+        {
+          command: "pnpm --filter api run dev",
+          url: "http://localhost:3010",
+          reuseExistingServer: true,
+          timeout: 120_000,
+        },
+        {
+          command: "pnpm --filter web run dev",
+          url: "http://localhost:3000",
+          reuseExistingServer: true,
+          timeout: 120_000,
+        },
+      ],
 });
