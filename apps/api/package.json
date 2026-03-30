@@ -1,7 +1,10 @@
 {
   "name": "@sanpo/api",
   "exports": {
-    ".": "./src/app.ts"
+    ".": {
+      "types": "./dist/src/app.d.ts",
+      "default": "./src/app.ts"
+    }
   },
   "version": "0.1.0",
   "private": true,

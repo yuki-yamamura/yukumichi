@@ -39,7 +39,27 @@ jobs:
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter api db:migrate
+      - run: pnpm --filter api check-types
+      - run: pnpm --filter web build
       - run: pnpm dlx playwright install --with-deps chromium
+      - name: Start servers
+        run: |
+          nohup pnpm --filter api exec tsx src/server.ts > /tmp/api.log 2>&1 &
+          nohup pnpm --filter web run start > /tmp/web.log 2>&1 &
+          for i in $(seq 1 30); do
+            API_OK=false; WEB_OK=false
+            curl -sf http://localhost:3010/spots > /dev/null 2>&1 && API_OK=true
+            curl -sf http://localhost:3000 > /dev/null 2>&1 && WEB_OK=true
+            if $API_OK && $WEB_OK; then
+              echo "Both servers ready after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server startup failed after 30s"
+          echo "=== API log ===" && cat /tmp/api.log
+          echo "=== Web log ===" && cat /tmp/web.log
+          exit 1
       - run: pnpm --filter e2e test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
