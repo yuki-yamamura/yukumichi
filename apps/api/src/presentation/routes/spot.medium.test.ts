@@ -22,9 +22,10 @@ beforeEach(async () => {
   for (const {
     id,
     name,
+    description,
     coordinate: { latitude, longitude },
   } of fakeSpots) {
-    await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+    await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
   }
 });
 
