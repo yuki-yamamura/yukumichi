@@ -3,6 +3,7 @@ import z from "zod";
 const spotSchema = z.object({
   id: z.uuidv7(),
   name: z.string(),
+  description: z.string().nullable(),
   coordinate: z.object({
     latitude: z.number(),
     longitude: z.number(),
@@ -11,6 +12,7 @@ const spotSchema = z.object({
 
 export const createSpotRequestBodySchema = z.object({
   name: z.string().min(1),
+  description: z.string().optional(),
   latitude: z.number(),
   longitude: z.number(),
 });

@@ -3,6 +3,7 @@ import { doublePrecision, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-
 export const spots = pgTable("spots", {
   id: uuid().primaryKey(),
   name: text().notNull(),
+  description: text(),
   latitude: doublePrecision().notNull(),
   longitude: doublePrecision().notNull(),
   createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),

@@ -13,7 +13,10 @@ export default async function SpotsPage() {
       <CreateSpotForm />
       <ul>
         {spots.map((spot) => (
-          <li key={spot.id}>{spot.name}</li>
+          <li key={spot.id}>
+            {spot.name}
+            {spot.description && <span> - {spot.description}</span>}
+          </li>
         ))}
       </ul>
     </main>

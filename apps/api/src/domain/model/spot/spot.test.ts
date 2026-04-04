@@ -23,6 +23,7 @@ describe("Spot", () => {
     expect(result._unsafeUnwrap()).toEqual({
       id,
       name: "Test Park",
+      description: null,
       coordinate,
     });
   });

@@ -13,6 +13,7 @@ export function SpotRepository(db: Database): SpotRepository {
       const {
         id,
         name,
+        description,
         coordinate: { latitude, longitude },
       } = input;
       const rows = await db
@@ -20,6 +21,7 @@ export function SpotRepository(db: Database): SpotRepository {
         .values({
           id,
           name,
+          description,
           latitude,
           longitude,
         })

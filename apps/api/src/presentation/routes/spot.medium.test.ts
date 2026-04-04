@@ -53,6 +53,7 @@ describe("post /spots", () => {
     expect(rows[0]).toEqual({
       id: expect.any(String),
       name: "Test Spot",
+      description: null,
       latitude: 37.7749,
       longitude: -122.4194,
       createdAt: expect.any(Date),

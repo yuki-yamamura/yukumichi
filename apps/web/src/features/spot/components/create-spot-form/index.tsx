@@ -16,11 +16,17 @@ export function CreateSpotForm() {
   const form = useForm({
     defaultValues: {
       name: "",
+      description: "",
       latitude: 0,
       longitude: 0,
     },
     onSubmit: async ({ value }) => {
-      await createSpot(value);
+      await createSpot({
+        name: value.name,
+        description: value.description || undefined,
+        latitude: value.latitude,
+        longitude: value.longitude,
+      });
       router.refresh();
       form.reset();
     },
@@ -54,6 +60,21 @@ export function CreateSpotForm() {
             {field.state.meta.errors.length > 0 && (
               <span className={styles.error}>{field.state.meta.errors.join(", ")}</span>
             )}
+          </div>
+        )}
+      </form.Field>
+
+      <form.Field name="description">
+        {(field) => (
+          <div className={styles.field}>
+            <Label htmlFor={field.name}>Description</Label>
+            <Input
+              id={field.name}
+              name={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+            />
           </div>
         )}
       </form.Field>

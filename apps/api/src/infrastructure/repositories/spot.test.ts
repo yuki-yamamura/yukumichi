@@ -48,6 +48,7 @@ describe("SpotRepository", () => {
       expect(rows[0]).toEqual({
         id: spot.id,
         name: spot.name,
+        description: spot.description,
         latitude: spot.coordinate.latitude,
         longitude: spot.coordinate.longitude,
         createdAt: expect.any(Date),
