@@ -56,8 +56,7 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: npx playwright install chromium
-        working-directory: apps/web
+      - run: pnpm --filter @sanpo/web exec playwright install chromium
       - run: pnpm --filter @sanpo/web run test
 
   chromatic:
