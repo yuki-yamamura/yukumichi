@@ -8,6 +8,13 @@
       "when": 1774077170303,
       "tag": "0000_futuristic_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775339215538,
+      "tag": "0001_lean_red_ghost",
+      "breakpoints": true
     }
   ]
 }

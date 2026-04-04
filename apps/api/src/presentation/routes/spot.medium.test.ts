@@ -22,9 +22,10 @@ beforeEach(async () => {
   for (const {
     id,
     name,
+    description,
     coordinate: { latitude, longitude },
   } of fakeSpots) {
-    await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+    await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
   }
 });
 
@@ -53,6 +54,7 @@ describe("post /spots", () => {
     expect(rows[0]).toEqual({
       id: expect.any(String),
       name: "Test Spot",
+      description: null,
       latitude: 37.7749,
       longitude: -122.4194,
       createdAt: expect.any(Date),

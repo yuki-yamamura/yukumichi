@@ -33,6 +33,7 @@ describe("SpotRepository", () => {
           latitude: 0,
           longitude: 0,
         }),
+        description: "A nice park to relax",
       });
 
       // When
@@ -48,6 +49,7 @@ describe("SpotRepository", () => {
       expect(rows[0]).toEqual({
         id: spot.id,
         name: spot.name,
+        description: spot.description,
         latitude: spot.coordinate.latitude,
         longitude: spot.coordinate.longitude,
         createdAt: expect.any(Date),
@@ -66,9 +68,10 @@ describe("SpotRepository", () => {
         const {
           id,
           name,
+          description,
           coordinate: { latitude, longitude },
         } = spot;
-        await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+        await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
       }
 
       // When
@@ -88,9 +91,10 @@ describe("SpotRepository", () => {
         const {
           id,
           name,
+          description,
           coordinate: { latitude, longitude },
         } = spot;
-        await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+        await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
       }
       await testDb.db.insert(archivedSpots).values({ spotId: spotB.id, archivedAt: new Date() });
 
@@ -111,8 +115,9 @@ describe("SpotRepository", () => {
         id,
         name,
         coordinate: { latitude, longitude },
+        description,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
 
       // When
       const result = await repository.findById(spot.id);
@@ -141,8 +146,9 @@ describe("SpotRepository", () => {
         id,
         name,
         coordinate: { latitude, longitude },
+        description,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
       await testDb.db.insert(archivedSpots).values({ spotId: spot.id, archivedAt: new Date() });
 
       // When
@@ -162,8 +168,9 @@ describe("SpotRepository", () => {
         id,
         name,
         coordinate: { latitude, longitude },
+        description,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, latitude, longitude });
+      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
       const archivedAt = new Date();
 
       // When

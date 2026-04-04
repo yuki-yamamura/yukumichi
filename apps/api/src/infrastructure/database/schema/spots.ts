@@ -5,6 +5,7 @@ export const spots = pgTable("spots", {
   name: text().notNull(),
   latitude: doublePrecision().notNull(),
   longitude: doublePrecision().notNull(),
+  description: text(),
   createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
 });

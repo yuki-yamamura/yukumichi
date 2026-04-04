@@ -12,6 +12,7 @@ export type SpotId = z.infer<typeof SpotId>;
 
 export type Spot = Readonly<{
   coordinate: Coordinate;
+  description: string | null;
   id: SpotId;
   name: string;
 }>;
@@ -26,9 +27,11 @@ type SpotParams = {
   latitude: number;
   longitude: number;
   name: string;
+  description?: string | null;
 };
 
 export function Spot({
+  description,
   id,
   name,
   latitude,
@@ -50,6 +53,7 @@ export function Spot({
   return ok({
     id: spotIdResult.data,
     name,
+    description: description ?? null,
     coordinate: coordinateResult.value,
   });
 }
