@@ -19,11 +19,7 @@ FROM base AS builder
 COPY . .
 RUN pnpm --filter @sanpo/api build
 
-# Production stage
-FROM gcr.io/distroless/nodejs24-debian12:nonroot AS production
-WORKDIR /app
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.9.1 /lambda-adapter /opt/extensions/lambda-adapter
-COPY --from=builder /app/apps/api/dist/index.js .
-ENV PORT=3010
-EXPOSE 3010
-CMD ["index.js"]
+# Production stage for AWS Lambda
+FROM public.ecr.aws/lambda/nodejs:24 AS production
+COPY --from=builder /app/apps/api/dist/index.js ${LAMBDA_TASK_ROOT}/
+CMD ["index.handler"]
