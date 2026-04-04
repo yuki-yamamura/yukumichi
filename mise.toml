@@ -2,3 +2,6 @@
 node = "24.14.0"
 pnpm = "10.30.3"
 lefthook = "2.1.4"
+
+[hooks]
+postinstall = "lefthook install"
