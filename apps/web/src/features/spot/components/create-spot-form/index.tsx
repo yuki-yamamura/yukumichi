@@ -16,14 +16,14 @@ export function CreateSpotForm() {
   const form = useForm({
     defaultValues: {
       name: "",
-      description: "",
+      description: undefined,
       latitude: 0,
       longitude: 0,
     },
     onSubmit: async ({ value }) => {
       await createSpot({
         name: value.name,
-        description: value.description || undefined,
+        description: value.description,
         latitude: value.latitude,
         longitude: value.longitude,
       });

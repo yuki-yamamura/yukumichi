@@ -23,7 +23,7 @@ export function createSpot(overrides?: Partial<Spot>): Spot {
   const spot: Spot = {
     id: SpotId.parse(faker.string.uuid({ version: 7 })),
     name: faker.location.street(),
-    description: null,
+    description: faker.lorem.sentence(),
     coordinate,
   };
 
