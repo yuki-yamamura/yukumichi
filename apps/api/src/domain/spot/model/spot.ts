@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { Coordinate } from "./coordinate";
 
-import type { SpotValidationError } from "./error";
+import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
 export const SpotId = z.uuidv7().brand<"SpotId">();
@@ -36,7 +36,7 @@ export function Spot({
   name,
   latitude,
   longitude,
-}: SpotParams): Result<Spot, SpotValidationError> {
+}: SpotParams): Result<Spot, ValidationError> {
   const spotIdResult = SpotId.safeParse(id);
   if (!spotIdResult.success) {
     return err({

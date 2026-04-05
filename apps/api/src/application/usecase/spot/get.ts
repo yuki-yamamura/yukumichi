@@ -1,8 +1,8 @@
-import { SpotId } from "@/domain/model/spot/spot";
+import { SpotId } from "@/domain/spot/model/spot";
 
-import type { SpotNotFoundError } from "@/domain/model/spot/error";
-import type { SpotRepository } from "@/domain/model/spot/repository";
-import type { Spot } from "@/domain/model/spot/spot";
+import type { DataIntegrityError, NotFoundError } from "@/domain/error";
+import type { Spot } from "@/domain/spot/model/spot";
+import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
 type GetSpotUsecaseDeps = {
@@ -14,7 +14,9 @@ type GetSpotUsecaseInput = {
 };
 
 export type GetSpotUsecase = {
-  execute: (input: GetSpotUsecaseInput) => Promise<Result<Spot, SpotNotFoundError>>;
+  execute: (
+    input: GetSpotUsecaseInput,
+  ) => Promise<Result<Spot, DataIntegrityError | NotFoundError>>;
 };
 
 export function GetSpotUsecase({ spotRepository }: GetSpotUsecaseDeps): GetSpotUsecase {

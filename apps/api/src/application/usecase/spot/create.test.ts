@@ -5,7 +5,7 @@ import { createSpot } from "@/test/fixtures/spot";
 
 import { CreateSpotUsecase } from "./create";
 
-import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { SpotRepository } from "@/domain/spot/repository";
 
 describe("CreateSpotUsecase", () => {
   describe("execute", () => {

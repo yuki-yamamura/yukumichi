@@ -1,10 +1,10 @@
 import { err, ok } from "neverthrow";
 import { uuidv7 } from "uuidv7";
 
-import { Spot } from "@/domain/model/spot/spot";
+import { Spot } from "@/domain/spot/model/spot";
 
-import type { SpotValidationError } from "@/domain/model/spot/error";
-import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { ValidationError } from "@/domain/error";
+import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
 type CreateSpotUsecaseDeps = {
@@ -19,7 +19,7 @@ type CreateSpotUsecaseInput = {
 };
 
 export type CreateSpotUsecase = {
-  execute: (input: CreateSpotUsecaseInput) => Promise<Result<void, SpotValidationError>>;
+  execute: (input: CreateSpotUsecaseInput) => Promise<Result<void, ValidationError>>;
 };
 
 export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): CreateSpotUsecase {

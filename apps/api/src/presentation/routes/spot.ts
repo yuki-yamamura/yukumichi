@@ -81,7 +81,14 @@ export function createSpotRoute({
       async (context) => {
         const result = await listSpotsUsecase.execute();
 
-        return context.json({ spots: result._unsafeUnwrap() });
+        return result.match(
+          (spots) => context.json({ spots }),
+          (error) => {
+            const apiError = toApiError(error);
+
+            return context.json(apiError, toHttpStatus(apiError.code));
+          },
+        );
       },
     )
     .get(

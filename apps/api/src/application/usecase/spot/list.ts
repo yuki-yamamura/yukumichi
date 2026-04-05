@@ -1,5 +1,6 @@
-import type { SpotRepository } from "@/domain/model/spot/repository";
-import type { Spot } from "@/domain/model/spot/spot";
+import type { DataIntegrityError } from "@/domain/error";
+import type { Spot } from "@/domain/spot/model/spot";
+import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
 type ListSpotsUsecaseDeps = {
@@ -7,7 +8,7 @@ type ListSpotsUsecaseDeps = {
 };
 
 export type ListSpotsUsecase = {
-  execute: () => Promise<Result<Spot[], never>>;
+  execute: () => Promise<Result<Spot[], DataIntegrityError>>;
 };
 
 export function ListSpotsUsecase({ spotRepository }: ListSpotsUsecaseDeps): ListSpotsUsecase {
