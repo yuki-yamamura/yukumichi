@@ -8,6 +8,14 @@ variable "environment" {
   description = "Environment name (e.g., production, staging)"
 }
 
+variable "private_subnets" {
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+  }))
+  description = "Map of private subnet configurations keyed by short AZ name (e.g., 1a)"
+}
+
 variable "public_subnets" {
   type = map(object({
     cidr_block        = string
