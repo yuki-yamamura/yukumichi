@@ -1,30 +1,7 @@
-terraform {
-  required_version = ">= 1.0"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = local.region
-
-  default_tags {
-    tags = {
-      Environment = local.environment
-      ManagedBy   = "Terraform"
-    }
-  }
-}
-
 locals {
   environment = "production"
   region      = "ap-northeast-1"
 }
-
 
 # -----------------------------------------------------------------------------
 # VPC
@@ -57,9 +34,10 @@ module "rds" {
   vpc_id             = module.vpc.id
   private_subnet_ids = module.vpc.private_subnet_ids
 
-  identifier           = "sanpo-db"
-  engine_version       = "18.3"
-  instance_class       = "db.t4g.micro"
+  identifier     = "sanpo-db"
+  engine_version = "18.3"
+  instance_class = "db.t4g.micro"
+
   allocated_storage = 20
   db_name           = "sanpo"
   username          = "sanpo"
