@@ -1,0 +1,15 @@
+# Terraform state (using local state, not committed)
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Terraform working directory
+.terraform/
+
+# Plan files
+*.tfplan
+tfplan
+
+# Sensitive variable files
+*.auto.tfvars
+!terraform.tfvars
