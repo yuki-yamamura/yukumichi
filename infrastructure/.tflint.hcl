@@ -9,8 +9,6 @@ plugin "aws" {
   source  = "github.com/terraform-linters/tflint-ruleset-aws"
 }
 
-# Child modules inherit required_version and required_providers from the root
-# module, so these rules are not applicable to internal modules.
 rule "terraform_required_version" {
   enabled = false
 }
