@@ -39,7 +39,6 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
 }
 
-# Egress: Lambda → RDS (port 5432)
 resource "aws_vpc_security_group_egress_rule" "rds" {
   security_group_id = aws_security_group.this.id
 
@@ -49,8 +48,6 @@ resource "aws_vpc_security_group_egress_rule" "rds" {
   ip_protocol                  = "tcp"
 }
 
-# Ingress on RDS SG: allow traffic from this Lambda SG
-# SG rules belong to the connection initiator.
 resource "aws_vpc_security_group_ingress_rule" "rds_from_lambda" {
   security_group_id = var.rds_security_group_id
 
@@ -97,7 +94,6 @@ resource "aws_lambda_function" "this" {
     log_group  = aws_cloudwatch_log_group.this.name
   }
 
-  # CI/CD manages image deployments and env var updates
   lifecycle {
     ignore_changes = [image_uri, environment]
   }

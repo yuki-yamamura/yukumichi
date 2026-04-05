@@ -1,23 +1,4 @@
 # -----------------------------------------------------------------------------
-# AMI
-# -----------------------------------------------------------------------------
-
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-*-arm64"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-# -----------------------------------------------------------------------------
 # IAM
 # -----------------------------------------------------------------------------
 
@@ -58,7 +39,6 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
 }
 
-# Egress: Bastion → RDS (port 5432)
 resource "aws_vpc_security_group_egress_rule" "rds" {
   security_group_id = aws_security_group.this.id
 
@@ -68,7 +48,6 @@ resource "aws_vpc_security_group_egress_rule" "rds" {
   ip_protocol                  = "tcp"
 }
 
-# Egress: Bastion → SSM endpoints (port 443)
 resource "aws_vpc_security_group_egress_rule" "ssm" {
   security_group_id = aws_security_group.this.id
 
@@ -78,8 +57,6 @@ resource "aws_vpc_security_group_egress_rule" "ssm" {
   ip_protocol = "tcp"
 }
 
-# Ingress on RDS SG: allow traffic from this bastion SG
-# SG rules belong to the connection initiator.
 resource "aws_vpc_security_group_ingress_rule" "rds_from_ssm" {
   security_group_id = var.rds_security_group_id
 
@@ -87,6 +64,25 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_ssm" {
   from_port                    = 5432
   to_port                      = 5432
   ip_protocol                  = "tcp"
+}
+
+# -----------------------------------------------------------------------------
+# AMI
+# -----------------------------------------------------------------------------
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-arm64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 # -----------------------------------------------------------------------------

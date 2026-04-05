@@ -3,7 +3,7 @@ resource "aws_ecr_repository" "this" {
   image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
-    scan_on_push = false
+    scan_on_push = true
   }
 }
 
@@ -14,7 +14,6 @@ resource "aws_ecr_lifecycle_policy" "this" {
     rules = [
       {
         rulePriority = 1
-        description  = "Keep only ${var.max_image_count} most recent images"
         selection = {
           tagStatus   = "any"
           countType   = "imageCountMoreThan"

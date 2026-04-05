@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# OIDC Provider
+# IAM
 # -----------------------------------------------------------------------------
 
 resource "aws_iam_openid_connect_provider" "github" {
@@ -7,10 +7,6 @@ resource "aws_iam_openid_connect_provider" "github" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = ["2b18947a6a9fc7764fd8b5fb18a863b0c6dac24f"]
 }
-
-# -----------------------------------------------------------------------------
-# IAM Role
-# -----------------------------------------------------------------------------
 
 resource "aws_iam_role" "this" {
   name = "ci-${var.environment}"
