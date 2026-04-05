@@ -39,46 +39,6 @@ module "vpc" {
   }
 }
 
-import {
-  to = module.vpc.aws_vpc.this
-  id = "vpc-0ea012f1e028bca25"
-}
-
-import {
-  to = module.vpc.aws_subnet.public["1a"]
-  id = "subnet-074f73be776ac3f9a"
-}
-
-import {
-  to = module.vpc.aws_subnet.private["1a"]
-  id = "subnet-0eda3406059835bd4"
-}
-
-import {
-  to = module.vpc.aws_subnet.private["1c"]
-  id = "subnet-052a264ffcce7fb2b"
-}
-
-import {
-  to = module.vpc.aws_internet_gateway.this
-  id = "igw-05b67083b1253e610"
-}
-
-import {
-  to = module.vpc.aws_route_table.public
-  id = "rtb-084df636deaf79697"
-}
-
-import {
-  to = module.vpc.aws_route.public_internet
-  id = "rtb-084df636deaf79697_0.0.0.0/0"
-}
-
-import {
-  to = module.vpc.aws_route_table_association.public["1a"]
-  id = "subnet-074f73be776ac3f9a/rtb-084df636deaf79697"
-}
-
 # -----------------------------------------------------------------------------
 # RDS
 # -----------------------------------------------------------------------------
@@ -99,16 +59,6 @@ module "rds" {
   allocated_storage = 20
   db_name           = "sanpo"
   username          = "sanpo"
-}
-
-import {
-  to = module.rds.aws_db_instance.this
-  id = "sanpo-db"
-}
-
-import {
-  to = module.rds.aws_db_subnet_group.this
-  id = "sanpo-db-subnet-group"
 }
 
 # -----------------------------------------------------------------------------
@@ -161,9 +111,4 @@ module "ci" {
   github_repository   = "yuki-yamamura/sanpo"
   ecr_repository_arn  = module.ecr.arn
   lambda_function_arn = module.lambda.arn
-}
-
-import {
-  to = module.ci.aws_iam_openid_connect_provider.github
-  id = "arn:aws:iam::730763715580:oidc-provider/token.actions.githubusercontent.com"
 }
