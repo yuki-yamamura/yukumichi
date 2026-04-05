@@ -108,3 +108,18 @@ module "ecr" {
   name        = "api"
   environment = var.environment
 }
+
+# -----------------------------------------------------------------------------
+# Lambda
+# -----------------------------------------------------------------------------
+
+module "lambda" {
+  source = "../../modules/aws/lambda"
+
+  environment           = var.environment
+  vpc_id                = module.vpc.id
+  private_subnet_ids    = module.vpc.private_subnet_ids
+  rds_security_group_id = module.rds.security_group_id
+  image_uri             = "${module.ecr.repository_url}:latest"
+  database_url          = var.database_url
+}
