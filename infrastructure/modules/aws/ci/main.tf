@@ -1,7 +1,3 @@
-# -----------------------------------------------------------------------------
-# IAM
-# -----------------------------------------------------------------------------
-
 resource "aws_iam_openid_connect_provider" "github" {
   url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]
@@ -38,7 +34,6 @@ resource "aws_iam_role_policy" "this" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # Terraform provisioning — start broad, narrow with IAM Access Analyzer
       {
         Sid    = "TerraformProvisioning"
         Effect = "Allow"
@@ -56,7 +51,6 @@ resource "aws_iam_role_policy" "this" {
         ]
         Resource = "*"
       },
-      # ECR push (deploy)
       {
         Sid      = "ECRAuth"
         Effect   = "Allow"
@@ -76,7 +70,6 @@ resource "aws_iam_role_policy" "this" {
         ]
         Resource = var.ecr_repository_arn
       },
-      # Lambda deploy
       {
         Sid    = "LambdaDeploy"
         Effect = "Allow"

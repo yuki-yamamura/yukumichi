@@ -39,14 +39,21 @@ pre-commit:
       root: "apps/api/"
       glob: "*.ts"
       run: pnpm run test
+    # infrastructure
+    - name: infra-lint
+      root: "infrastructure/"
+      glob: "**/*.tf"
+      run: tflint --init --config "$(pwd)/.tflint.hcl" && tflint --recursive --config "$(pwd)/.tflint.hcl"
 
 pre-push:
   parallel: true
   jobs:
+    # web
     - name: web-knip
       root: "apps/web/"
       glob: "*.{ts,tsx}"
       run: pnpm run knip
+    # api
     - name: api-knip
       root: "apps/api/"
       glob: "*.ts"
