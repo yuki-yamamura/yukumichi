@@ -97,3 +97,14 @@ import {
   to = module.rds.aws_db_instance.this
   id = "sanpo-db"
 }
+
+# -----------------------------------------------------------------------------
+# ECR
+# -----------------------------------------------------------------------------
+
+module "ecr" {
+  source = "../../modules/aws/ecr"
+
+  name        = "api"
+  environment = var.environment
+}
