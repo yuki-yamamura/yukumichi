@@ -4,13 +4,17 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const res = await fetchClient.spots.$get();
-  const { spots } = await res.json();
+  const data = await res.json();
+
+  if ("code" in data) {
+    throw new Error(data.message);
+  }
 
   return (
     <main>
-      <h1>Sanpo</h1>
+      <h1>Sanpo v0.2.0</h1>
       <ul>
-        {spots.map((spot) => (
+        {data.spots.map((spot) => (
           <li key={spot.id}>{spot.name}</li>
         ))}
       </ul>
