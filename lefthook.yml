@@ -40,6 +40,10 @@ pre-commit:
       glob: "*.ts"
       run: pnpm run test
     # infrastructure
+    - name: infra-format
+      root: "infrastructure/"
+      glob: "**/*.tf"
+      run: terraform fmt -recursive
     - name: infra-lint
       root: "infrastructure/"
       glob: "**/*.tf"
