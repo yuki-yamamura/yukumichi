@@ -9,6 +9,19 @@ Migrate a single AWS module from manually-created infrastructure to Terraform. T
 
 **Supported modules:** `vpc`, `rds`, `lambda`, `ecr`, `ssm`, `ci`
 
+## Style Guide
+
+All generated Terraform code must follow the [HashiCorp Terraform Style Guide](https://developer.hashicorp.com/terraform/language/style). Read `references/terraform-style.md` before writing any `.tf` files — it covers argument ordering, naming, formatting, and file organization conventions. The most critical rules are:
+
+- **Argument ordering in resource blocks:** meta-arguments → single-line arguments → block arguments → `lifecycle` → `depends_on`, with blank lines between groups
+- **Argument ordering in variable blocks:** `type` → `description` → `default` → `sensitive` → `validation`
+- **Argument ordering in output blocks:** `description` → `value` → `sensitive`
+- **Every variable** must have both `type` and `description`
+- **Every output** must have a `description`
+- **Alphabetical order** for `variable` and `output` blocks within their files
+- **Comments** use `#` only (not `//` or `/* */`)
+- **Equals sign alignment** for consecutive arguments at the same nesting level
+
 ## Prerequisites
 
 Before starting, verify the toolchain is available:
@@ -131,14 +144,14 @@ provider "aws" {
 
 **infrastructure/environments/production/variables.tf:**
 ```hcl
-variable "region" {
-  description = "AWS region"
+variable "environment" {
   type        = string
+  description = "Environment name (e.g., production, staging)"
 }
 
-variable "environment" {
-  description = "Environment name"
+variable "region" {
   type        = string
+  description = "AWS region to deploy resources in"
 }
 ```
 
@@ -147,6 +160,23 @@ variable "environment" {
 region      = "ap-northeast-1"
 environment = "production"
 ```
+
+**infrastructure/environments/production/.gitignore:**
+```gitignore
+# Terraform state (local state, not committed)
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Terraform working directory
+.terraform/
+
+# Plan files
+*.tfplan
+tfplan
+```
+
+Commit the `.terraform.lock.hcl` file — it ensures reproducible provider installations.
 
 ### 2b. Module Code
 
