@@ -14,8 +14,7 @@ resource "aws_db_instance" "this" {
 
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.this.id]
-  publicly_accessible    = false
-  network_type           = "IPV4"
+  publicly_accessible = false
 
   multi_az = false
 
@@ -25,7 +24,6 @@ resource "aws_db_instance" "this" {
   copy_tags_to_snapshot   = true
 
   auto_minor_version_upgrade = false
-  ca_cert_identifier         = "rds-ca-rsa2048-g1"
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
   deletion_protection             = true
