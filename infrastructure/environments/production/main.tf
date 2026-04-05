@@ -123,3 +123,16 @@ module "lambda" {
   image_uri             = "${module.ecr.repository_url}:latest"
   database_url          = var.database_url
 }
+
+# -----------------------------------------------------------------------------
+# SSM (Bastion)
+# -----------------------------------------------------------------------------
+
+module "ssm" {
+  source = "../../modules/aws/ssm"
+
+  environment           = var.environment
+  vpc_id                = module.vpc.id
+  subnet_id             = module.vpc.public_subnet_ids[0]
+  rds_security_group_id = module.rds.security_group_id
+}
