@@ -40,7 +40,7 @@ resource "aws_db_instance" "this" {
   network_type           = "IPV4"
 
   multi_az          = false
-  availability_zone = "ap-northeast-1c"
+  availability_zone = var.availability_zone
 
   backup_retention_period = 7
   backup_window           = "18:21-18:51"

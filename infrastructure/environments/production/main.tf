@@ -10,8 +10,14 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  region = local.region
 }
+
+locals {
+  environment = "production"
+  region      = "ap-northeast-1"
+}
+
 
 # -----------------------------------------------------------------------------
 # VPC
@@ -21,15 +27,15 @@ module "vpc" {
   source = "../../modules/aws/vpc"
 
   cidr_block  = "10.0.0.0/16"
-  environment = var.environment
+  environment = local.environment
 
   public_subnets = {
-    "1a" = { cidr_block = "10.0.100.0/24", availability_zone = "ap-northeast-1a" }
+    "1a" = { cidr_block = "10.0.100.0/24", availability_zone = "${local.region}a" }
   }
 
   private_subnets = {
-    "1a" = { cidr_block = "10.0.1.0/24", availability_zone = "ap-northeast-1a" }
-    "1c" = { cidr_block = "10.0.2.0/24", availability_zone = "ap-northeast-1c" }
+    "1a" = { cidr_block = "10.0.1.0/24", availability_zone = "${local.region}a" }
+    "1c" = { cidr_block = "10.0.2.0/24", availability_zone = "${local.region}c" }
   }
 }
 
@@ -80,13 +86,14 @@ import {
 module "rds" {
   source = "../../modules/aws/rds"
 
-  environment        = var.environment
+  environment        = local.environment
   vpc_id             = module.vpc.id
   private_subnet_ids = module.vpc.private_subnet_ids
 
   identifier           = "sanpo-db"
   engine_version       = "18.3"
   instance_class       = "db.t4g.micro"
+  availability_zone    = "${local.region}c"
   db_subnet_group_name = "sanpo-db-subnet-group"
 
   allocated_storage = 20
@@ -112,7 +119,7 @@ module "ecr" {
   source = "../../modules/aws/ecr"
 
   name        = "api"
-  environment = var.environment
+  environment = local.environment
 }
 
 # -----------------------------------------------------------------------------
@@ -122,7 +129,7 @@ module "ecr" {
 module "lambda" {
   source = "../../modules/aws/lambda"
 
-  environment           = var.environment
+  environment           = local.environment
   vpc_id                = module.vpc.id
   private_subnet_ids    = module.vpc.private_subnet_ids
   rds_security_group_id = module.rds.security_group_id
@@ -137,7 +144,7 @@ module "lambda" {
 module "ssm" {
   source = "../../modules/aws/ssm"
 
-  environment           = var.environment
+  environment           = local.environment
   vpc_id                = module.vpc.id
   subnet_id             = module.vpc.public_subnet_ids[0]
   rds_security_group_id = module.rds.security_group_id
@@ -150,7 +157,7 @@ module "ssm" {
 module "ci" {
   source = "../../modules/aws/ci"
 
-  environment         = var.environment
+  environment         = local.environment
   github_repository   = "yuki-yamamura/sanpo"
   ecr_repository_arn  = module.ecr.arn
   lambda_function_arn = module.lambda.arn

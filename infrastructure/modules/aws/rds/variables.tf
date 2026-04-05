@@ -3,6 +3,11 @@ variable "allocated_storage" {
   description = "Allocated storage in GB"
 }
 
+variable "availability_zone" {
+  type        = string
+  description = "Availability zone for the RDS instance"
+}
+
 variable "db_name" {
   type        = string
   description = "Name of the database to create"
