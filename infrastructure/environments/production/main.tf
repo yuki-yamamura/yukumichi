@@ -60,11 +60,10 @@ module "rds" {
   identifier           = "sanpo-db"
   engine_version       = "18.3"
   instance_class       = "db.t4g.micro"
-  db_subnet_group_name = "sanpo-db-subnet-group"
-
   allocated_storage = 20
   db_name           = "sanpo"
   username          = "sanpo"
+  password          = var.database_password
 }
 
 # -----------------------------------------------------------------------------

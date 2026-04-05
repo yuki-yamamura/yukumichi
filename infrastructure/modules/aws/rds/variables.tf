@@ -13,11 +13,6 @@ variable "db_name" {
   description = "Name of the database to create"
 }
 
-variable "db_subnet_group_name" {
-  type        = string
-  description = "Name of the DB subnet group"
-}
-
 variable "engine_version" {
   type        = string
   description = "PostgreSQL engine version"
@@ -31,6 +26,12 @@ variable "identifier" {
 variable "instance_class" {
   type        = string
   description = "RDS instance class"
+}
+
+variable "password" {
+  type        = string
+  description = "Master password for the database"
+  sensitive   = true
 }
 
 variable "private_subnet_ids" {
