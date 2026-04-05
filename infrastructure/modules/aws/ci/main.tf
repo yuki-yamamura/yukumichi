@@ -79,6 +79,20 @@ resource "aws_iam_role_policy" "this" {
         ]
         Resource = var.lambda_function_arn
       },
+      {
+        Sid    = "TerraformState"
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+        ]
+        Resource = [
+          "arn:aws:s3:::sanpo-terraform-state",
+          "arn:aws:s3:::sanpo-terraform-state/*",
+        ]
+      },
     ]
   })
 }
