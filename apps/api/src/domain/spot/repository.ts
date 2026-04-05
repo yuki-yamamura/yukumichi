@@ -1,4 +1,4 @@
-import type { ArchivedSpot, Spot, SpotId } from "./model/spot";
+import type { ArchivedSpot, Spot, SpotId } from "./models/spot";
 import type { ConflictError, DataIntegrityError, NotFoundError } from "@/domain/error";
 import type { Result } from "neverthrow";
 

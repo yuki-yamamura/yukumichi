@@ -1,7 +1,7 @@
-import { SpotId } from "@/domain/spot/model/spot";
+import { SpotId } from "@/domain/spot/models/spot";
 
 import type { DataIntegrityError, NotFoundError } from "@/domain/error";
-import type { Spot } from "@/domain/spot/model/spot";
+import type { Spot } from "@/domain/spot/models/spot";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 

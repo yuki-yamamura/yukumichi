@@ -1,6 +1,6 @@
 import { err, ok } from "neverthrow";
 
-import { archiveSpot, SpotId } from "@/domain/spot/model/spot";
+import { archiveSpot, SpotId } from "@/domain/spot/models/spot";
 
 import type { ConflictError, DataIntegrityError, NotFoundError } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";

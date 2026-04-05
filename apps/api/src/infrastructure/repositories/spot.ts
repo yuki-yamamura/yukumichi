@@ -1,7 +1,7 @@
 import { and, desc, eq, notExists } from "drizzle-orm";
 import { err, ok, Result } from "neverthrow";
 
-import { Spot, SpotId } from "@/domain/spot/model/spot";
+import { Spot, SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 
 import type { SpotRepository } from "@/domain/spot/repository";

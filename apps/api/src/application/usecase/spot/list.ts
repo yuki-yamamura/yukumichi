@@ -1,5 +1,5 @@
 import type { DataIntegrityError } from "@/domain/error";
-import type { Spot } from "@/domain/spot/model/spot";
+import type { Spot } from "@/domain/spot/models/spot";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
