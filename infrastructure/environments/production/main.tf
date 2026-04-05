@@ -136,3 +136,21 @@ module "ssm" {
   subnet_id             = module.vpc.public_subnet_ids[0]
   rds_security_group_id = module.rds.security_group_id
 }
+
+# -----------------------------------------------------------------------------
+# CI (GitHub Actions)
+# -----------------------------------------------------------------------------
+
+module "ci" {
+  source = "../../modules/aws/ci"
+
+  environment         = var.environment
+  github_repository   = "yuki-yamamura/sanpo"
+  ecr_repository_arn  = module.ecr.arn
+  lambda_function_arn = module.lambda.arn
+}
+
+import {
+  to = module.ci.aws_iam_openid_connect_provider.github
+  id = "arn:aws:iam::730763715580:oidc-provider/token.actions.githubusercontent.com"
+}
