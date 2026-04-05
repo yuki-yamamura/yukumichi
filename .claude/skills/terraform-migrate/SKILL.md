@@ -41,10 +41,10 @@ infrastructure/
 │   └── aws/
 │       ├── vpc/          # VPC, Subnets, IGW, Route Tables, Route Table Associations
 │       ├── rds/          # RDS Instance, DB Subnet Group, Security Group (shell only)
-│       ├── lambda/       # Lambda, Function URL, SG, SG rules, IAM Role, Policy Attachments, CW Log Group
+│       ├── lambda/       # Lambda, Function URL, SG, SG egress rule (→ RDS) + ingress rule (on RDS SG), IAM Role, Policy Attachments, CW Log Group
 │       ├── ecr/          # ECR Repository, Lifecycle Policy
-│       ├── ssm/          # Bastion EC2, IAM Role, Instance Profile, Policy Attachment, SG, SG rules
-│       └── ci/           # OIDC Provider, IAM Role, IAM Role Policy
+│       ├── ssm/          # Bastion EC2, IAM Role, Instance Profile, Policy Attachment, SG, SG egress rule (→ RDS)
+│       └── ci/           # OIDC Provider, IAM Role, IAM Role Policy (ECR push + Lambda update + Terraform apply)
 └── environments/
     └── production/
         ├── main.tf       # Provider, backend, module calls, import blocks
