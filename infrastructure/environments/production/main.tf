@@ -84,9 +84,10 @@ module "rds" {
   vpc_id             = module.vpc.id
   private_subnet_ids = module.vpc.private_subnet_ids
 
-  identifier     = "sanpo-db"
-  engine_version = "18.3"
-  instance_class = "db.t4g.micro"
+  identifier           = "sanpo-db"
+  engine_version       = "18.3"
+  instance_class       = "db.t4g.micro"
+  db_subnet_group_name = "sanpo-db-subnet-group"
 
   allocated_storage = 20
   db_name           = "sanpo"
@@ -96,6 +97,11 @@ module "rds" {
 import {
   to = module.rds.aws_db_instance.this
   id = "sanpo-db"
+}
+
+import {
+  to = module.rds.aws_db_subnet_group.this
+  id = "sanpo-db-subnet-group"
 }
 
 # -----------------------------------------------------------------------------

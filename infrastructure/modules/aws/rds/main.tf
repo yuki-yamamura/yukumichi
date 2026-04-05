@@ -11,11 +11,11 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "db-${var.environment}"
+  name       = var.db_subnet_group_name
   subnet_ids = var.private_subnet_ids
 
   tags = {
-    Name = "db-${var.environment}"
+    Name = var.db_subnet_group_name
   }
 }
 

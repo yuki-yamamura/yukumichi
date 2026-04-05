@@ -8,6 +8,11 @@ variable "db_name" {
   description = "Name of the database to create"
 }
 
+variable "db_subnet_group_name" {
+  type        = string
+  description = "Name of the DB subnet group"
+}
+
 variable "engine_version" {
   type        = string
   description = "PostgreSQL engine version"
