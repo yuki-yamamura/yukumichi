@@ -25,6 +25,7 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @sanpo/api run build
       - name: Build and deploy
         run: pnpm --filter @sanpo/web run deploy
         env:
