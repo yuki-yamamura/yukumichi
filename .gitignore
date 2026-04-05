@@ -5,3 +5,12 @@ dist
 generated
 storybook-static
 *.tsbuildinfo
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+*.tfplan
+tfplan
+*.auto.tfvars

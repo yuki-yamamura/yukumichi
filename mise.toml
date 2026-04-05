@@ -2,6 +2,8 @@
 node = "24.14.0"
 pnpm = "10.30.3"
 lefthook = "2.1.4"
+terraform = "1.14.8"
+tflint = "0.61.0"
 
 [hooks]
 postinstall = "lefthook install"
