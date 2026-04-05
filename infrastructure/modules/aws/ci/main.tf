@@ -33,10 +33,6 @@ resource "aws_iam_role" "this" {
       }
     ]
   })
-
-  tags = {
-    Name = "ci-${var.environment}"
-  }
 }
 
 resource "aws_iam_role_policy" "this" {

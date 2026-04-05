@@ -17,10 +17,6 @@ resource "aws_iam_role" "this" {
       }
     ]
   })
-
-  tags = {
-    Name = "api-${var.environment}"
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "basic" {
@@ -41,10 +37,6 @@ resource "aws_security_group" "this" {
   name        = "api-${var.environment}"
   description = "Security group for the API Lambda function"
   vpc_id      = var.vpc_id
-
-  tags = {
-    Name = "api-${var.environment}"
-  }
 }
 
 # Egress: Lambda → RDS (port 5432)
@@ -75,10 +67,6 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_lambda" {
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/lambda/api-${var.environment}"
   retention_in_days = 90
-
-  tags = {
-    Name = "api-${var.environment}"
-  }
 }
 
 # -----------------------------------------------------------------------------
@@ -107,10 +95,6 @@ resource "aws_lambda_function" "this" {
   logging_config {
     log_format = "Text"
     log_group  = aws_cloudwatch_log_group.this.name
-  }
-
-  tags = {
-    Name = "api-${var.environment}"
   }
 
   # CI/CD manages image deployments and env var updates

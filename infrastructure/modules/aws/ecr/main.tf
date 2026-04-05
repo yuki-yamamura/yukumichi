@@ -5,10 +5,6 @@ resource "aws_ecr_repository" "this" {
   image_scanning_configuration {
     scan_on_push = false
   }
-
-  tags = {
-    Name = "${var.name}-${var.environment}"
-  }
 }
 
 resource "aws_ecr_lifecycle_policy" "this" {

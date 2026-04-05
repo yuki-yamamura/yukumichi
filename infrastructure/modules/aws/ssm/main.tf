@@ -36,10 +36,6 @@ resource "aws_iam_role" "this" {
       }
     ]
   })
-
-  tags = {
-    Name = "ssm-${var.environment}"
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "ssm" {
@@ -50,10 +46,6 @@ resource "aws_iam_role_policy_attachment" "ssm" {
 resource "aws_iam_instance_profile" "this" {
   name = "ssm-${var.environment}"
   role = aws_iam_role.this.name
-
-  tags = {
-    Name = "ssm-${var.environment}"
-  }
 }
 
 # -----------------------------------------------------------------------------
@@ -64,10 +56,6 @@ resource "aws_security_group" "this" {
   name        = "ssm-${var.environment}"
   description = "Security group for the SSM bastion"
   vpc_id      = var.vpc_id
-
-  tags = {
-    Name = "ssm-${var.environment}"
-  }
 }
 
 # Egress: Bastion → RDS (port 5432)
