@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { uuidv7 } from "uuidv7";
 import { inject } from "vitest";
 
-import { SpotId } from "@/domain/model/spot/spot";
+import { SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { createTestDatabase } from "@/test/database/helpers";
 import { createCoordinate, createSpot } from "@/test/fixtures/spot";

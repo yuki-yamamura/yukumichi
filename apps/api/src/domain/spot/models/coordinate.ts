@@ -1,7 +1,7 @@
 import { err, ok } from "neverthrow";
 import z from "zod";
 
-import type { SpotValidationError } from "./error";
+import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
 const latitudeSchema = z.number().min(-90).max(90);
@@ -18,7 +18,7 @@ export function Coordinate({
 }: {
   latitude: number;
   longitude: number;
-}): Result<Coordinate, SpotValidationError> {
+}): Result<Coordinate, ValidationError> {
   const latitudeResult = latitudeSchema.safeParse(latitude);
   if (!latitudeResult.success) {
     return err({ kind: "validation", message: latitudeResult.error.message });

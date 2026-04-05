@@ -1,10 +1,10 @@
 import { and, desc, eq, notExists } from "drizzle-orm";
 import { err, ok, Result } from "neverthrow";
 
-import { Spot, SpotId } from "@/domain/model/spot/spot";
+import { Spot, SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 
-import type { SpotRepository } from "@/domain/model/spot/repository";
+import type { SpotRepository } from "@/domain/spot/repository";
 import type { Database } from "@/infrastructure/database/client";
 
 export function SpotRepository(db: Database): SpotRepository {
@@ -39,7 +39,10 @@ export function SpotRepository(db: Database): SpotRepository {
         .orderBy(desc(spots.createdAt));
       const spotsResult = Result.combine(rows.map((row) => Spot(row)));
       if (spotsResult.isErr()) {
-        throw new Error(spotsResult.error.message);
+        return err({
+          kind: "data_integrity",
+          message: `failed to reconstruct Spot from DB: ${spotsResult.error.message}`,
+        });
       }
 
       return ok(spotsResult.value);
@@ -59,7 +62,10 @@ export function SpotRepository(db: Database): SpotRepository {
       const row = rows[0];
       const spotResult = Spot(row.spots);
       if (spotResult.isErr()) {
-        throw new Error(spotResult.error.message);
+        return err({
+          kind: "data_integrity",
+          message: `failed to reconstruct Spot from DB: ${spotResult.error.message}`,
+        });
       }
 
       return ok({
@@ -85,7 +91,10 @@ export function SpotRepository(db: Database): SpotRepository {
 
       const spotResult = Spot(rows[0]);
       if (spotResult.isErr()) {
-        throw new Error(spotResult.error.message);
+        return err({
+          kind: "data_integrity",
+          message: `failed to reconstruct Spot from DB: ${spotResult.error.message}`,
+        });
       }
 
       return ok(spotResult.value);
