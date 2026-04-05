@@ -1,12 +1,12 @@
+variable "environment" {
+  type        = string
+  description = "Environment name (e.g., production, staging)"
+}
+
 variable "database_url" {
   type        = string
   description = "Database connection URL for the Lambda environment"
   sensitive   = true
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name (e.g., production, staging)"
 }
 
 variable "image_uri" {

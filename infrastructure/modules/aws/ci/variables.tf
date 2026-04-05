@@ -1,11 +1,11 @@
-variable "ecr_repository_arn" {
-  type        = string
-  description = "ARN of the ECR repository for deploy permissions"
-}
-
 variable "environment" {
   type        = string
   description = "Environment name (e.g., production, staging)"
+}
+
+variable "ecr_repository_arn" {
+  type        = string
+  description = "ARN of the ECR repository for deploy permissions"
 }
 
 variable "github_repository" {

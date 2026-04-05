@@ -1,3 +1,8 @@
+variable "environment" {
+  type        = string
+  description = "Environment name (e.g., production, staging)"
+}
+
 variable "allocated_storage" {
   type        = number
   description = "Allocated storage in GB"
@@ -21,11 +26,6 @@ variable "db_subnet_group_name" {
 variable "engine_version" {
   type        = string
   description = "PostgreSQL engine version"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name (e.g., production, staging)"
 }
 
 variable "identifier" {
