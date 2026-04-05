@@ -31,8 +31,7 @@ resource "aws_db_instance" "this" {
   publicly_accessible    = false
   network_type           = "IPV4"
 
-  multi_az          = false
-  availability_zone = var.availability_zone
+  multi_az = false
 
   backup_retention_period = 7
   backup_window           = "18:21-18:51"

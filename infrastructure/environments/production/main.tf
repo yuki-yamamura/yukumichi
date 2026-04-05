@@ -60,7 +60,6 @@ module "rds" {
   identifier           = "sanpo-db"
   engine_version       = "18.3"
   instance_class       = "db.t4g.micro"
-  availability_zone    = "${local.region}c"
   db_subnet_group_name = "sanpo-db-subnet-group"
 
   allocated_storage = 20
