@@ -1,6 +1,16 @@
 locals {
   environment = "production"
   region      = "ap-northeast-1"
+  db_name     = "sanpo"
+  db_username = "sanpo"
+}
+
+# -----------------------------------------------------------------------------
+# SSM Parameter Store
+# -----------------------------------------------------------------------------
+
+data "aws_ssm_parameter" "db_password" {
+  name = "/sanpo/production/db/password"
 }
 
 # -----------------------------------------------------------------------------
@@ -39,9 +49,9 @@ module "rds" {
   instance_class = "db.t4g.micro"
 
   allocated_storage = 20
-  db_name           = "sanpo"
-  username          = "sanpo"
-  password          = var.database_password
+  db_name           = local.db_name
+  username          = local.db_username
+  password          = data.aws_ssm_parameter.db_password.value
 }
 
 # -----------------------------------------------------------------------------
@@ -67,7 +77,7 @@ module "lambda" {
   private_subnet_ids    = module.vpc.private_subnet_ids
   rds_security_group_id = module.rds.security_group_id
   image_uri             = "${module.ecr.repository_url}:latest"
-  database_url          = var.database_url
+  database_url          = "postgresql://${local.db_username}:${urlencode(data.aws_ssm_parameter.db_password.value)}@${module.rds.endpoint}/${local.db_name}"
 }
 
 # -----------------------------------------------------------------------------
