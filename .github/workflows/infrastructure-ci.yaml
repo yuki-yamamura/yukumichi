@@ -75,9 +75,6 @@ jobs:
         id: plan
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -input=false -no-color 2>&1 | tee plan.txt
-        env:
-          TF_VAR_database_url: ${{ secrets.DATABASE_URL }}
-          TF_VAR_database_password: ${{ secrets.DATABASE_PASSWORD }}
       # ref: https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
       - name: Post plan to PR
         uses: actions/github-script@v7

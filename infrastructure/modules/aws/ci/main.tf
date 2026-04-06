@@ -48,6 +48,7 @@ resource "aws_iam_role_policy" "this" {
           "sts:GetCallerIdentity",
           "kms:DescribeKey",
           "kms:CreateGrant",
+          "kms:Decrypt",
         ]
         Resource = "*"
       },
