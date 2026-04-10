@@ -9,6 +9,7 @@
   white-space: nowrap;
   user-select: none;
   outline: none;
+  background-color: transparent;
   background-clip: padding-box;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
