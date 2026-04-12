@@ -1,0 +1,170 @@
+/* FieldSet */
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+}
+
+/* FieldLegend */
+.fieldLegend {
+  /* base styling; variant-specific styles applied via data-variant */
+}
+
+/* FieldGroup */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  container-name: field-group;
+  container-type: inline-size;
+}
+
+/* Field */
+.field {
+  display: flex;
+  width: 100%;
+}
+
+.orientationVertical {
+  flex-direction: column;
+
+  & > * {
+    width: 100%;
+  }
+}
+
+.orientationHorizontal {
+  flex-direction: row;
+  align-items: center;
+
+  & > [data-slot="field-label"] {
+    flex: 1 1 auto;
+  }
+
+  &:has(> [data-slot="field-content"]) {
+    align-items: flex-start;
+  }
+
+  &:has(> [data-slot="field-content"]) > [role="checkbox"],
+  &:has(> [data-slot="field-content"]) > [role="radio"] {
+    margin-top: 1px;
+  }
+}
+
+.orientationResponsive {
+  flex-direction: column;
+
+  & > * {
+    width: 100%;
+  }
+
+  @container field-group (min-width: 28rem) {
+    flex-direction: row;
+    align-items: center;
+
+    & > * {
+      width: auto;
+    }
+
+    & > [data-slot="field-label"] {
+      flex: 1 1 auto;
+    }
+
+    &:has(> [data-slot="field-content"]) {
+      align-items: flex-start;
+    }
+
+    &:has(> [data-slot="field-content"]) > [role="checkbox"],
+    &:has(> [data-slot="field-content"]) > [role="radio"] {
+      margin-top: 1px;
+    }
+  }
+}
+
+/* FieldContent */
+.fieldContent {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  line-height: 1.375;
+}
+
+/* FieldLabel */
+.fieldLabel {
+  display: flex;
+  width: fit-content;
+  line-height: 1.375;
+
+  &:has(> [data-slot="field"]) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+/* FieldTitle */
+.fieldTitle {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  line-height: 1.375;
+}
+
+/* FieldDescription */
+.fieldDescription {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+
+  & > a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+
+  &:last-child {
+    margin-top: 0;
+  }
+
+  &:nth-last-child(2) {
+    margin-top: -0.25rem;
+  }
+}
+
+/* FieldSeparator */
+.fieldSeparator {
+  position: relative;
+}
+
+.fieldSeparatorLine {
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+.fieldSeparatorContent {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  background-color: var(--background);
+}
+
+/* FieldError */
+.fieldError {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--destructive);
+}
+
+.fieldErrorList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-left: 1rem;
+  list-style-type: disc;
+}
