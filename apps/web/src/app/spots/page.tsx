@@ -1,4 +1,5 @@
 import { CreateSpotForm } from "@/features/spot/components/create-spot-form";
+import { SpotList } from "@/features/spot/components/spot-list";
 import { fetchClient } from "@/libs/hono";
 
 export const dynamic = "force-dynamic";
@@ -15,14 +16,7 @@ export default async function SpotsPage() {
     <main>
       <h1>Spots</h1>
       <CreateSpotForm />
-      <ul>
-        {data.spots.map((spot) => (
-          <li key={spot.id}>
-            {spot.name}
-            {spot.description && <span> - {spot.description}</span>}
-          </li>
-        ))}
-      </ul>
+      <SpotList />
     </main>
   );
 }
