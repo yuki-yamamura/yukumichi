@@ -1,7 +1,11 @@
 import z from "zod";
 
+import { spotIdOutputSchema, spotIdParamSchema } from "./id";
+
+import type { Spot } from "@/domain/spot/models/spot";
+
 const spotSchema = z.object({
-  id: z.uuidv7(),
+  id: spotIdOutputSchema,
   name: z.string(),
   description: z.string().nullable(),
   coordinate: z.object({
@@ -9,6 +13,10 @@ const spotSchema = z.object({
     longitude: z.number(),
   }),
 });
+
+export function toSpotResponse(spot: Spot): z.output<typeof spotSchema> {
+  return spotSchema.parse(spot);
+}
 
 export const createSpotRequestBodySchema = z.object({
   name: z.string().min(1),
@@ -22,7 +30,7 @@ export const listSpotsResponseSchema = z.object({
 });
 
 export const getSpotRequestParamsSchema = z.object({
-  spotId: z.uuidv7(),
+  spotId: spotIdParamSchema,
 });
 
 export const getSpotResponseSchema = z.object({
@@ -30,5 +38,5 @@ export const getSpotResponseSchema = z.object({
 });
 
 export const archiveSpotRequestParamsSchema = z.object({
-  spotId: z.uuidv7(),
+  spotId: spotIdParamSchema,
 });

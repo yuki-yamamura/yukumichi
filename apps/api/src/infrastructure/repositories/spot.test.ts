@@ -1,11 +1,9 @@
 import { eq } from "drizzle-orm";
-import { uuidv7 } from "uuidv7";
 import { inject } from "vitest";
 
-import { SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { createTestDatabase } from "@/test/database/helpers";
-import { createCoordinate, createSpot } from "@/test/fixtures/spot";
+import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { SpotRepository } from "./spot";
 
@@ -25,7 +23,7 @@ describe("SpotRepository", () => {
   describe("create", () => {
     it("should store a spot and return its id", async () => {
       // Given
-      const id = SpotId.parse(uuidv7());
+      const id = createSpotId();
       const spot = createSpot({
         id,
         name: "Test Park",
@@ -129,7 +127,7 @@ describe("SpotRepository", () => {
 
     it("should return not_found when the spot does not exist", async () => {
       // Given
-      const id = SpotId.parse(uuidv7());
+      const id = createSpotId();
 
       // When
       const result = await repository.findById(id);

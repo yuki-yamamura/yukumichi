@@ -1,4 +1,5 @@
 import { err, ok } from "neverthrow";
+import { uuidv7 } from "uuidv7";
 import { z } from "zod";
 
 import { Coordinate } from "./coordinate";
@@ -9,6 +10,10 @@ import type { Result } from "neverthrow";
 export const SpotId = z.uuidv7().brand<"SpotId">();
 
 export type SpotId = z.infer<typeof SpotId>;
+
+export function generateSpotId(): SpotId {
+  return SpotId.parse(uuidv7());
+}
 
 export type Spot = Readonly<{
   coordinate: Coordinate;
@@ -23,7 +28,7 @@ export type ArchivedSpot = Spot &
   }>;
 
 type SpotParams = {
-  id: string;
+  id: SpotId;
   latitude: number;
   longitude: number;
   name: string;
@@ -37,21 +42,13 @@ export function Spot({
   latitude,
   longitude,
 }: SpotParams): Result<Spot, ValidationError> {
-  const spotIdResult = SpotId.safeParse(id);
-  if (!spotIdResult.success) {
-    return err({
-      kind: "validation",
-      message: spotIdResult.error.message,
-    });
-  }
-
   const coordinateResult = Coordinate({ latitude, longitude });
   if (coordinateResult.isErr()) {
     return err(coordinateResult.error);
   }
 
   return ok({
-    id: spotIdResult.data,
+    id,
     name,
     description: description ?? null,
     coordinate: coordinateResult.value,

@@ -2,7 +2,9 @@ import { faker } from "@faker-js/faker";
 import { testClient } from "hono/testing";
 import { err, ok } from "neverthrow";
 
-import { createSpot } from "@/test/fixtures/spot";
+import { spotIdOutputSchema } from "@/presentation/schemas/id";
+import { toSpotResponse } from "@/presentation/schemas/spot";
+import { createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { createSpotRoute } from "./spot";
 
@@ -108,7 +110,7 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ spots });
+      expect(await response.json()).toEqual({ spots: spots.map((spot) => toSpotResponse(spot)) });
     });
   });
 
@@ -128,15 +130,15 @@ describe("createSpotRoute", () => {
 
       // When
       const response = await client.spots[":spotId"].$get({
-        param: { spotId: spot.id },
+        param: { spotId: spotIdOutputSchema.parse(spot.id) },
       });
 
       // Then
       expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ spot });
+      expect(await response.json()).toEqual({ spot: toSpotResponse(spot) });
     });
 
-    it("should return 400 status code when spotId is not a UUID v7", async () => {
+    it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
       // Given
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
@@ -170,7 +172,7 @@ describe("createSpotRoute", () => {
 
       const client = testClient(spotRoute);
 
-      const spotId = faker.string.uuid({ version: 7 });
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].$get({
@@ -198,7 +200,7 @@ describe("createSpotRoute", () => {
 
       const client = testClient(spotRoute);
 
-      const spotId = faker.string.uuid({ version: 7 });
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -210,7 +212,7 @@ describe("createSpotRoute", () => {
       expect(await response.text()).toBe("");
     });
 
-    it("should return 400 status code when spotId is not a UUID v7", async () => {
+    it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
       // Given
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
@@ -243,7 +245,7 @@ describe("createSpotRoute", () => {
       });
 
       const client = testClient(spotRoute);
-      const spotId = faker.string.uuid({ version: 7 });
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -271,7 +273,7 @@ describe("createSpotRoute", () => {
       });
 
       const client = testClient(spotRoute);
-      const spotId = faker.string.uuid({ version: 7 });
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({

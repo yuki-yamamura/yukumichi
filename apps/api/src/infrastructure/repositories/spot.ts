@@ -37,15 +37,26 @@ export function SpotRepository(db: Database): SpotRepository {
         .from(spots)
         .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))))
         .orderBy(desc(spots.createdAt));
-      const spotsResult = Result.combine(rows.map((row) => Spot(row)));
-      if (spotsResult.isErr()) {
-        return err({
-          kind: "data_integrity",
-          message: `failed to reconstruct Spot from DB: ${spotsResult.error.message}`,
-        });
-      }
 
-      return ok(spotsResult.value);
+      return Result.combine(
+        rows.map((row) => {
+          const idResult = SpotId.safeParse(row.id);
+          if (!idResult.success) {
+            return err({
+              kind: "data_integrity",
+              message: idResult.error.message,
+            } as const);
+          }
+
+          return Spot({ ...row, id: idResult.data }).mapErr(
+            (error) =>
+              ({
+                kind: "data_integrity",
+                message: error.message,
+              }) as const,
+          );
+        }),
+      );
     },
 
     findArchivedSpotById: async (id: SpotId) => {
@@ -59,19 +70,15 @@ export function SpotRepository(db: Database): SpotRepository {
         return err({ kind: "not_found", message: `archived spot not found: ${id}` });
       }
 
-      const row = rows[0];
-      const spotResult = Spot(row.spots);
-      if (spotResult.isErr()) {
-        return err({
-          kind: "data_integrity",
-          message: `failed to reconstruct Spot from DB: ${spotResult.error.message}`,
-        });
+      const { spots: row, archived_spots: archived } = rows[0];
+      const idResult = SpotId.safeParse(row.id);
+      if (!idResult.success) {
+        return err({ kind: "data_integrity", message: idResult.error.message });
       }
 
-      return ok({
-        ...spotResult.value,
-        archivedAt: row.archived_spots.archivedAt,
-      });
+      return Spot({ ...row, id: idResult.data })
+        .map((spot) => ({ ...spot, archivedAt: archived.archivedAt }))
+        .mapErr((error) => ({ kind: "data_integrity", message: error.message }));
     },
 
     findById: async (id: SpotId) => {
@@ -89,15 +96,16 @@ export function SpotRepository(db: Database): SpotRepository {
         return err({ kind: "not_found", message: `spot not found: ${id}` });
       }
 
-      const spotResult = Spot(rows[0]);
-      if (spotResult.isErr()) {
-        return err({
-          kind: "data_integrity",
-          message: `failed to reconstruct Spot from DB: ${spotResult.error.message}`,
-        });
+      const row = rows[0];
+      const idResult = SpotId.safeParse(row.id);
+      if (!idResult.success) {
+        return err({ kind: "data_integrity", message: idResult.error.message });
       }
 
-      return ok(spotResult.value);
+      return Spot({ ...row, id: idResult.data }).mapErr((error) => ({
+        kind: "data_integrity",
+        message: error.message,
+      }));
     },
 
     archive: async (archivedSpot) => {

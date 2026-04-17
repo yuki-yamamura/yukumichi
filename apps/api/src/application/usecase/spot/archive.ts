@@ -2,7 +2,12 @@ import { err, ok } from "neverthrow";
 
 import { archiveSpot, SpotId } from "@/domain/spot/models/spot";
 
-import type { ConflictError, DataIntegrityError, NotFoundError } from "@/domain/error";
+import type {
+  ConflictError,
+  DataIntegrityError,
+  NotFoundError,
+  ValidationError,
+} from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
@@ -17,13 +22,17 @@ type ArchiveSpotUsecaseInput = {
 export type ArchiveSpotUsecase = {
   execute: (
     input: ArchiveSpotUsecaseInput,
-  ) => Promise<Result<void, ConflictError | DataIntegrityError | NotFoundError>>;
+  ) => Promise<Result<void, ConflictError | DataIntegrityError | NotFoundError | ValidationError>>;
 };
 
 export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
     execute: async (input) => {
-      const spotId = SpotId.parse(input.spotId);
+      const idResult = SpotId.safeParse(input.spotId);
+      if (!idResult.success) {
+        return err({ kind: "validation", message: idResult.error.message });
+      }
+      const spotId = idResult.data;
 
       const archivedResult = await spotRepository.findArchivedSpotById(spotId);
       if (archivedResult.isOk()) {
