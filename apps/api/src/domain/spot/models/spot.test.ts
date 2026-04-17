@@ -2,12 +2,12 @@ import { faker } from "@faker-js/faker";
 
 import { createCoordinate, createSpot } from "@/test/fixtures/spot";
 
-import { archiveSpot, Spot } from "./spot";
+import { archiveSpot, generateSpotId, Spot, SpotId } from "./spot";
 
 describe("Spot", () => {
   it("should create a valid spot", () => {
     // Given
-    const id = faker.string.uuid({ version: 7 });
+    const id = SpotId.parse(faker.string.uuid({ version: 7 }));
     const coordinate = createCoordinate({ latitude: 0, longitude: 0 });
 
     // When
@@ -28,27 +28,10 @@ describe("Spot", () => {
     });
   });
 
-  it("should return a validation error when id is not a UUID v7", () => {
-    // Given
-    const params = {
-      id: "not-a-uuid",
-      name: faker.location.street(),
-      latitude: faker.location.latitude(),
-      longitude: faker.location.longitude(),
-    };
-
-    // When
-    const result = Spot(params);
-
-    // Then
-    expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
-  });
-
   it("should return a validation error when coordinates are invalid", () => {
     // Given
     const params = {
-      id: faker.string.uuid({ version: 7 }),
+      id: generateSpotId(),
       name: faker.location.street(),
       latitude: faker.location.latitude(),
       longitude: 999, // Invalid longitude
@@ -60,6 +43,17 @@ describe("Spot", () => {
     // Then
     expect(result.isErr()).toBe(true);
     expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
+  });
+});
+
+describe("generateSpotId", () => {
+  it("returns a valid SpotId each call", () => {
+    const first = generateSpotId();
+    const second = generateSpotId();
+
+    expect(first).not.toBe(second);
+    expect(SpotId.safeParse(first).success).toBe(true);
+    expect(SpotId.safeParse(second).success).toBe(true);
   });
 });
 

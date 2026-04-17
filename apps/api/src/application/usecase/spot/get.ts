@@ -1,7 +1,5 @@
-import { SpotId } from "@/domain/spot/models/spot";
-
 import type { DataIntegrityError, NotFoundError } from "@/domain/error";
-import type { Spot } from "@/domain/spot/models/spot";
+import type { Spot, SpotId } from "@/domain/spot/models/spot";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
@@ -10,7 +8,7 @@ type GetSpotUsecaseDeps = {
 };
 
 type GetSpotUsecaseInput = {
-  spotId: string;
+  spotId: SpotId;
 };
 
 export type GetSpotUsecase = {
@@ -22,7 +20,7 @@ export type GetSpotUsecase = {
 export function GetSpotUsecase({ spotRepository }: GetSpotUsecaseDeps): GetSpotUsecase {
   return {
     execute: async ({ spotId }) => {
-      return await spotRepository.findById(SpotId.parse(spotId));
+      return await spotRepository.findById(spotId);
     },
   };
 }

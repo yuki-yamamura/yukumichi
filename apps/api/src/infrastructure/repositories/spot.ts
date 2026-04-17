@@ -4,8 +4,18 @@ import { err, ok, Result } from "neverthrow";
 import { Spot, SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 
+import type { ValidationError } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Database } from "@/infrastructure/database/client";
+
+function reconstructSpot(row: typeof spots.$inferSelect): Result<Spot, ValidationError> {
+  const idResult = SpotId.safeParse(row.id);
+  if (!idResult.success) {
+    return err({ kind: "validation", message: idResult.error.message });
+  }
+
+  return Spot({ ...row, id: idResult.data });
+}
 
 export function SpotRepository(db: Database): SpotRepository {
   return {
@@ -37,7 +47,7 @@ export function SpotRepository(db: Database): SpotRepository {
         .from(spots)
         .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))))
         .orderBy(desc(spots.createdAt));
-      const spotsResult = Result.combine(rows.map((row) => Spot(row)));
+      const spotsResult = Result.combine(rows.map((row) => reconstructSpot(row)));
       if (spotsResult.isErr()) {
         return err({
           kind: "data_integrity",
@@ -60,7 +70,7 @@ export function SpotRepository(db: Database): SpotRepository {
       }
 
       const row = rows[0];
-      const spotResult = Spot(row.spots);
+      const spotResult = reconstructSpot(row.spots);
       if (spotResult.isErr()) {
         return err({
           kind: "data_integrity",
@@ -89,7 +99,7 @@ export function SpotRepository(db: Database): SpotRepository {
         return err({ kind: "not_found", message: `spot not found: ${id}` });
       }
 
-      const spotResult = Spot(rows[0]);
+      const spotResult = reconstructSpot(rows[0]);
       if (spotResult.isErr()) {
         return err({
           kind: "data_integrity",

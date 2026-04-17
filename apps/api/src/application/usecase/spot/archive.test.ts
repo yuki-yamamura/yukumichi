@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { err, ok } from "neverthrow";
 
+import { generateSpotId } from "@/domain/spot/models/spot";
 import { createSpot } from "@/test/fixtures/spot";
 
 import { ArchiveSpotUsecase } from "./archive";
@@ -39,7 +40,7 @@ describe("ArchiveSpotUsecase", () => {
 
     it("should return an error when a spot is not found", async () => {
       // Given
-      const spotId = faker.string.uuid({ version: 7 });
+      const spotId = generateSpotId();
       const message = faker.lorem.sentence();
 
       const spotRepository: SpotRepository = {
