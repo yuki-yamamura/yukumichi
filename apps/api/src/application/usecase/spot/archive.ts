@@ -1,9 +1,13 @@
 import { err, ok } from "neverthrow";
 
-import { archiveSpot } from "@/domain/spot/models/spot";
+import { archiveSpot, SpotId } from "@/domain/spot/models/spot";
 
-import type { ConflictError, DataIntegrityError, NotFoundError } from "@/domain/error";
-import type { SpotId } from "@/domain/spot/models/spot";
+import type {
+  ConflictError,
+  DataIntegrityError,
+  NotFoundError,
+  ValidationError,
+} from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Result } from "neverthrow";
 
@@ -12,18 +16,24 @@ type ArchiveSpotUsecaseDeps = {
 };
 
 type ArchiveSpotUsecaseInput = {
-  spotId: SpotId;
+  spotId: string;
 };
 
 export type ArchiveSpotUsecase = {
   execute: (
     input: ArchiveSpotUsecaseInput,
-  ) => Promise<Result<void, ConflictError | DataIntegrityError | NotFoundError>>;
+  ) => Promise<Result<void, ConflictError | DataIntegrityError | NotFoundError | ValidationError>>;
 };
 
 export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
-    execute: async ({ spotId }) => {
+    execute: async (input) => {
+      const idResult = SpotId.safeParse(input.spotId);
+      if (!idResult.success) {
+        return err({ kind: "validation", message: idResult.error.message });
+      }
+      const spotId = idResult.data;
+
       const archivedResult = await spotRepository.findArchivedSpotById(spotId);
       if (archivedResult.isOk()) {
         return err({ kind: "conflict", message: `spot is already archived: ${spotId}` });
