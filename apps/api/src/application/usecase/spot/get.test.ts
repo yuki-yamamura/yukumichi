@@ -1,8 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { err, ok } from "neverthrow";
 
-import { generateSpotId } from "@/domain/spot/models/spot";
-import { createSpot } from "@/test/fixtures/spot";
+import { createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { GetSpotUsecase } from "./get";
 
@@ -50,7 +49,7 @@ describe("GetSpotUsecase", () => {
         spotRepository,
       });
 
-      const spotId = generateSpotId();
+      const spotId = createSpotId();
       const input = { spotId };
 
       // When

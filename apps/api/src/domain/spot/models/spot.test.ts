@@ -1,13 +1,13 @@
 import { faker } from "@faker-js/faker";
 
-import { createCoordinate, createSpot } from "@/test/fixtures/spot";
+import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { archiveSpot, generateSpotId, Spot, SpotId } from "./spot";
 
 describe("Spot", () => {
   it("should create a valid spot", () => {
     // Given
-    const id = SpotId.parse(faker.string.uuid({ version: 7 }));
+    const id = createSpotId();
     const coordinate = createCoordinate({ latitude: 0, longitude: 0 });
 
     // When
@@ -31,7 +31,7 @@ describe("Spot", () => {
   it("should return a validation error when coordinates are invalid", () => {
     // Given
     const params = {
-      id: generateSpotId(),
+      id: createSpotId(),
       name: faker.location.street(),
       latitude: faker.location.latitude(),
       longitude: 999, // Invalid longitude

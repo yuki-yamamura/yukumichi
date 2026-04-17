@@ -172,7 +172,7 @@ describe("createSpotRoute", () => {
 
       const client = testClient(spotRoute);
 
-      const spotId = createSpotId();
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].$get({
@@ -200,7 +200,7 @@ describe("createSpotRoute", () => {
 
       const client = testClient(spotRoute);
 
-      const spotId = createSpotId();
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -245,7 +245,7 @@ describe("createSpotRoute", () => {
       });
 
       const client = testClient(spotRoute);
-      const spotId = createSpotId();
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -273,7 +273,7 @@ describe("createSpotRoute", () => {
       });
 
       const client = testClient(spotRoute);
-      const spotId = createSpotId();
+      const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
