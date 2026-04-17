@@ -4,7 +4,6 @@ import { err, ok, Result } from "neverthrow";
 import { Spot, SpotId } from "@/domain/spot/models/spot";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 
-import type { DataIntegrityError } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
 import type { Database } from "@/infrastructure/database/client";
 
@@ -43,16 +42,19 @@ export function SpotRepository(db: Database): SpotRepository {
         rows.map((row) => {
           const idResult = SpotId.safeParse(row.id);
           if (!idResult.success) {
-            return err<Spot, DataIntegrityError>({
+            return err({
               kind: "data_integrity",
               message: idResult.error.message,
-            });
+            } as const);
           }
 
-          return Spot({ ...row, id: idResult.data }).mapErr((error) => ({
-            kind: "data_integrity" as const,
-            message: error.message,
-          }));
+          return Spot({ ...row, id: idResult.data }).mapErr(
+            (error) =>
+              ({
+                kind: "data_integrity",
+                message: error.message,
+              }) as const,
+          );
         }),
       );
     },
@@ -76,7 +78,7 @@ export function SpotRepository(db: Database): SpotRepository {
 
       return Spot({ ...row, id: idResult.data })
         .map((spot) => ({ ...spot, archivedAt: archived.archivedAt }))
-        .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }));
+        .mapErr((error) => ({ kind: "data_integrity", message: error.message }));
     },
 
     findById: async (id: SpotId) => {
@@ -101,7 +103,7 @@ export function SpotRepository(db: Database): SpotRepository {
       }
 
       return Spot({ ...row, id: idResult.data }).mapErr((error) => ({
-        kind: "data_integrity" as const,
+        kind: "data_integrity",
         message: error.message,
       }));
     },
