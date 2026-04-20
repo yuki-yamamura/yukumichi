@@ -10,5 +10,3 @@ export const spotFormSchema = z.object({
 });
 
 export type SpotFormInput = z.input<typeof spotFormSchema>;
-
-export type SpotFormOutput = z.output<typeof spotFormSchema>;
