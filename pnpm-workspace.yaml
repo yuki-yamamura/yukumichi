@@ -10,3 +10,4 @@ catalog:
   prettier: ^3.8.1
   knip: ^6.0.6
   typescript: 5.9.3
+  zod: "^4.3.6"

@@ -1,0 +1,4 @@
+.listItem {
+  display: flex;
+  column-gap: 0.5rem;
+}

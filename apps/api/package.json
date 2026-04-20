@@ -35,7 +35,7 @@
     "neverthrow": "^8.2.0",
     "postgres": "^3.4.8",
     "uuidv7": "^1.1.0",
-    "zod": "^4.3.6"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@faker-js/faker": "catalog:",
