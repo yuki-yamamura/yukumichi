@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 import { SpinnerIcon } from "./spinner-icon";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
@@ -40,23 +42,9 @@ export const InheritsColor: Story = {
 
 export const InsideButton: Story = {
   render: (args) => (
-    <button
-      type="button"
-      disabled
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "0.375rem",
-        padding: "0.5rem 0.875rem",
-        background: "var(--primary)",
-        color: "var(--primary-foreground)",
-        border: 0,
-        borderRadius: "var(--radius-md)",
-        font: "inherit",
-      }}
-    >
+    <Button type="button" disabled>
       <SpinnerIcon {...args} />
       Submit
-    </button>
+    </Button>
   ),
 };
