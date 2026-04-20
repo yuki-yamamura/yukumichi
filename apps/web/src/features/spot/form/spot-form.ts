@@ -1,27 +1,14 @@
-import { formOptions } from "@tanstack/react-form";
 import { z } from "zod";
 
-const spotFormSchema = z.object({
+import { createFloatSchema } from "@/libs/zod/schemas";
+
+export const spotFormSchema = z.object({
   name: z.string().min(1),
-  description: z.string().min(1).optional(),
-  latitude: z.number(),
-  longitude: z.number(),
+  description: z.string().optional(),
+  latitude: createFloatSchema(z.number().min(-90).max(90)),
+  longitude: createFloatSchema(z.number().min(-180).max(180)),
 });
 
-export type SpotFormValues = z.infer<typeof spotFormSchema>;
+export type SpotFormInput = z.input<typeof spotFormSchema>;
 
-export function createSpotFormOptions({
-  defaultValues,
-  onSubmit,
-}: {
-  defaultValues?: SpotFormValues;
-  onSubmit: ({ value }: { value: SpotFormValues }) => Promise<void>;
-}) {
-  return formOptions({
-    defaultValues,
-    validators: {
-      onChange: spotFormSchema,
-    },
-    onSubmit,
-  });
-}
+export type SpotFormOutput = z.output<typeof spotFormSchema>;

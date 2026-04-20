@@ -7,10 +7,6 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 const meta = {
   title: "UI/Button",
   component: Button,
-  parameters: {
-    layout: "centered",
-  },
-  tags: ["autodocs"],
 } satisfies Meta<typeof Button>;
 
 export default meta;

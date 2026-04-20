@@ -1,3 +1,5 @@
+import { CreateSpotForm } from "@/features/spot/components/create-spot-form";
+
 export default async function Page() {
-  return <div>new</div>;
+  return <CreateSpotForm />;
 }

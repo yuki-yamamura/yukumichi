@@ -1,4 +1,3 @@
-import { CreateSpotForm } from "@/features/spot/components/create-spot-form";
 import { SpotList } from "@/features/spot/components/spot-list";
 import { fetchClient } from "@/libs/hono";
 
@@ -15,7 +14,6 @@ export default async function SpotsPage() {
   return (
     <main>
       <h1>Spots</h1>
-      <CreateSpotForm />
       <SpotList />
     </main>
   );

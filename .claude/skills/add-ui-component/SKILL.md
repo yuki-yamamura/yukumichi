@@ -46,6 +46,7 @@ The Base UI components live in the shadcn/ui repository at `apps/v4/registry/bas
 3. Save the original source to `tmp/shadcn-source/<component-name>.tsx` for reference during conversion.
 
 If the path has changed, fall back to the GitHub API search:
+
 ```
 https://api.github.com/search/code?q=repo:shadcn-ui/ui+filename:<component>.tsx+path:bases/base/ui
 ```
@@ -65,8 +66,12 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
    - Use the project's existing design tokens (CSS custom properties) from `apps/web/src/app/globals.css` wherever possible. If a shadcn token is missing, add it to `globals.css` (both light and dark mode).
    - Leverage Base UI's `data-*` attributes for state styling — these work naturally with CSS Module selectors:
      ```css
-     .trigger[data-popup-open] { /* styles when popup is open */ }
-     .content[data-side='top'] { /* position-aware styles */ }
+     .trigger[data-popup-open] {
+       /* styles when popup is open */
+     }
+     .content[data-side="top"] {
+       /* position-aware styles */
+     }
      ```
    - Handle interactive states (hover, focus, active, disabled) with pseudo-classes.
    - Handle dark mode consistently with the project's existing approach (check `globals.css` for the pattern).
@@ -74,10 +79,11 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
 3. **Create the component** (`component-name.tsx`):
    - Import the CSS Module: `import styles from './component-name.module.css'`
    - Use `cva` for variant-driven class mappings. Name the variant function the same as the component (per guideline):
+
      ```tsx
-     import { cva } from 'class-variance-authority';
-     import type { VariantProps } from 'class-variance-authority';
-     import styles from './button.module.css';
+     import { cva } from "class-variance-authority";
+     import type { VariantProps } from "class-variance-authority";
+     import styles from "./button.module.css";
 
      const button = cva(styles.base, {
        variants: {
@@ -93,8 +99,8 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
          },
        },
        defaultVariants: {
-         variant: 'default',
-         size: 'default',
+         variant: "default",
+         size: "default",
        },
      });
 
@@ -106,11 +112,12 @@ Read `references/tailwind-to-css-modules.md` for the detailed conversion pattern
        return <button className={button({ variant, size })}>{label}</button>;
      }
      ```
+
    - Preserve the exact same public API (props, composition) as the shadcn original.
    - Import Base UI primitives from their sub-paths:
      ```tsx
-     import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
-     import { Select as SelectPrimitive } from '@base-ui/react/select';
+     import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+     import { Select as SelectPrimitive } from "@base-ui/react/select";
      ```
    - Ensure every component that wraps an HTML element forwards its ref. Use `React.forwardRef` or accept `ref` as a prop (React 19 style). This is critical for composition — consumers need refs for focus management, measurements, and third-party library integration.
    - Re-export from an `index.ts` barrel file in the component directory.
@@ -140,16 +147,12 @@ Story file location: `apps/web/src/components/ui/<component-name>/component-name
 #### Story structure example
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./button";
 
 const meta = {
-  title: 'UI/Button',
+  title: "UI/Button",
   component: Button,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -157,14 +160,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Button',
+    children: "Button",
   },
 };
 
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
-    children: 'Delete',
+    variant: "destructive",
+    children: "Delete",
   },
 };
 
@@ -210,10 +213,11 @@ Compare the converted component against the original shadcn/ui design to ensure 
 Once verification passes, commit using the `commit` skill.
 
 Stage these files:
+
 - `apps/web/src/components/ui/<component-name>/` (all files in the directory)
 - `apps/web/src/app/globals.css` (if design tokens were added)
 
 Do NOT commit:
+
 - `tmp/shadcn-source/` (raw reference files)
 - `tmp/verification/` (screenshots)
-

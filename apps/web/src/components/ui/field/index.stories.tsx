@@ -18,10 +18,6 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 const meta = {
   title: "UI/Field",
   component: Field,
-  parameters: {
-    layout: "centered",
-  },
-  tags: ["autodocs"],
 } satisfies Meta<typeof Field>;
 
 export default meta;
