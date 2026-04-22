@@ -1,22 +1,18 @@
 import { createSpot } from "@/test/fixtures/spot";
 
+import preview from "#.storybook/preview";
+
 import { SpotNameHintPresenter } from "./presenter";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta: Meta<typeof SpotNameHintPresenter> = {
+const meta = preview.meta({
   title: "Features/Spot/SpotNameHintPresenter",
   component: SpotNameHintPresenter,
-};
+});
 
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     spot: createSpot({
       name: "東京タワー",
     }),
   },
-};
-
-export default meta;
+});

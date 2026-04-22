@@ -144,35 +144,55 @@ Use the Storybook MCP to generate story files for the component.
 
 Story file location: `apps/web/src/components/ui/<component-name>/component-name.stories.tsx`
 
+Stories use the **CSF Factory** pattern (Storybook 10+). Import the project's shared `preview` via the `#.storybook/preview` subpath import declared in `apps/web/package.json#imports`, then use `preview.meta(...)` and `meta.story(...)` to compose stories. Do not use the legacy `satisfies Meta<typeof X>` / `StoryObj<typeof meta>` forms — they were migrated away from in Storybook 10.
+
 #### Story structure example
 
 ```tsx
-import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "./button";
+import preview from "#.storybook/preview";
 
-const meta = {
+import { Button } from ".";
+
+const meta = preview.meta({
   title: "UI/Button",
   component: Button,
-} satisfies Meta<typeof Button>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     children: "Button",
   },
-};
+});
 
-export const Destructive: Story = {
+export const Destructive = meta.story({
   args: {
     variant: "destructive",
     children: "Delete",
   },
-};
+});
 
 // ... all other variants
 ```
+
+#### Layout-sensitive components
+
+Components whose CSS relies on `width: 100%` or `container-type: inline-size` (e.g., Input, Textarea, Field, form fields in general) collapse to zero width under the default `layout: "centered"` setting. Constrain them via a meta-level decorator:
+
+```tsx
+const meta = preview.meta({
+  title: "UI/Input",
+  component: Input,
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
+});
+```
+
+This mirrors the pattern used by `Textarea`, `Input`, `Label`, and `Field` stories in this project.
 
 ### Step 4: Visual Verification
 

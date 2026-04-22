@@ -2,9 +2,11 @@ import z from "zod";
 
 import { useAppForm } from "@/libs/tanstack-form";
 
+import preview from "#.storybook/preview";
+
 import { TextField } from ".";
 
-import type { Decorator, Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Decorator } from "@storybook/nextjs-vite";
 
 const withNameFieldContext: Decorator = (Story) => {
   const form = useAppForm({
@@ -34,39 +36,40 @@ const withPhoneNumberFieldContext: Decorator = (Story) => {
   return <form.AppField name="phoneNumber">{() => Story()}</form.AppField>;
 };
 
-const meta = {
+const meta = preview.meta({
   title: "Form/TextField",
   component: TextField,
-  parameters: {
-    layout: "centered",
-  },
-} satisfies Meta<typeof TextField>;
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     label: "Name",
     placeholder: "Enter your name",
   },
   decorators: [withNameFieldContext],
-};
+});
 
-export const Required: Story = {
+export const Required = meta.story({
   args: {
     label: "Name",
     placeholder: "Enter your name",
     required: true,
   },
   decorators: [withNameFieldContext],
-};
+});
 
-export const WithInputModel: Story = {
+export const WithInputModel = meta.story({
   args: {
     label: "Phone Number",
     placeholder: "Enter your phone number",
     inputMode: "tel",
   },
   decorators: [withPhoneNumberFieldContext],
-};
+});

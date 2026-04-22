@@ -1,5 +1,7 @@
 import { Input } from "@/components/ui/input";
 
+import preview from "#.storybook/preview";
+
 import {
   Field,
   FieldContent,
@@ -13,43 +15,43 @@ import {
   FieldTitle,
 } from ".";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta = {
+const meta = preview.meta({
   title: "UI/Field",
   component: Field,
-} satisfies Meta<typeof Field>;
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-// Orientations
-export const Vertical: Story = {
+export const Vertical = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field>
         <FieldLabel htmlFor="name">Name</FieldLabel>
         <Input id="name" placeholder="Enter your name" />
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-export const Horizontal: Story = {
+export const Horizontal = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field orientation="horizontal">
         <FieldLabel htmlFor="name-h">Name</FieldLabel>
         <Input id="name-h" placeholder="Enter your name" />
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-// With Description
-export const WithDescription: Story = {
+export const WithDescription = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field>
         <FieldLabel htmlFor="email">Email</FieldLabel>
         <Input id="email" type="email" placeholder="you@example.com" />
@@ -57,12 +59,11 @@ export const WithDescription: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-// With Error
-export const WithError: Story = {
+export const WithError = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="username">Username</FieldLabel>
         <Input id="username" aria-invalid />
@@ -70,11 +71,11 @@ export const WithError: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-export const WithMultipleErrors: Story = {
+export const WithMultipleErrors = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="password">Password</FieldLabel>
         <Input id="password" type="password" aria-invalid />
@@ -87,12 +88,11 @@ export const WithMultipleErrors: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-// FieldGroup with multiple fields
-export const MultipleFields: Story = {
+export const MultipleFields = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field>
         <FieldLabel htmlFor="first">First Name</FieldLabel>
         <Input id="first" placeholder="John" />
@@ -108,14 +108,13 @@ export const MultipleFields: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-// FieldSet with Legend
-export const WithFieldSet: Story = {
+export const WithFieldSet = meta.story({
   render: () => (
     <FieldSet>
       <FieldLegend>Personal Information</FieldLegend>
-      <FieldGroup style={{ maxWidth: 400 }}>
+      <FieldGroup>
         <Field>
           <FieldLabel htmlFor="fn">First Name</FieldLabel>
           <Input id="fn" />
@@ -127,12 +126,11 @@ export const WithFieldSet: Story = {
       </FieldGroup>
     </FieldSet>
   ),
-};
+});
 
-// FieldContent (for horizontal layout with description)
-export const HorizontalWithContent: Story = {
+export const HorizontalWithContent = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 500 }}>
+    <FieldGroup>
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>Notifications</FieldTitle>
@@ -142,12 +140,11 @@ export const HorizontalWithContent: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-// FieldSeparator
-export const WithSeparator: Story = {
+export const WithSeparator = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field>
         <FieldLabel htmlFor="s-email">Email</FieldLabel>
         <Input id="s-email" type="email" />
@@ -159,11 +156,11 @@ export const WithSeparator: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-export const SeparatorWithText: Story = {
+export const SeparatorWithText = meta.story({
   render: () => (
-    <FieldGroup style={{ maxWidth: 400 }}>
+    <FieldGroup>
       <Field>
         <FieldLabel htmlFor="st-email">Email</FieldLabel>
         <Input id="st-email" type="email" />
@@ -175,4 +172,4 @@ export const SeparatorWithText: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
