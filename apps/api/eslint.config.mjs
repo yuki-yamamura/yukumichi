@@ -1,12 +1,13 @@
-import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
-import { prettierConfig } from "@sanpo/eslint/prettier";
 import drizzlePlugin from "eslint-plugin-drizzle";
-import { vitestConfig } from "@sanpo/eslint/vitest";
 import { defineConfig, globalIgnores } from "eslint/config";
 
+import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
+import { prettierConfig } from "@sanpo/eslint/prettier";
+import { vitestConfig } from "@sanpo/eslint/vitest";
+
 export default defineConfig([
-  ...typescriptConfig,
   ...baseConfig,
+  ...typescriptConfig,
   globalIgnores(["dist/**"]),
   {
     plugins: {
