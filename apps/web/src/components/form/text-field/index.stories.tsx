@@ -39,6 +39,13 @@ const withPhoneNumberFieldContext: Decorator = (Story) => {
 const meta = preview.meta({
   title: "Form/TextField",
   component: TextField,
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
 });
 
 export const Default = meta.story({

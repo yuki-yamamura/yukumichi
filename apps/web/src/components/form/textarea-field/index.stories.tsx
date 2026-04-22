@@ -21,7 +21,7 @@ const withDescriptionFieldContext: Decorator = (Story) => {
   return (
     <form.AppField name="description">
       {() => (
-        <div style={{ width: "390px" }}>
+        <div style={{ width: 400 }}>
           <Story />
         </div>
       )}
