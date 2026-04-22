@@ -42,14 +42,14 @@ export function toApiError(error: { kind: ErrorKind; message: string }): ApiErro
 
 export function toHttpStatus(code: ErrorCode): ContentfulStatusCode {
   switch (code) {
-    case "CONFLICT_ERROR": {
-      return 409;
+    case "VALIDATION_ERROR": {
+      return 400;
     }
     case "NOT_FOUND_ERROR": {
       return 404;
     }
-    case "VALIDATION_ERROR": {
-      return 400;
+    case "CONFLICT_ERROR": {
+      return 409;
     }
     case "DATA_INTEGRITY_ERROR":
     case "UNKNOWN_ERROR": {
