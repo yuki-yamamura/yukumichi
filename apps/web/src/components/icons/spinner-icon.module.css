@@ -1,9 +1,7 @@
 .base {
   animation: spin 1.2s linear infinite;
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .base {
+  @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
 }

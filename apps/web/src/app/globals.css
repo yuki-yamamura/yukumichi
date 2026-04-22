@@ -44,10 +44,8 @@
   --shadow-lg: 0px 4px 12px 0px hsl(0deg 0 0 / 4%), 0px 4px 6px -1px hsl(0deg 0 0 / 4%);
   --shadow-xl: 0px 4px 12px 0px hsl(0deg 0 0 / 4%), 0px 8px 10px -1px hsl(0deg 0 0 / 4%);
   --shadow-2xl: 0px 4px 12px 0px hsl(0deg 0 0 / 10%);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
+  @media (prefers-color-scheme: dark) {
     --background: oklch(16.07% 0.0054 67.432deg);
     --foreground: oklch(96.99% 0.0076 61.4535deg);
     --card: oklch(20.7% 0.0075 67.3916deg);
@@ -93,7 +91,7 @@
 
 html,
 body {
-  max-width: 100vw;
+  max-inline-size: 100vw;
   overflow-x: hidden;
 }
 
