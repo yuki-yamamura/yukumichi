@@ -9,54 +9,40 @@ import type { Database } from "@/infrastructure/database/client";
 
 export function SpotRepository(db: Database): SpotRepository {
   return {
+    archive: async (archivedSpot) => {
+      const rows = await db
+        .insert(archivedSpots)
+        .values({
+          archivedAt: archivedSpot.archivedAt,
+          spotId: archivedSpot.id as string,
+        })
+        .returning({
+          spotId: archivedSpots.spotId,
+        });
+
+      return ok(SpotId.parse(rows[0].spotId));
+    },
+
     async create(input) {
       const {
+        coordinate: { latitude, longitude },
+        description,
         id,
         name,
-        description,
-        coordinate: { latitude, longitude },
       } = input;
       const rows = await db
         .insert(spots)
         .values({
-          id,
-          name,
           description,
+          id,
           latitude,
           longitude,
+          name,
         })
         .returning({ id: spots.id });
       const spotId = SpotId.parse(rows[0].id);
 
       return ok(spotId);
-    },
-
-    findMany: async () => {
-      const rows = await db
-        .select()
-        .from(spots)
-        .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))))
-        .orderBy(desc(spots.createdAt));
-
-      return Result.combine(
-        rows.map((row) => {
-          const idResult = SpotId.safeParse(row.id);
-          if (!idResult.success) {
-            return err({
-              kind: "data_integrity",
-              message: idResult.error.message,
-            } as const);
-          }
-
-          return Spot({ ...row, id: idResult.data }).mapErr(
-            (error) =>
-              ({
-                kind: "data_integrity",
-                message: error.message,
-              }) as const,
-          );
-        }),
-      );
     },
 
     findArchivedSpotById: async (id: SpotId) => {
@@ -70,7 +56,7 @@ export function SpotRepository(db: Database): SpotRepository {
         return err({ kind: "not_found", message: `archived spot not found: ${id}` });
       }
 
-      const { spots: row, archived_spots: archived } = rows[0];
+      const { archived_spots: archived, spots: row } = rows[0];
       const idResult = SpotId.safeParse(row.id);
       if (!idResult.success) {
         return err({ kind: "data_integrity", message: idResult.error.message });
@@ -108,18 +94,32 @@ export function SpotRepository(db: Database): SpotRepository {
       }));
     },
 
-    archive: async (archivedSpot) => {
+    findMany: async () => {
       const rows = await db
-        .insert(archivedSpots)
-        .values({
-          spotId: archivedSpot.id as string,
-          archivedAt: archivedSpot.archivedAt,
-        })
-        .returning({
-          spotId: archivedSpots.spotId,
-        });
+        .select()
+        .from(spots)
+        .where(notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))))
+        .orderBy(desc(spots.createdAt));
 
-      return ok(SpotId.parse(rows[0].spotId));
+      return Result.combine(
+        rows.map((row) => {
+          const idResult = SpotId.safeParse(row.id);
+          if (!idResult.success) {
+            return err({
+              kind: "data_integrity",
+              message: idResult.error.message,
+            } as const);
+          }
+
+          return Spot({ ...row, id: idResult.data }).mapErr(
+            (error) =>
+              ({
+                kind: "data_integrity",
+                message: error.message,
+              }) as const,
+          );
+        }),
+      );
     },
   };
 }

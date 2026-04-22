@@ -37,7 +37,6 @@ const withPhoneNumberFieldContext: Decorator = (Story) => {
 };
 
 const meta = preview.meta({
-  title: "Form/TextField",
   component: TextField,
   decorators: [
     (Story) => (
@@ -46,6 +45,7 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  title: "Form/TextField",
 });
 
 export const Default = meta.story({
@@ -67,9 +67,9 @@ export const Required = meta.story({
 
 export const WithInputModel = meta.story({
   args: {
+    inputMode: "tel",
     label: "Phone Number",
     placeholder: "Enter your phone number",
-    inputMode: "tel",
   },
   decorators: [withPhoneNumberFieldContext],
 });

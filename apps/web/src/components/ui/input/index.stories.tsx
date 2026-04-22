@@ -5,7 +5,6 @@ import preview from "#.storybook/preview";
 import { Input } from ".";
 
 const meta = preview.meta({
-  title: "UI/Input",
   component: Input,
   decorators: [
     (Story) => (
@@ -14,6 +13,7 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  title: "UI/Input",
 });
 
 export const Default = meta.story({
@@ -30,43 +30,43 @@ export const WithValue = meta.story({
 
 export const Disabled = meta.story({
   args: {
-    placeholder: "Enter text",
     disabled: true,
+    placeholder: "Enter text",
   },
 });
 
 export const Invalid = meta.story({
   args: {
-    placeholder: "Enter text",
     "aria-invalid": true,
+    placeholder: "Enter text",
   },
 });
 
 export const Email = meta.story({
   args: {
-    type: "email",
     placeholder: "you@example.com",
+    type: "email",
   },
 });
 
 export const Password = meta.story({
   args: {
-    type: "password",
     defaultValue: "supersecret",
+    type: "password",
   },
 });
 
 export const Number = meta.story({
   args: {
-    type: "number",
     placeholder: "0",
+    type: "number",
   },
 });
 
 export const Search = meta.story({
   args: {
-    type: "search",
     placeholder: "Search...",
+    type: "search",
   },
 });
 
@@ -104,7 +104,7 @@ export const WithFieldError = meta.story({
     <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="username">Username</FieldLabel>
-        <Input id="username" aria-invalid />
+        <Input aria-invalid id="username" />
         <FieldError errors={[{ message: "Username is required." }]} />
       </Field>
     </FieldGroup>

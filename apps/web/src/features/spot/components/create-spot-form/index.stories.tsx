@@ -3,8 +3,14 @@ import preview from "#.storybook/preview";
 import { CreateSpotForm } from ".";
 
 const meta = preview.meta({
-  title: "Features/Spot/CreateSpotForm",
   component: CreateSpotForm,
+  decorators: [
+    (Story) => (
+      <div style={{ width: "390px" }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     nextjs: {
       appDirectory: true,
@@ -13,13 +19,7 @@ const meta = preview.meta({
       },
     },
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: "390px" }}>
-        <Story />
-      </div>
-    ),
-  ],
+  title: "Features/Spot/CreateSpotForm",
 });
 
 export const Default = meta.story();

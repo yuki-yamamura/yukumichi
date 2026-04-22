@@ -25,10 +25,10 @@ export function createSpot(overrides?: Partial<Spot>): Spot {
   const coordinate = createCoordinate();
 
   const spot: Spot = {
+    coordinate,
+    description: faker.lorem.sentence(),
     id: createSpotId(),
     name: faker.location.street(),
-    description: faker.lorem.sentence(),
-    coordinate,
   };
 
   return {

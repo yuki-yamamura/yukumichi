@@ -5,7 +5,6 @@ import preview from "#.storybook/preview";
 import { Label } from ".";
 
 const meta = preview.meta({
-  title: "UI/Label",
   component: Label,
   decorators: [
     (Story) => (
@@ -14,6 +13,7 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  title: "UI/Label",
 });
 
 export const Default = meta.story({
@@ -35,7 +35,7 @@ export const WithDisabledInput = meta.story({
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       <Label htmlFor="username">Username</Label>
-      <Input id="username" disabled defaultValue="admin" />
+      <Input disabled id="username" defaultValue="admin" />
     </div>
   ),
 });

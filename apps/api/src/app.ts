@@ -36,10 +36,10 @@ export function createApp({ databaseUrl }: AppDeps) {
   const apiApp = app.route(
     "/",
     createSpotRoute({
-      createSpotUsecase: CreateSpotUsecase({ spotRepository }),
-      listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
-      getSpotUsecase: GetSpotUsecase({ spotRepository }),
       archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
+      createSpotUsecase: CreateSpotUsecase({ spotRepository }),
+      getSpotUsecase: GetSpotUsecase({ spotRepository }),
+      listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
     }),
   );
 

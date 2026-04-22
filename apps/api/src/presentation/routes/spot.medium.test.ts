@@ -22,12 +22,12 @@ beforeEach(async () => {
 
   const fakeSpots = [spotA, spotB];
   for (const {
+    coordinate: { latitude, longitude },
+    description,
     id,
     name,
-    description,
-    coordinate: { latitude, longitude },
   } of fakeSpots) {
-    await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
+    await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
   }
 });
 
@@ -40,9 +40,9 @@ describe("post /spots", () => {
     // When
     const response = await client.spots.$post({
       json: {
-        name: "Test Spot",
         latitude: 37.7749,
         longitude: -122.4194,
+        name: "Test Spot",
       },
     });
 
@@ -54,12 +54,12 @@ describe("post /spots", () => {
     const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
     expect(rows).toHaveLength(3);
     expect(rows[0]).toEqual({
-      id: expect.any(String),
-      name: "Test Spot",
+      createdAt: expect.any(Date),
       description: null,
+      id: expect.any(String),
       latitude: 37.7749,
       longitude: -122.4194,
-      createdAt: expect.any(Date),
+      name: "Test Spot",
       updatedAt: expect.any(Date),
     });
   });
@@ -113,8 +113,8 @@ describe("post /spots/:spotId/archive", () => {
       .where(eq(archivedSpots.spotId, spotA.id));
     expect(rows).toHaveLength(1);
     expect(rows[0]).toEqual({
-      spotId: spotA.id,
       archivedAt: expect.any(Date),
+      spotId: spotA.id,
     });
   });
 });

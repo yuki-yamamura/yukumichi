@@ -13,9 +13,9 @@ type Props = PropsWithChildren<{
 }> &
   Pick<ComponentProps<"input">, "inputMode">;
 
-export function TextField({ label, placeholder, inputMode, required = false }: Props) {
+export function TextField({ inputMode, label, placeholder, required = false }: Props) {
   const field = useFieldContext<string>();
-  const { isDirty, isValid, errors } = field.state.meta;
+  const { errors, isDirty, isValid } = field.state.meta;
   const hasSubmitted = field.form.state.submissionAttempts > 0;
   const isInvalid = (isDirty || hasSubmitted) && !isValid;
 
@@ -29,9 +29,9 @@ export function TextField({ label, placeholder, inputMode, required = false }: P
         required={required}
         name={field.name}
         value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
         aria-invalid={isInvalid}
         placeholder={placeholder}
+        onChange={(e) => field.handleChange(e.target.value)}
       />
       {isInvalid && <FieldError errors={errors} />}
     </Field>

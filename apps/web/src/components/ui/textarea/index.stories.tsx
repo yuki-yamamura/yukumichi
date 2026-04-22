@@ -5,7 +5,6 @@ import preview from "#.storybook/preview";
 import { Textarea } from ".";
 
 const meta = preview.meta({
-  title: "UI/Textarea",
   component: Textarea,
   decorators: [
     (Story) => (
@@ -14,6 +13,7 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  title: "UI/Textarea",
 });
 
 export const Default = meta.story({
@@ -30,15 +30,15 @@ export const WithValue = meta.story({
 
 export const Disabled = meta.story({
   args: {
-    placeholder: "Type your message here.",
     disabled: true,
+    placeholder: "Type your message here.",
   },
 });
 
 export const Invalid = meta.story({
   args: {
-    placeholder: "Type your message here.",
     "aria-invalid": true,
+    placeholder: "Type your message here.",
   },
 });
 
@@ -70,7 +70,7 @@ export const WithFieldError = meta.story({
     <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="feedback">Feedback</FieldLabel>
-        <Textarea id="feedback" aria-invalid />
+        <Textarea aria-invalid id="feedback" />
         <FieldError errors={[{ message: "Feedback is required." }]} />
       </Field>
     </FieldGroup>

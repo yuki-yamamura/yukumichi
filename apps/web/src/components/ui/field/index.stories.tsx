@@ -16,7 +16,6 @@ import {
 } from ".";
 
 const meta = preview.meta({
-  title: "UI/Field",
   component: Field,
   decorators: [
     (Story) => (
@@ -25,6 +24,7 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  title: "UI/Field",
 });
 
 export const Vertical = meta.story({
@@ -66,7 +66,7 @@ export const WithError = meta.story({
     <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="username">Username</FieldLabel>
-        <Input id="username" aria-invalid />
+        <Input aria-invalid id="username" />
         <FieldError errors={[{ message: "Username is required." }]} />
       </Field>
     </FieldGroup>
@@ -78,7 +78,7 @@ export const WithMultipleErrors = meta.story({
     <FieldGroup>
       <Field data-invalid>
         <FieldLabel htmlFor="password">Password</FieldLabel>
-        <Input id="password" type="password" aria-invalid />
+        <Input aria-invalid id="password" type="password" />
         <FieldError
           errors={[
             { message: "Must be at least 8 characters." },
@@ -136,7 +136,7 @@ export const HorizontalWithContent = meta.story({
           <FieldTitle>Notifications</FieldTitle>
           <FieldDescription>Receive email notifications about updates.</FieldDescription>
         </FieldContent>
-        <Input id="notify" type="checkbox" style={{ width: 16, height: 16 }} />
+        <Input id="notify" type="checkbox" style={{ height: 16, width: 16 }} />
       </Field>
     </FieldGroup>
   ),
