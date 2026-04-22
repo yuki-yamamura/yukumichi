@@ -4,12 +4,12 @@ import perfectionist from "eslint-plugin-perfectionist";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
+import jseslint from "@eslint/js";
 
-// Exported separately so API can use it directly.
-// Web gets @typescript-eslint from eslint-config-next/typescript.
 export const typescriptConfig = tseslint.configs.recommended;
 
 export const baseConfig = [
+  jseslint.configs.recommended,
   eslintPluginUnicorn.configs.recommended,
   {
     rules: {
@@ -37,15 +37,7 @@ export const baseConfig = [
       "import-x/order": [
         "error",
         {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-            "type",
-          ],
+          groups: ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
           pathGroups: [
             {
               pattern: "@/**",

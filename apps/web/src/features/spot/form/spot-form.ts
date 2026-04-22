@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createFloatSchema } from "@/libs/zod/schemas";
+import { createFloatSchema } from "@/libs/zod/schema";
 
 export const spotFormSchema = z.object({
   name: z.string().min(1),

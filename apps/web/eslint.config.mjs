@@ -1,10 +1,10 @@
 import { baseConfig } from "@sanpo/eslint/base";
 import { prettierConfig } from "@sanpo/eslint/prettier";
 import { vitestConfig } from "@sanpo/eslint/vitest";
+
 import storybook from "eslint-plugin-storybook";
 import testingLibrary from "eslint-plugin-testing-library";
 import reactHooks from "eslint-plugin-react-hooks";
-
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
@@ -32,13 +32,10 @@ const eslintConfig = defineConfig([
     files: ["**/*.test.{ts,tsx}"],
     ...testingLibrary.configs["flat/react"],
   },
-{
+  {
     files: ["**/*.tsx"],
     rules: {
-      "react/jsx-curly-brace-presence": [
-        "error",
-        { props: "never", children: "never" },
-      ],
+      "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
       "react/jsx-boolean-value": ["error", "never"],
       "react/self-closing-comp": "error",
     },
