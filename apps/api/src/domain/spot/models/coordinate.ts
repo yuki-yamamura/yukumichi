@@ -4,8 +4,9 @@ import z from "zod";
 import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
-const latitudeSchema = z.number().min(-90).max(90);
-const longitudeSchema = z.number().min(-180).max(180);
+export const latitudeSchema = z.number().min(-90).max(90);
+
+export const longitudeSchema = z.number().min(-180).max(180);
 
 export type Coordinate = Readonly<{
   latitude: number;

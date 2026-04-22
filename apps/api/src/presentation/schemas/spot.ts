@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { latitudeSchema, longitudeSchema } from "@/domain/spot/models/coordinate";
+
 import { spotIdOutputSchema, spotIdParamSchema } from "./id";
 
 import type { Spot } from "@/domain/spot/models/spot";
@@ -9,8 +11,8 @@ const spotSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   coordinate: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
+    latitude: latitudeSchema,
+    longitude: longitudeSchema,
   }),
 });
 
@@ -21,8 +23,8 @@ export function toSpotResponse(spot: Spot): z.output<typeof spotSchema> {
 export const createSpotRequestBodySchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: latitudeSchema,
+  longitude: longitudeSchema,
 });
 
 export const listSpotsResponseSchema = z.object({

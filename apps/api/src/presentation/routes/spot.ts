@@ -1,7 +1,7 @@
-import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
+import { zValidator } from "@/presentation/middlewares/zod-validator";
 import { errorResponseSchema, toApiError, toHttpStatus } from "@/presentation/schemas/error";
 import {
   archiveSpotRequestParamsSchema,

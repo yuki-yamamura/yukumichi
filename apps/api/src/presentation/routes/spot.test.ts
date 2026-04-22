@@ -59,14 +59,12 @@ describe("createSpotRoute", () => {
       expect(response.status).toBe(400);
     });
 
-    it("should return 400 status code when invalid parameters are specified", async () => {
+    it("should return 400 with a field path when latitude is out of range", async () => {
       // Given
-      const message = faker.lorem.sentence();
+      const createSpotUsecase = { execute: vi.fn() };
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
-        createSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "validation", message })),
-        },
+        createSpotUsecase,
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
@@ -77,17 +75,46 @@ describe("createSpotRoute", () => {
       const response = await client.spots.$post({
         json: {
           name: faker.location.street(),
-          latitude: 999, // Invalid latitude
+          latitude: 91,
           longitude: faker.location.longitude(),
         },
       });
 
       // Then
       expect(response.status).toBe(400);
-      expect(await response.json()).toEqual({
-        code: "VALIDATION_ERROR",
-        message,
+      const body = (await response.json()) as { code: string; message: string };
+      expect(body.code).toBe("VALIDATION_ERROR");
+      expect(body.message).toContain("latitude");
+      expect(createSpotUsecase.execute).not.toHaveBeenCalled();
+    });
+
+    it("should return 400 with a field path when longitude is out of range", async () => {
+      // Given
+      const createSpotUsecase = { execute: vi.fn() };
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: { execute: vi.fn() },
+        createSpotUsecase,
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
       });
+
+      const client = testClient(spotRoute);
+
+      // When
+      const response = await client.spots.$post({
+        json: {
+          name: faker.location.street(),
+          latitude: faker.location.latitude(),
+          longitude: 181,
+        },
+      });
+
+      // Then
+      expect(response.status).toBe(400);
+      const body = (await response.json()) as { code: string; message: string };
+      expect(body.code).toBe("VALIDATION_ERROR");
+      expect(body.message).toContain("longitude");
+      expect(createSpotUsecase.execute).not.toHaveBeenCalled();
     });
   });
 
