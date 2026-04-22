@@ -10,6 +10,7 @@ const errorMap: $ZodErrorMap = (issue) => {
       if (issue.expected === "string") {
         return { message: "必ず入力してください" };
       }
+      break;
     }
     case "too_small": {
       if (issue.origin === "string" && issue.minimum === 1) {
@@ -18,11 +19,13 @@ const errorMap: $ZodErrorMap = (issue) => {
       if (issue.origin === "number") {
         return { message: `${issue.minimum}以上の数値を入力してください` };
       }
+      break;
     }
     case "too_big": {
       if (issue.origin === "number") {
         return { message: `${issue.maximum}以下の数値を入力してください` };
       }
+      break;
     }
     case "custom": {
       const params = customIssueParamsSchema.safeParse(issue.params);
@@ -36,6 +39,7 @@ const errorMap: $ZodErrorMap = (issue) => {
           }
         }
       }
+      break;
     }
   }
 };
