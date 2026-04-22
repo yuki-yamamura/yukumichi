@@ -1,8 +1,8 @@
+import preview from "#.storybook/preview";
+
 import { CreateSpotForm } from ".";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta: Meta<typeof CreateSpotForm> = {
+const meta = preview.meta({
   title: "Features/Spot/CreateSpotForm",
   component: CreateSpotForm,
   parameters: {
@@ -20,9 +20,6 @@ const meta: Meta<typeof CreateSpotForm> = {
       </div>
     ),
   ],
-};
+});
 
-export default meta;
-type Story = StoryObj<typeof CreateSpotForm>;
-
-export const Default: Story = {};
+export const Default = meta.story();

@@ -1,50 +1,47 @@
 import { Button } from "@/components/ui/button";
 
+import preview from "#.storybook/preview";
+
 import { SpinnerIcon } from "./spinner-icon";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta = {
+const meta = preview.meta({
   title: "Icons/SpinnerIcon",
   component: SpinnerIcon,
-} satisfies Meta<typeof SpinnerIcon>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export const Default = meta.story();
 
-export const Default: Story = {};
-
-export const Small: Story = {
+export const Small = meta.story({
   args: {
     size: 12,
   },
-};
+});
 
-export const Large: Story = {
+export const Large = meta.story({
   args: {
     size: 32,
   },
-};
+});
 
-export const WithLabel: Story = {
+export const WithLabel = meta.story({
   args: {
     label: "Loading",
   },
-};
+});
 
-export const InheritsColor: Story = {
+export const InheritsColor = meta.story({
   render: (args) => (
     <div style={{ color: "var(--destructive)" }}>
       <SpinnerIcon {...args} />
     </div>
   ),
-};
+});
 
-export const InsideButton: Story = {
+export const InsideButton = meta.story({
   render: (args) => (
     <Button type="button" disabled>
       <SpinnerIcon {...args} />
       Submit
     </Button>
   ),
-};
+});

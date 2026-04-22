@@ -1,104 +1,97 @@
 import { ChevronRightIcon, LoaderCircleIcon, MailIcon } from "lucide-react";
 
+import preview from "#.storybook/preview";
+
 import { Button } from ".";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta = {
+const meta = preview.meta({
   title: "UI/Button",
   component: Button,
-} satisfies Meta<typeof Button>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-// Variants
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     children: "Button",
   },
-};
+});
 
-export const Destructive: Story = {
+export const Destructive = meta.story({
   args: {
     variant: "destructive",
     children: "Delete",
   },
-};
+});
 
-export const Outline: Story = {
+export const Outline = meta.story({
   args: {
     variant: "outline",
     children: "Outline",
   },
-};
+});
 
-export const Secondary: Story = {
+export const Secondary = meta.story({
   args: {
     variant: "secondary",
     children: "Secondary",
   },
-};
+});
 
-export const Ghost: Story = {
+export const Ghost = meta.story({
   args: {
     variant: "ghost",
     children: "Ghost",
   },
-};
+});
 
-export const Link: Story = {
+export const Link = meta.story({
   args: {
     variant: "link",
     children: "Link",
   },
-};
+});
 
-// Sizes
-export const SizeDefault: Story = {
+export const SizeDefault = meta.story({
   args: {
     children: "Default",
   },
-};
+});
 
-export const SizeXs: Story = {
+export const SizeXs = meta.story({
   args: {
     size: "xs",
     children: "Extra Small",
   },
-};
+});
 
-export const SizeSm: Story = {
+export const SizeSm = meta.story({
   args: {
     size: "sm",
     children: "Small",
   },
-};
+});
 
-export const SizeLg: Story = {
+export const SizeLg = meta.story({
   args: {
     size: "lg",
     children: "Large",
   },
-};
+});
 
-export const SizeIcon: Story = {
+export const SizeIcon = meta.story({
   args: {
     size: "icon",
     children: <ChevronRightIcon />,
   },
-};
+});
 
-// States
-export const Disabled: Story = {
+export const Disabled = meta.story({
   args: {
     disabled: true,
     children: "Disabled",
   },
-};
+});
 
-// With icons
-export const WithIcon: Story = {
+export const WithIcon = meta.story({
   args: {
     children: (
       <>
@@ -107,9 +100,9 @@ export const WithIcon: Story = {
       </>
     ),
   },
-};
+});
 
-export const IconRight: Story = {
+export const IconRight = meta.story({
   args: {
     children: (
       <>
@@ -118,9 +111,9 @@ export const IconRight: Story = {
       </>
     ),
   },
-};
+});
 
-export const Loading: Story = {
+export const Loading = meta.story({
   args: {
     disabled: true,
     children: (
@@ -130,4 +123,4 @@ export const Loading: Story = {
       </>
     ),
   },
-};
+});

@@ -1,48 +1,45 @@
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 
+import preview from "#.storybook/preview";
+
 import { Textarea } from ".";
 
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-const meta = {
+const meta = preview.meta({
   title: "UI/Textarea",
   component: Textarea,
-} satisfies Meta<typeof Textarea>;
+});
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     placeholder: "Type your message here.",
     style: { width: 400 },
   },
-};
+});
 
-export const WithValue: Story = {
+export const WithValue = meta.story({
   args: {
     defaultValue: "The quick brown fox jumps over the lazy dog.",
     style: { width: 400 },
   },
-};
+});
 
-export const Disabled: Story = {
+export const Disabled = meta.story({
   args: {
     placeholder: "Type your message here.",
     disabled: true,
     style: { width: 400 },
   },
-};
+});
 
-export const Invalid: Story = {
+export const Invalid = meta.story({
   args: {
     placeholder: "Type your message here.",
     "aria-invalid": true,
     style: { width: 400 },
   },
-};
+});
 
-export const WithField: Story = {
+export const WithField = meta.story({
   render: () => (
     <FieldGroup style={{ width: 400 }}>
       <Field>
@@ -51,9 +48,9 @@ export const WithField: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-export const WithFieldDescription: Story = {
+export const WithFieldDescription = meta.story({
   render: () => (
     <FieldGroup style={{ width: 400 }}>
       <Field>
@@ -63,9 +60,9 @@ export const WithFieldDescription: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});
 
-export const WithFieldError: Story = {
+export const WithFieldError = meta.story({
   render: () => (
     <FieldGroup style={{ width: 400 }}>
       <Field data-invalid>
@@ -75,4 +72,4 @@ export const WithFieldError: Story = {
       </Field>
     </FieldGroup>
   ),
-};
+});

@@ -1,15 +1,14 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import type { StorybookConfig } from "@storybook/nextjs-vite";
+import { defineMain } from "@storybook/nextjs-vite/node";
 
 function getAbsolutePath(value: string) {
   return path.dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
 }
-const config: StorybookConfig = {
+export default defineMain({
   stories: ["../src/**/*.stories.@(ts|tsx)"],
   addons: [getAbsolutePath("@storybook/addon-mcp")],
   framework: getAbsolutePath("@storybook/nextjs-vite"),
   staticDirs: ["../public"],
-};
-export default config;
+});

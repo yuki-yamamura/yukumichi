@@ -1,10 +1,9 @@
+import { definePreview } from "@storybook/nextjs-vite";
+
+import "../src/libs/zod";
 import "../src/app/globals.css";
 
-import "../src/app/provider";
-
-import type { Preview } from "@storybook/nextjs-vite";
-
-const preview: Preview = {
+export default definePreview({
   parameters: {
     controls: {
       matchers: {
@@ -12,9 +11,8 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    layout: "centered",
   },
-  tags: ["autodocs"],
-};
 
-export default preview;
+  tags: ["autodocs"],
+  addons: [],
+});
