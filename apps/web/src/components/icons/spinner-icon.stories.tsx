@@ -5,8 +5,8 @@ import preview from "#.storybook/preview";
 import { SpinnerIcon } from "./spinner-icon";
 
 const meta = preview.meta({
-  title: "Icons/SpinnerIcon",
   component: SpinnerIcon,
+  title: "Icons/SpinnerIcon",
 });
 
 export const Default = meta.story();
@@ -39,7 +39,7 @@ export const InheritsColor = meta.story({
 
 export const InsideButton = meta.story({
   render: (args) => (
-    <Button type="button" disabled>
+    <Button disabled type="button">
       <SpinnerIcon {...args} />
       Submit
     </Button>

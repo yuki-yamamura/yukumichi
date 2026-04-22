@@ -4,19 +4,19 @@ import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  test: {
-    globals: true,
-    setupFiles: ["./vitest.setup.ts"],
-    browser: {
-      enabled: true,
-      provider: playwright(),
-      instances: [{ browser: "chromium" }],
-      headless: true,
-    },
-  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("src", import.meta.url)),
     },
+  },
+  test: {
+    browser: {
+      enabled: true,
+      headless: true,
+      instances: [{ browser: "chromium" }],
+      provider: playwright(),
+    },
+    globals: true,
+    setupFiles: ["./vitest.setup.ts"],
   },
 });

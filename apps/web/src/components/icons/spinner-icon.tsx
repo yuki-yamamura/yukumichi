@@ -9,7 +9,7 @@ type Props = {
 
 export function SpinnerIcon({ label, size }: Props) {
   const accessibilityProps = label
-    ? { role: "status" as const, "aria-label": label }
+    ? { "aria-label": label, role: "status" as const }
     : { "aria-hidden": true as const };
 
   return <CircleNotchIcon {...accessibilityProps} size={size} className={styles.base} />;

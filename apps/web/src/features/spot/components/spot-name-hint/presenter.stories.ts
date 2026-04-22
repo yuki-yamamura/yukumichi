@@ -5,8 +5,8 @@ import preview from "#.storybook/preview";
 import { SpotNameHintPresenter } from "./presenter";
 
 const meta = preview.meta({
-  title: "Features/Spot/SpotNameHintPresenter",
   component: SpotNameHintPresenter,
+  title: "Features/Spot/SpotNameHintPresenter",
 });
 
 export const Default = meta.story({

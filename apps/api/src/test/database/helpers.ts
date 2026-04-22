@@ -18,11 +18,11 @@ type TestDatabase = {
 
 export function createTestDatabase(url: string): TestDatabase {
   const client = postgres(url);
-  const db = drizzle(client, { schema, casing: "snake_case" });
+  const db = drizzle(client, { casing: "snake_case", schema });
 
   return {
-    db,
     cleanup: () => client.end(),
+    db,
     truncateTables: async () => {
       await db.execute(sql.raw(`TRUNCATE TABLE ${tableNames.join(", ")} CASCADE`));
     },

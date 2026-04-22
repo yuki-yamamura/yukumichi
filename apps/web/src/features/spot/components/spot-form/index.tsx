@@ -20,43 +20,43 @@ export function SpotForm({ defaultValues, onSubmit }: Props) {
   const form = useAppForm(
     formOptions({
       defaultValues,
+      onSubmit,
       validators: {
         onChange: spotFormSchema,
       },
-      onSubmit,
     }),
   );
 
   return (
     <form
+      noValidate
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
       }}
-      noValidate
       className={styles.base}
     >
       <div className={styles.content}>
         <form.AppField name="name">
-          {(field) => <field.TextField label="Name" placeholder="Central Park" required />}
+          {(field) => <field.TextField required label="Name" placeholder="Central Park" />}
         </form.AppField>
         <form.AppField name="latitude">
           {(field) => (
             <field.TextField
+              required
               label="Latitude"
               placeholder="40.785091"
               inputMode="decimal"
-              required
             />
           )}
         </form.AppField>
         <form.AppField name="longitude">
           {(field) => (
             <field.TextField
+              required
               label="Longitude"
               placeholder="-73.968285"
               inputMode="decimal"
-              required
             />
           )}
         </form.AppField>

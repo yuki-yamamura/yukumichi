@@ -10,29 +10,29 @@ import type { ComponentProps } from "react";
 import styles from "./index.module.css";
 
 const button = cva(styles.base, {
+  defaultVariants: {
+    size: "default",
+    variant: "default",
+  },
   variants: {
+    size: {
+      default: styles.sizeDefault,
+      icon: styles.sizeIcon,
+      "icon-lg": styles.sizeIconLg,
+      "icon-sm": styles.sizeIconSm,
+      "icon-xs": styles.sizeIconXs,
+      lg: styles.sizeLg,
+      sm: styles.sizeSm,
+      xs: styles.sizeXs,
+    },
     variant: {
       default: styles.default,
       destructive: styles.destructive,
-      outline: styles.outline,
-      secondary: styles.secondary,
       ghost: styles.ghost,
       link: styles.link,
+      outline: styles.outline,
+      secondary: styles.secondary,
     },
-    size: {
-      default: styles.sizeDefault,
-      xs: styles.sizeXs,
-      sm: styles.sizeSm,
-      lg: styles.sizeLg,
-      icon: styles.sizeIcon,
-      "icon-xs": styles.sizeIconXs,
-      "icon-sm": styles.sizeIconSm,
-      "icon-lg": styles.sizeIconLg,
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default",
   },
 });
 
@@ -40,16 +40,16 @@ type Props = ComponentProps<typeof ButtonPrimitive> & VariantProps<typeof button
 
 export function Button({
   className,
-  variant,
-  size,
   ref,
+  size,
+  variant,
   ...props
 }: Props & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
     <ButtonPrimitive
       ref={ref}
       data-slot="button"
-      className={clsx(button({ variant, size }), className)}
+      className={clsx(button({ size, variant }), className)}
       {...props}
     />
   );

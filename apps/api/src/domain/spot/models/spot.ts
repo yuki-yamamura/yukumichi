@@ -38,9 +38,9 @@ type SpotParams = {
 export function Spot({
   description,
   id,
-  name,
   latitude,
   longitude,
+  name,
 }: SpotParams): Result<Spot, ValidationError> {
   const coordinateResult = Coordinate({ latitude, longitude });
   if (coordinateResult.isErr()) {
@@ -48,10 +48,10 @@ export function Spot({
   }
 
   return ok({
+    coordinate: coordinateResult.value,
+    description: description ?? null,
     id,
     name,
-    description: description ?? null,
-    coordinate: coordinateResult.value,
   });
 }
 

@@ -23,9 +23,9 @@ describe("CreateSpotUsecase", () => {
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
-        name: faker.location.street(),
         latitude: faker.location.latitude(),
         longitude: faker.location.longitude(),
+        name: faker.location.street(),
       };
 
       // When
@@ -47,9 +47,9 @@ describe("CreateSpotUsecase", () => {
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
-        name: faker.location.street(),
         latitude: 999, // Invalid latitude
         longitude: faker.location.longitude(),
+        name: faker.location.street(),
       };
 
       // When

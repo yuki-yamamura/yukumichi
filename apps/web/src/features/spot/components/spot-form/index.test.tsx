@@ -30,10 +30,10 @@ describe("SpotForm", () => {
     expect(onSubmitSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         value: {
-          name: "Central Park",
+          description: "A large public park in New York City.",
           latitude: "40.123",
           longitude: "-73.456",
-          description: "A large public park in New York City.",
+          name: "Central Park",
         },
       }),
     );
@@ -56,9 +56,9 @@ describe("SpotForm", () => {
     expect(onSubmitSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         value: {
-          name: "Central Park",
           latitude: "40.123",
           longitude: "-73.456",
+          name: "Central Park",
         },
       }),
     );

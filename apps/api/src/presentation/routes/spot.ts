@@ -25,28 +25,28 @@ type SpotRouteDeps = {
 };
 
 export function createSpotRoute({
-  createSpotUsecase,
-  listSpotsUsecase,
-  getSpotUsecase,
   archiveSpotUsecase,
+  createSpotUsecase,
+  getSpotUsecase,
+  listSpotsUsecase,
 }: SpotRouteDeps) {
   return new Hono()
     .post(
       "/spots",
       describeRoute({
-        tags: ["spots"],
         description: "Create a new spot",
         responses: {
           201: { description: "Spot created successfully" },
           400: {
-            description: "Validation error",
             content: {
               "application/json": {
                 schema: resolver(errorResponseSchema),
               },
             },
+            description: "Validation error",
           },
         },
+        tags: ["spots"],
       }),
       zValidator("json", createSpotRequestBodySchema),
       async (context) => {
@@ -66,18 +66,18 @@ export function createSpotRoute({
     .get(
       "/spots",
       describeRoute({
-        tags: ["spots"],
         description: "List all spots",
         responses: {
           200: {
-            description: "Returns a list of spots",
             content: {
               "application/json": {
                 schema: resolver(listSpotsResponseSchema),
               },
             },
+            description: "Returns a list of spots",
           },
         },
+        tags: ["spots"],
       }),
       async (context) => {
         const result = await listSpotsUsecase.execute();
@@ -95,24 +95,24 @@ export function createSpotRoute({
     .get(
       "/spots/:spotId",
       describeRoute({
-        tags: ["spots"],
         description: "Get a spot by ID",
         responses: {
           200: {
-            description: "Returns the spot",
             content: {
               "application/json": {
                 schema: resolver(getSpotResponseSchema),
               },
             },
+            description: "Returns the spot",
           },
           404: {
-            description: "Spot not found",
             content: {
               "application/json": { schema: resolver(errorResponseSchema) },
             },
+            description: "Spot not found",
           },
         },
+        tags: ["spots"],
       }),
       zValidator("param", getSpotRequestParamsSchema),
       async (context) => {
@@ -132,23 +132,23 @@ export function createSpotRoute({
     .post(
       "/spots/:spotId/archive",
       describeRoute({
-        tags: ["spots"],
         description: "Archive a spot",
         responses: {
           204: { description: "Spot archived successfully" },
-          409: {
-            description: "Already archived",
-            content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
-            },
-          },
           404: {
-            description: "Spot not found",
             content: {
               "application/json": { schema: resolver(errorResponseSchema) },
             },
+            description: "Spot not found",
+          },
+          409: {
+            content: {
+              "application/json": { schema: resolver(errorResponseSchema) },
+            },
+            description: "Already archived",
           },
         },
+        tags: ["spots"],
       }),
       zValidator("param", archiveSpotRequestParamsSchema),
       async (context) => {

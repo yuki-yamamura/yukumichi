@@ -25,13 +25,13 @@ describe("SpotRepository", () => {
       // Given
       const id = createSpotId();
       const spot = createSpot({
-        id,
-        name: "Test Park",
         coordinate: createCoordinate({
           latitude: 0,
           longitude: 0,
         }),
         description: "A nice park to relax",
+        id,
+        name: "Test Park",
       });
 
       // When
@@ -45,12 +45,12 @@ describe("SpotRepository", () => {
       const rows = await testDb.db.select().from(spots).where(eq(spots.id, id));
       expect(rows).toHaveLength(1);
       expect(rows[0]).toEqual({
-        id: spot.id,
-        name: spot.name,
+        createdAt: expect.any(Date),
         description: spot.description,
+        id: spot.id,
         latitude: spot.coordinate.latitude,
         longitude: spot.coordinate.longitude,
-        createdAt: expect.any(Date),
+        name: spot.name,
         updatedAt: expect.any(Date),
       });
     });
@@ -64,12 +64,12 @@ describe("SpotRepository", () => {
 
       for (const spot of [spotA, spotB]) {
         const {
+          coordinate: { latitude, longitude },
+          description,
           id,
           name,
-          description,
-          coordinate: { latitude, longitude },
         } = spot;
-        await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
+        await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
       }
 
       // When
@@ -87,14 +87,14 @@ describe("SpotRepository", () => {
 
       for (const spot of [spotA, spotB]) {
         const {
+          coordinate: { latitude, longitude },
+          description,
           id,
           name,
-          description,
-          coordinate: { latitude, longitude },
         } = spot;
-        await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
+        await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
       }
-      await testDb.db.insert(archivedSpots).values({ spotId: spotB.id, archivedAt: new Date() });
+      await testDb.db.insert(archivedSpots).values({ archivedAt: new Date(), spotId: spotB.id });
 
       // When
       const result = await repository.findMany();
@@ -110,12 +110,12 @@ describe("SpotRepository", () => {
       // Given
       const spot = createSpot();
       const {
-        id,
-        name,
         coordinate: { latitude, longitude },
         description,
+        id,
+        name,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
 
       // When
       const result = await repository.findById(spot.id);
@@ -141,13 +141,13 @@ describe("SpotRepository", () => {
       // Given
       const spot = createSpot();
       const {
-        id,
-        name,
         coordinate: { latitude, longitude },
         description,
+        id,
+        name,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
-      await testDb.db.insert(archivedSpots).values({ spotId: spot.id, archivedAt: new Date() });
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
+      await testDb.db.insert(archivedSpots).values({ archivedAt: new Date(), spotId: spot.id });
 
       // When
       const result = await repository.findById(spot.id);
@@ -163,12 +163,12 @@ describe("SpotRepository", () => {
       // Given
       const spot = createSpot();
       const {
-        id,
-        name,
         coordinate: { latitude, longitude },
         description,
+        id,
+        name,
       } = spot;
-      await testDb.db.insert(spots).values({ id, name, description, latitude, longitude });
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
       const archivedAt = new Date();
 
       // When
@@ -185,8 +185,8 @@ describe("SpotRepository", () => {
         .where(eq(archivedSpots.spotId, spot.id));
       expect(rows).toHaveLength(1);
       expect(rows[0]).toEqual({
-        spotId: spot.id,
         archivedAt,
+        spotId: spot.id,
       });
     });
   });

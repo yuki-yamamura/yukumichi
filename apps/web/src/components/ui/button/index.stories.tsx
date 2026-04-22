@@ -5,8 +5,8 @@ import preview from "#.storybook/preview";
 import { Button } from ".";
 
 const meta = preview.meta({
-  title: "UI/Button",
   component: Button,
+  title: "UI/Button",
 });
 
 export const Default = meta.story({
@@ -17,36 +17,36 @@ export const Default = meta.story({
 
 export const Destructive = meta.story({
   args: {
-    variant: "destructive",
     children: "Delete",
+    variant: "destructive",
   },
 });
 
 export const Outline = meta.story({
   args: {
-    variant: "outline",
     children: "Outline",
+    variant: "outline",
   },
 });
 
 export const Secondary = meta.story({
   args: {
-    variant: "secondary",
     children: "Secondary",
+    variant: "secondary",
   },
 });
 
 export const Ghost = meta.story({
   args: {
-    variant: "ghost",
     children: "Ghost",
+    variant: "ghost",
   },
 });
 
 export const Link = meta.story({
   args: {
-    variant: "link",
     children: "Link",
+    variant: "link",
   },
 });
 
@@ -58,36 +58,36 @@ export const SizeDefault = meta.story({
 
 export const SizeXs = meta.story({
   args: {
-    size: "xs",
     children: "Extra Small",
+    size: "xs",
   },
 });
 
 export const SizeSm = meta.story({
   args: {
-    size: "sm",
     children: "Small",
+    size: "sm",
   },
 });
 
 export const SizeLg = meta.story({
   args: {
-    size: "lg",
     children: "Large",
+    size: "lg",
   },
 });
 
 export const SizeIcon = meta.story({
   args: {
-    size: "icon",
     children: <ChevronRightIcon />,
+    size: "icon",
   },
 });
 
 export const Disabled = meta.story({
   args: {
-    disabled: true,
     children: "Disabled",
+    disabled: true,
   },
 });
 
@@ -115,12 +115,12 @@ export const IconRight = meta.story({
 
 export const Loading = meta.story({
   args: {
-    disabled: true,
     children: (
       <>
         <LoaderCircleIcon className="animate-spin" />
         Please wait
       </>
     ),
+    disabled: true,
   },
 });

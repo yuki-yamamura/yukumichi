@@ -12,9 +12,9 @@ export function CreateSpotForm() {
   const router = useRouter();
 
   const defaultValues = {
-    name: "",
     latitude: "",
     longitude: "",
+    name: "",
   };
 
   const handleSubmit = async ({ value }: { value: SpotFormInput }) => {

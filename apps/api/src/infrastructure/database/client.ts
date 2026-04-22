@@ -9,7 +9,7 @@ export function createDatabase(url: string) {
     ssl: ssl ? { rejectUnauthorized: false } : false,
   });
 
-  return drizzle(sql, { schema, casing: "snake_case" });
+  return drizzle(sql, { casing: "snake_case", schema });
 }
 
 export type Database = ReturnType<typeof createDatabase>;

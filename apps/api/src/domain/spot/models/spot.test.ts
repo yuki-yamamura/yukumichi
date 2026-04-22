@@ -13,18 +13,18 @@ describe("Spot", () => {
     // When
     const result = Spot({
       id,
-      name: "Test Park",
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
+      name: "Test Park",
     });
 
     // Then
     expect(result.isOk()).toBe(true);
     expect(result._unsafeUnwrap()).toEqual({
+      coordinate,
+      description: null,
       id,
       name: "Test Park",
-      description: null,
-      coordinate,
     });
   });
 
@@ -32,9 +32,9 @@ describe("Spot", () => {
     // Given
     const params = {
       id: createSpotId(),
-      name: faker.location.street(),
       latitude: faker.location.latitude(),
       longitude: 999, // Invalid longitude
+      name: faker.location.street(),
     };
 
     // When

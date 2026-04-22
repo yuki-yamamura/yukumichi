@@ -4,6 +4,8 @@ import "../src/libs/zod";
 import "../src/app/globals.css";
 
 export default definePreview({
+  addons: [],
+
   parameters: {
     controls: {
       matchers: {
@@ -12,7 +14,5 @@ export default definePreview({
       },
     },
   },
-
   tags: ["autodocs"],
-  addons: [],
 });

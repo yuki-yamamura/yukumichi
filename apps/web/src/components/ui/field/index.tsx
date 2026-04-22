@@ -35,15 +35,15 @@ function FieldGroup({ className, ...props }: ComponentProps<"div">) {
 }
 
 const field = cva(styles.field, {
-  variants: {
-    orientation: {
-      vertical: styles.orientationVertical,
-      horizontal: styles.orientationHorizontal,
-      responsive: styles.orientationResponsive,
-    },
-  },
   defaultVariants: {
     orientation: "vertical",
+  },
+  variants: {
+    orientation: {
+      horizontal: styles.orientationHorizontal,
+      responsive: styles.orientationResponsive,
+      vertical: styles.orientationVertical,
+    },
   },
 });
 
@@ -101,7 +101,7 @@ function FieldSeparator({ children, className, ...props }: FieldSeparatorProps) 
     >
       <div className={styles.fieldSeparatorLine} />
       {children && (
-        <span className={styles.fieldSeparatorContent} data-slot="field-separator-content">
+        <span data-slot="field-separator-content" className={styles.fieldSeparatorContent}>
           {children}
         </span>
       )}
@@ -113,7 +113,7 @@ type FieldErrorProps = ComponentProps<"div"> & {
   errors?: Array<{ message?: string } | undefined>;
 };
 
-function FieldError({ className, children, errors, ...props }: FieldErrorProps) {
+function FieldError({ children, className, errors, ...props }: FieldErrorProps) {
   const content = useMemo(() => {
     if (children) {
       return children;

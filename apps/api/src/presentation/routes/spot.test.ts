@@ -24,9 +24,9 @@ describe("createSpotRoute", () => {
       // When
       const response = await client.spots.$post({
         json: {
-          name: faker.location.street(),
           latitude: faker.location.latitude(),
           longitude: faker.location.longitude(),
+          name: faker.location.street(),
         },
       });
 
@@ -49,9 +49,9 @@ describe("createSpotRoute", () => {
       // When
       const response = await client.spots.$post({
         json: {
-          name: "", // Invalid name (empty string)
           latitude: faker.location.latitude(),
           longitude: faker.location.longitude(),
+          name: "", // Invalid name (empty string)
         },
       });
 
@@ -74,9 +74,9 @@ describe("createSpotRoute", () => {
       // When
       const response = await client.spots.$post({
         json: {
-          name: faker.location.street(),
           latitude: 91,
           longitude: faker.location.longitude(),
+          name: faker.location.street(),
         },
       });
 
@@ -103,9 +103,9 @@ describe("createSpotRoute", () => {
       // When
       const response = await client.spots.$post({
         json: {
-          name: faker.location.street(),
           latitude: faker.location.latitude(),
           longitude: 181,
+          name: faker.location.street(),
         },
       });
 

@@ -111,6 +111,12 @@ export const baseConfig = [
           groups: ["required-property", "optional-property"],
         },
       ],
+      "perfectionist/sort-objects": [
+        "error",
+        {
+          type: "natural",
+        },
+      ],
       "perfectionist/sort-union-types": [
         "error",
         {

@@ -30,8 +30,8 @@ const withDescriptionFieldContext: Decorator = (Story) => {
 };
 
 const meta = preview.meta({
-  title: "Form/TextareaField",
   component: TextareaField,
+  title: "Form/TextareaField",
 });
 
 export const Default = meta.story({
