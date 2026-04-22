@@ -38,6 +38,19 @@ const eslintConfig = defineConfig([
       "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
       "react/jsx-boolean-value": ["error", "never"],
       "react/self-closing-comp": "error",
+      "perfectionist/sort-jsx-props": [
+        "error",
+        {
+          type: "unsorted",
+          customGroups: [
+            { groupName: "reserved", elementNamePattern: "^(key|ref)$" },
+            { groupName: "render", elementNamePattern: "^render[A-Z]" },
+            { groupName: "callback", elementNamePattern: "^on[A-Z]" },
+            { groupName: "className", elementNamePattern: "^className$" },
+          ],
+          groups: ["reserved", "shorthand-prop", "render", "unknown", "callback", "className"],
+        },
+      ],
     },
   },
   prettierConfig,
