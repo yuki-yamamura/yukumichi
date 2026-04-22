@@ -34,16 +34,16 @@
     "clsx": "^2.1.1",
     "hono": "^4.12.5",
     "lucide-react": "^1.7.0",
-    "next": "16.1.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "next": "16.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@css-modules-kit/codegen": "^0.10.0",
     "@css-modules-kit/stylelint-plugin": "^0.10.0",
     "@faker-js/faker": "catalog:",
-    "@opennextjs/cloudflare": "1.17.1",
+    "@opennextjs/cloudflare": "1.19.3",
     "@sanpo/eslint": "workspace:*",
     "@storybook/addon-mcp": "^0.6.0",
     "@storybook/nextjs-vite": "^10.3.5",
@@ -58,7 +58,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "chromatic": "^16.0.0",
     "eslint": "catalog:",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-storybook": "^10.3.5",
     "eslint-plugin-testing-library": "^7.16.2",
@@ -76,7 +76,7 @@
     "typescript": "catalog:",
     "vite": "^8.0.3",
     "vitest": "catalog:",
-    "wrangler": "4.69.0"
+    "wrangler": "4.84.1"
   },
   "imports": {
     "#.storybook/preview": "./.storybook/preview.ts"

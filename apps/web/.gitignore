@@ -45,6 +45,9 @@ next-env.d.ts
 # opennext
 .open-next
 
+# wrangler
+.wrangler
+
 # storybook
 *storybook.log
 storybook-static
