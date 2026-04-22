@@ -13,7 +13,7 @@
 .fieldGroup {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  inline-size: 100%;
   container-name: field-group;
   container-type: inline-size;
 }
@@ -21,7 +21,7 @@
 /* Field */
 .field {
   display: flex;
-  width: 100%;
+  inline-size: 100%;
 
   &:has(:required) .fieldLabel::after {
     margin-inline-start: 0.25rem;
@@ -34,7 +34,7 @@
   flex-direction: column;
 
   & > * {
-    width: 100%;
+    inline-size: 100%;
   }
 }
 
@@ -52,7 +52,7 @@
 
   &:has(> [data-slot="field-content"]) > [role="checkbox"],
   &:has(> [data-slot="field-content"]) > [role="radio"] {
-    margin-top: 1px;
+    margin-block-start: 1px;
   }
 }
 
@@ -60,7 +60,7 @@
   flex-direction: column;
 
   & > * {
-    width: 100%;
+    inline-size: 100%;
   }
 
   @container field-group (min-width: 28rem) {
@@ -68,7 +68,7 @@
     align-items: center;
 
     & > * {
-      width: auto;
+      inline-size: auto;
     }
 
     & > [data-slot="field-label"] {
@@ -81,7 +81,7 @@
 
     &:has(> [data-slot="field-content"]) > [role="checkbox"],
     &:has(> [data-slot="field-content"]) > [role="radio"] {
-      margin-top: 1px;
+      margin-block-start: 1px;
     }
   }
 }
@@ -97,12 +97,12 @@
 /* FieldLabel */
 .fieldLabel {
   display: flex;
-  width: fit-content;
+  inline-size: fit-content;
   line-height: 1.375;
 
   &:has(> [data-slot="field"]) {
     flex-direction: column;
-    width: 100%;
+    inline-size: 100%;
   }
 }
 
@@ -110,7 +110,7 @@
 .fieldTitle {
   display: flex;
   align-items: center;
-  width: fit-content;
+  inline-size: fit-content;
   line-height: 1.375;
 }
 
@@ -131,11 +131,11 @@
   }
 
   &:last-child {
-    margin-top: 0;
+    margin-block-start: 0;
   }
 
   &:nth-last-child(2) {
-    margin-top: -0.25rem;
+    margin-block-start: -0.25rem;
   }
 }
 
@@ -148,14 +148,14 @@
   position: absolute;
   inset: 0;
   top: 50%;
-  height: 1px;
+  block-size: 1px;
   background-color: var(--border);
 }
 
 .fieldSeparatorContent {
   position: relative;
   display: block;
-  width: fit-content;
+  inline-size: fit-content;
   margin-inline: auto;
   background-color: var(--background);
 }
@@ -171,6 +171,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  margin-left: 1rem;
+  margin-inline-start: 1rem;
   list-style-type: disc;
 }

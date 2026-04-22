@@ -6,6 +6,11 @@ const stylelintConfig = {
     "stylelint-config-recess-order",
     "@css-modules-kit/stylelint-plugin/recommended",
   ],
+  plugins: [
+    "stylelint-declaration-block-no-ignored-properties",
+    "stylelint-use-logical",
+    "stylelint-use-nesting",
+  ],
   rules: {
     "selector-class-pattern": [
       "^[a-z][a-zA-Z0-9]*$",
@@ -25,6 +30,12 @@ const stylelintConfig = {
         message: "Expected keyframe name to be kebab-case",
       },
     ],
+    "plugin/declaration-block-no-ignored-properties": true,
+    "csstools/use-logical": [
+      "always",
+      { except: ["top", "right", "bottom", "left"] },
+    ],
+    "csstools/use-nesting": "always",
   },
 };
 
