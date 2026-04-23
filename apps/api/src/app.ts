@@ -42,7 +42,7 @@ export function createApp({ databaseUrl }: AppDeps) {
   });
 
   const app = _app.route(
-    "/",
+    "/spots",
     createSpotRoute({
       archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
       createSpotUsecase: CreateSpotUsecase({ spotRepository }),

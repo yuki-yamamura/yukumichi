@@ -32,7 +32,7 @@ export function createSpotRoute({
 }: SpotRouteDeps) {
   return new Hono()
     .post(
-      "/spots",
+      "/",
       describeRoute({
         description: "Create a new spot",
         responses: {
@@ -64,7 +64,7 @@ export function createSpotRoute({
       },
     )
     .get(
-      "/spots",
+      "/",
       describeRoute({
         description: "List all spots",
         responses: {
@@ -93,7 +93,7 @@ export function createSpotRoute({
       },
     )
     .get(
-      "/spots/:spotId",
+      "/:spotId",
       describeRoute({
         description: "Get a spot by ID",
         responses: {
@@ -130,7 +130,7 @@ export function createSpotRoute({
       },
     )
     .post(
-      "/spots/:spotId/archive",
+      "/:spotId/archive",
       describeRoute({
         description: "Archive a spot",
         responses: {

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { Hono } from "hono";
 import { testClient } from "hono/testing";
 import { err, ok } from "neverthrow";
 
@@ -19,7 +20,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -44,7 +45,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -69,7 +70,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -98,7 +99,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -130,7 +131,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn().mockResolvedValue(ok(spots)) },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$get();
@@ -153,7 +154,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].$get({
@@ -174,7 +175,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].$get({
@@ -197,7 +198,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       const spotId = spotIdOutputSchema.parse(createSpotId());
 
@@ -225,7 +226,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       const spotId = spotIdOutputSchema.parse(createSpotId());
 
@@ -248,7 +249,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -271,7 +272,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
       const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
@@ -299,7 +300,7 @@ describe("createSpotRoute", () => {
         listSpotsUsecase: { execute: vi.fn() },
       });
 
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
       const spotId = spotIdOutputSchema.parse(createSpotId());
 
       // When
