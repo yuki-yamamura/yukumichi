@@ -129,9 +129,6 @@ export const baseConfig = [
     },
   },
   {
-    files: ["**/*.config.{js,mjs}"],
-    rules: {
-      "unicorn/prefer-string-raw": "off",
-    },
+    ignores: ["**/*.config.{js,mjs,ts,mts,cts}"],
   },
 ];
