@@ -10,6 +10,7 @@ import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
+import { toHttpStatus } from "@/presentation/schemas/error";
 
 import type { ApiError } from "@/presentation/schemas/error";
 
@@ -21,19 +22,26 @@ export function createApp({ databaseUrl }: AppDeps) {
   const db = createDatabase(databaseUrl);
   const spotRepository = SpotRepository(db);
 
-  const app = new Hono();
-  app.use(cors());
-  app.onError((error, c) => {
-    // TODO: replace with structured logger and Sentry integration
+  const _app = new Hono();
+  _app.use(cors());
+
+  _app.onError((error, context) => {
+    /**
+     * @todo Replace with structured logging
+     * @see https://github.com/yuki-yamamura/sanpo/issues/35
+     */
     console.error(error);
 
-    return c.json(
-      { code: "UNKNOWN_ERROR", message: "internal server error" } satisfies ApiError,
-      500,
+    return context.json<ApiError>(
+      {
+        code: "UNKNOWN_ERROR",
+        message: "internal server error",
+      },
+      toHttpStatus("UNKNOWN_ERROR"),
     );
   });
 
-  const apiApp = app.route(
+  const app = _app.route(
     "/",
     createSpotRoute({
       archiveSpotUsecase: ArchiveSpotUsecase({ spotRepository }),
@@ -43,9 +51,9 @@ export function createApp({ databaseUrl }: AppDeps) {
     }),
   );
 
-  app.get(
+  _app.get(
     "/doc",
-    openAPIRouteHandler(app, {
+    openAPIRouteHandler(_app, {
       documentation: {
         info: {
           title: "Sanpo API",
@@ -54,9 +62,9 @@ export function createApp({ databaseUrl }: AppDeps) {
       },
     }),
   );
-  app.get("/ui", swaggerUI({ url: "/doc" }));
+  _app.get("/ui", swaggerUI({ url: "/doc" }));
 
-  return apiApp;
+  return app;
 }
 
 export type AppType = ReturnType<typeof createApp>;
