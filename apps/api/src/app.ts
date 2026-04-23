@@ -13,6 +13,7 @@ import { createSpotRoute } from "@/presentation/routes/spot";
 import { errorResponseSchema, toHttpStatus } from "@/presentation/schemas/error";
 
 import type { ApiError } from "@/presentation/schemas/error";
+import type { DescribeRouteOptions } from "hono-openapi";
 
 type AppDeps = {
   databaseUrl: string;
@@ -51,7 +52,7 @@ export function createApp({ databaseUrl }: AppDeps) {
     }),
   );
 
-  const commonResponses = {
+  const describeRouteOptions: DescribeRouteOptions = {
     responses: {
       500: {
         content: {
@@ -61,16 +62,15 @@ export function createApp({ databaseUrl }: AppDeps) {
       },
     },
   };
-
   _app.get(
     "/doc",
     openAPIRouteHandler(_app, {
       defaultOptions: {
-        DELETE: commonResponses,
-        GET: commonResponses,
-        PATCH: commonResponses,
-        POST: commonResponses,
-        PUT: commonResponses,
+        DELETE: describeRouteOptions,
+        GET: describeRouteOptions,
+        PATCH: describeRouteOptions,
+        POST: describeRouteOptions,
+        PUT: describeRouteOptions,
       },
       documentation: {
         info: {

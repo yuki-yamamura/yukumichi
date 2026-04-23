@@ -36,7 +36,9 @@ export function createSpotRoute({
       describeRoute({
         description: "Create a new spot",
         responses: {
-          201: { description: "Spot created successfully" },
+          201: {
+            description: "Spot created successfully",
+          },
           400: {
             content: {
               "application/json": {

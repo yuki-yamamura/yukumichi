@@ -21,7 +21,7 @@ export function toSpotResponse(spot: Spot): z.output<typeof spotSchema> {
 }
 
 export const createSpotRequestBodySchema = z.object({
-  description: z.string().optional(),
+  description: z.string().min(1).optional(),
   latitude: latitudeSchema,
   longitude: longitudeSchema,
   name: z.string().min(1),
