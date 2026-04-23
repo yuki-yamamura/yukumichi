@@ -1,7 +1,7 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { openAPIRouteHandler } from "hono-openapi";
+import { openAPIRouteHandler, resolver } from "hono-openapi";
 
 import { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
 import { CreateSpotUsecase } from "@/application/usecase/spot/create";
@@ -10,7 +10,7 @@ import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
-import { toHttpStatus } from "@/presentation/schemas/error";
+import { errorResponseSchema, toHttpStatus } from "@/presentation/schemas/error";
 
 import type { ApiError } from "@/presentation/schemas/error";
 
@@ -51,9 +51,27 @@ export function createApp({ databaseUrl }: AppDeps) {
     }),
   );
 
+  const commonResponses = {
+    responses: {
+      500: {
+        content: {
+          "application/json": { schema: resolver(errorResponseSchema) },
+        },
+        description: "Internal server error",
+      },
+    },
+  };
+
   _app.get(
     "/doc",
     openAPIRouteHandler(_app, {
+      defaultOptions: {
+        DELETE: commonResponses,
+        GET: commonResponses,
+        PATCH: commonResponses,
+        POST: commonResponses,
+        PUT: commonResponses,
+      },
       documentation: {
         info: {
           title: "Sanpo API",
