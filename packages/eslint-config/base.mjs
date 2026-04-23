@@ -128,4 +128,10 @@ export const baseConfig = [
       "perfectionist/sort-named-exports": ["error"],
     },
   },
+  {
+    files: ["**/*.config.{js,mjs}"],
+    rules: {
+      "unicorn/prefer-string-raw": "off",
+    },
+  },
 ];
