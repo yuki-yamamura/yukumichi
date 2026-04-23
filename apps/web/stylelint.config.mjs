@@ -36,6 +36,10 @@ const stylelintConfig = {
       { except: ["top", "right", "bottom", "left"] },
     ],
     "csstools/use-nesting": "always",
+    "declaration-property-value-allowed-list": {
+      "font-size": ["/^var\\(--text-/"],
+      "line-height": ["/^var\\(--leading-/"],
+    },
   },
 };
 
