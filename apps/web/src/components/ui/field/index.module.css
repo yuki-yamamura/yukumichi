@@ -91,14 +91,14 @@
   display: flex;
   flex: 1 1 0%;
   flex-direction: column;
-  line-height: 1.375;
+  line-height: var(--leading-snug);
 }
 
 /* FieldLabel */
 .fieldLabel {
   display: flex;
   inline-size: fit-content;
-  line-height: 1.375;
+  line-height: var(--leading-snug);
 
   &:has(> [data-slot="field"]) {
     flex-direction: column;
@@ -111,14 +111,14 @@
   display: flex;
   align-items: center;
   inline-size: fit-content;
-  line-height: 1.375;
+  line-height: var(--leading-snug);
 }
 
 /* FieldDescription */
 .fieldDescription {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
   color: var(--muted-foreground);
 
   & > a {
@@ -162,7 +162,7 @@
 
 /* FieldError */
 .fieldError {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 400;
   color: var(--destructive);
 }

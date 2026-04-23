@@ -1,9 +1,9 @@
 .base {
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
-  line-height: 1.25rem;
+  line-height: var(--leading-normal);
   user-select: none;
 
   &:has(+ :disabled),

@@ -128,4 +128,7 @@ export const baseConfig = [
       "perfectionist/sort-named-exports": ["error"],
     },
   },
+  {
+    ignores: ["**/*.config.{js,mjs,ts,mts,cts}"],
+  },
 ];
