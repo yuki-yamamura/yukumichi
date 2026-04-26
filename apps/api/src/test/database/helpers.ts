@@ -21,7 +21,9 @@ export function createTestDatabase(url: string): TestDatabase {
   const db = drizzle(client, { casing: "snake_case", schema });
 
   return {
-    cleanup: () => client.end(),
+    cleanup: () => {
+      return client.end();
+    },
     db,
     truncateTables: async () => {
       await db.execute(sql.raw(`TRUNCATE TABLE ${tableNames.join(", ")} CASCADE`));
