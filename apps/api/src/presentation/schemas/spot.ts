@@ -15,7 +15,7 @@ const spotSchema = z.object({
   name: z.string().min(1),
 });
 
-export const spotIdParamSchema = publicIdSchema.pipe(SpotId);
+const spotIdParamSchema = publicIdSchema.pipe(SpotId);
 
 export const createSpotRequestBodySchema = z.object({
   description: z.string().min(1).optional(),
