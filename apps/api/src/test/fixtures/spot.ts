@@ -23,7 +23,6 @@ export function createCoordinate(overrides?: Partial<Coordinate>): Coordinate {
 
 export function createSpot(overrides?: Partial<Spot>): Spot {
   const coordinate = createCoordinate();
-
   const spot: Spot = {
     coordinate,
     description: faker.lorem.sentence(),

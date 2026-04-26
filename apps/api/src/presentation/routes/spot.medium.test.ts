@@ -4,8 +4,8 @@ import { inject } from "vitest";
 
 import { createApp } from "@/app";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
-import { spotIdOutputSchema } from "@/presentation/schemas/id";
-import { toSpotResponse } from "@/presentation/schemas/spot";
+import { base62Encode } from "@/presentation/schemas/id";
+import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
 import { createTestDatabase } from "@/test/database/helpers";
 import { createSpot } from "@/test/fixtures/spot";
 
@@ -72,9 +72,7 @@ describe("get /spots", () => {
 
     // Then
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({
-      spots: [toSpotResponse(spotB), toSpotResponse(spotA)],
-    });
+    expect(await response.json()).toEqual(listSpotsResponseSchema.parse({ spots: [spotB, spotA] }));
   });
 });
 
@@ -83,13 +81,13 @@ describe("get /spots/:spotId", () => {
     // When
     const response = await client.spots[":spotId"].$get({
       param: {
-        spotId: spotIdOutputSchema.parse(spotA.id),
+        spotId: base62Encode(spotA.id),
       },
     });
 
     // Then
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ spot: toSpotResponse(spotA) });
+    expect(await response.json()).toEqual(getSpotResponseSchema.parse({ spot: spotA }));
   });
 });
 
@@ -98,7 +96,7 @@ describe("post /spots/:spotId/archive", () => {
     // When
     const response = await client.spots[":spotId"].archive.$post({
       param: {
-        spotId: spotIdOutputSchema.parse(spotA.id),
+        spotId: base62Encode(spotA.id),
       },
     });
 

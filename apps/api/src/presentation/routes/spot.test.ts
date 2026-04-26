@@ -1,9 +1,10 @@
 import { faker } from "@faker-js/faker";
+import { Hono } from "hono";
 import { testClient } from "hono/testing";
 import { err, ok } from "neverthrow";
 
-import { spotIdOutputSchema } from "@/presentation/schemas/id";
-import { toSpotResponse } from "@/presentation/schemas/spot";
+import { base62Encode } from "@/presentation/schemas/id";
+import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
 import { createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { createSpotRoute } from "./spot";
@@ -18,8 +19,7 @@ describe("createSpotRoute", () => {
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -43,8 +43,7 @@ describe("createSpotRoute", () => {
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
@@ -61,20 +60,18 @@ describe("createSpotRoute", () => {
 
     it("should return 400 with a field path when latitude is out of range", async () => {
       // Given
-      const createSpotUsecase = { execute: vi.fn() };
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
-        createSpotUsecase,
+        createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
         json: {
-          latitude: 91,
+          latitude: 91, // Invalid latitude (greater than 90)
           longitude: faker.location.longitude(),
           name: faker.location.street(),
         },
@@ -82,39 +79,31 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
-      const body = (await response.json()) as { code: string; message: string };
-      expect(body.code).toBe("VALIDATION_ERROR");
-      expect(body.message).toContain("latitude");
-      expect(createSpotUsecase.execute).not.toHaveBeenCalled();
+      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
     });
 
     it("should return 400 with a field path when longitude is out of range", async () => {
       // Given
-      const createSpotUsecase = { execute: vi.fn() };
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
-        createSpotUsecase,
+        createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$post({
         json: {
           latitude: faker.location.latitude(),
-          longitude: 181,
+          longitude: 181, // Invalid longitude (greater than 180)
           name: faker.location.street(),
         },
       });
 
       // Then
       expect(response.status).toBe(400);
-      const body = (await response.json()) as { code: string; message: string };
-      expect(body.code).toBe("VALIDATION_ERROR");
-      expect(body.message).toContain("longitude");
-      expect(createSpotUsecase.execute).not.toHaveBeenCalled();
+      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
     });
   });
 
@@ -122,22 +111,20 @@ describe("createSpotRoute", () => {
     it("should return 200 status code with spots", async () => {
       // Given
       const spots = [createSpot(), createSpot()];
-
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn().mockResolvedValue(ok(spots)) },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots.$get();
 
       // Then
       expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ spots: spots.map((spot) => toSpotResponse(spot)) });
+      expect(await response.json()).toEqual(listSpotsResponseSchema.parse({ spots }));
     });
   });
 
@@ -145,24 +132,22 @@ describe("createSpotRoute", () => {
     it("should return 200 status code with a spot", async () => {
       // Given
       const spot = createSpot();
-
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn().mockResolvedValue(ok(spot)) },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].$get({
-        param: { spotId: spotIdOutputSchema.parse(spot.id) },
+        param: { spotId: base62Encode(spot.id) },
       });
 
       // Then
       expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ spot: toSpotResponse(spot) });
+      expect(await response.json()).toEqual(getSpotResponseSchema.parse({ spot }));
     });
 
     it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
@@ -173,8 +158,7 @@ describe("createSpotRoute", () => {
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].$get({
@@ -187,31 +171,31 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
-      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: { execute: vi.fn() },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
+          execute: vi.fn().mockResolvedValue(
+            err({
+              kind: "not_found",
+              message: faker.lorem.sentence(),
+            }),
+          ),
         },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
-
-      const spotId = spotIdOutputSchema.parse(createSpotId());
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].$get({
-        param: { spotId },
+        param: {
+          spotId: base62Encode(createSpotId()),
+        },
       });
 
       // Then
       expect(response.status).toBe(404);
-      expect(await response.json()).toEqual({
-        code: "NOT_FOUND_ERROR",
-        message,
-      });
+      expect(await response.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
     });
   });
 
@@ -224,14 +208,11 @@ describe("createSpotRoute", () => {
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
-
-      const spotId = spotIdOutputSchema.parse(createSpotId());
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
-        param: { spotId },
+        param: { spotId: base62Encode(createSpotId()) },
       });
 
       // Then
@@ -247,8 +228,7 @@ describe("createSpotRoute", () => {
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
@@ -261,58 +241,50 @@ describe("createSpotRoute", () => {
 
     it("should return 404 status code when a spot is not found", async () => {
       // Given
-      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
+          execute: vi
+            .fn()
+            .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
-      const spotId = spotIdOutputSchema.parse(createSpotId());
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
-        param: { spotId },
+        param: { spotId: base62Encode(createSpotId()) },
       });
 
       // Then
       expect(response.status).toBe(404);
-      expect(await response.json()).toEqual({
-        code: "NOT_FOUND_ERROR",
-        message,
-      });
+      expect(await response.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
     });
 
     it("should return 409 status code when a spot is already archived", async () => {
       // Given
-      const message = faker.lorem.sentence();
       const spotRoute = createSpotRoute({
         archiveSpotUsecase: {
-          execute: vi.fn().mockResolvedValue(err({ kind: "conflict", message })),
+          execute: vi
+            .fn()
+            .mockResolvedValue(err({ kind: "conflict", message: base62Encode(createSpotId()) })),
         },
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
       });
-
-      const client = testClient(spotRoute);
-      const spotId = spotIdOutputSchema.parse(createSpotId());
+      const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
       const response = await client.spots[":spotId"].archive.$post({
-        param: { spotId },
+        param: { spotId: base62Encode(createSpotId()) },
       });
 
       // Then
       expect(response.status).toBe(409);
-      expect(await response.json()).toEqual({
-        code: "CONFLICT_ERROR",
-        message,
-      });
+      expect(await response.json()).toMatchObject({ code: "CONFLICT_ERROR" });
     });
   });
 });

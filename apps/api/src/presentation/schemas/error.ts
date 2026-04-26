@@ -21,6 +21,7 @@ type ErrorKind =
   | "conflict" // Conflict error, such as when trying to create a resource that already exists
   | "data_integrity" // Data integrity error, such as when reconstructing a domain object from corrupted DB data
   | "not_found" // Not found error, such as when a requested resource does not exist
+  | "unknown" // Unknown error, such as unhandled exceptions or errors without a specific kind
   | "validation"; // Validation error, such as invalid input or missing required fields on domain logic level
 
 export function toApiError(error: { kind: ErrorKind; message: string }): ApiError {
@@ -36,6 +37,9 @@ export function toApiError(error: { kind: ErrorKind; message: string }): ApiErro
     }
     case "validation": {
       return { code: "VALIDATION_ERROR", message: error.message };
+    }
+    case "unknown": {
+      return { code: "UNKNOWN_ERROR", message: error.message };
     }
   }
 }

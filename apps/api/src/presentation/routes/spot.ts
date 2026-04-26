@@ -9,7 +9,6 @@ import {
   getSpotRequestParamsSchema,
   getSpotResponseSchema,
   listSpotsResponseSchema,
-  toSpotResponse,
 } from "@/presentation/schemas/spot";
 
 import type { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
@@ -32,11 +31,13 @@ export function createSpotRoute({
 }: SpotRouteDeps) {
   return new Hono()
     .post(
-      "/spots",
+      "/",
       describeRoute({
         description: "Create a new spot",
         responses: {
-          201: { description: "Spot created successfully" },
+          201: {
+            description: "Spot created successfully",
+          },
           400: {
             content: {
               "application/json": {
@@ -64,7 +65,7 @@ export function createSpotRoute({
       },
     )
     .get(
-      "/spots",
+      "/",
       describeRoute({
         description: "List all spots",
         responses: {
@@ -83,7 +84,7 @@ export function createSpotRoute({
         const result = await listSpotsUsecase.execute();
 
         return result.match(
-          (spots) => context.json({ spots: spots.map((spot) => toSpotResponse(spot)) }),
+          (spots) => context.json(listSpotsResponseSchema.parse({ spots })),
           (error) => {
             const apiError = toApiError(error);
 
@@ -93,7 +94,7 @@ export function createSpotRoute({
       },
     )
     .get(
-      "/spots/:spotId",
+      "/:spotId",
       describeRoute({
         description: "Get a spot by ID",
         responses: {
@@ -120,7 +121,7 @@ export function createSpotRoute({
         const result = await getSpotUsecase.execute({ spotId });
 
         return result.match(
-          (spot) => context.json({ spot: toSpotResponse(spot) }),
+          (spot) => context.json(getSpotResponseSchema.parse({ spot })),
           (error) => {
             const apiError = toApiError(error);
 
@@ -130,7 +131,7 @@ export function createSpotRoute({
       },
     )
     .post(
-      "/spots/:spotId/archive",
+      "/:spotId/archive",
       describeRoute({
         description: "Archive a spot",
         responses: {

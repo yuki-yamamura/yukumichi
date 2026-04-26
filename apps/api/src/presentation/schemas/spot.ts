@@ -1,27 +1,24 @@
 import z from "zod";
 
 import { latitudeSchema, longitudeSchema } from "@/domain/spot/models/coordinate";
+import { SpotId } from "@/domain/spot/models/spot";
 
-import { spotIdOutputSchema, spotIdParamSchema } from "./id";
-
-import type { Spot } from "@/domain/spot/models/spot";
+import { base62Encode, publicIdSchema } from "./id";
 
 const spotSchema = z.object({
   coordinate: z.object({
     latitude: latitudeSchema,
     longitude: longitudeSchema,
   }),
-  description: z.string().nullable(),
-  id: spotIdOutputSchema,
-  name: z.string(),
+  description: z.string().min(1).nullable(),
+  id: SpotId.transform(base62Encode),
+  name: z.string().min(1),
 });
 
-export function toSpotResponse(spot: Spot): z.output<typeof spotSchema> {
-  return spotSchema.parse(spot);
-}
+const spotIdParamSchema = publicIdSchema.pipe(SpotId);
 
 export const createSpotRequestBodySchema = z.object({
-  description: z.string().optional(),
+  description: z.string().min(1).optional(),
   latitude: latitudeSchema,
   longitude: longitudeSchema,
   name: z.string().min(1),

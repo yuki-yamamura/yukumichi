@@ -1,42 +1,45 @@
 import z from "zod";
 
-import { SpotId } from "@/domain/spot/models/spot";
-
 const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const base62Length = 22;
 
-function encode(uuid: string): string {
+/**
+ * Encodes a UUIDv7 string into a 22-character Base62 string.
+ * @param uuid A UUIDv7 string
+ * @returns A 22-character Base62 string encoding the input UUIDv7
+ */
+export function base62Encode(uuid: string): string {
   let n = BigInt("0x" + uuid.replaceAll("-", ""));
   let out = "";
+
+  const base62Length = 22;
   while (out.length < base62Length) {
-    out = alphabet[Number(n % 62n)] + out;
+    // Get the rightmost Base62 digit, prepend it to the output, and shift n right by one Base62 digit.
+    const char = alphabet[Number(n % 62n)];
+    out = char + out;
     n /= 62n;
   }
 
   return out;
 }
 
-function decode(base62: string): string {
+/**
+ * Decodes a 22-character Base62 string into a UUIDv7 string.
+ * @param base62 A 22-character Base62 string encoding a UUIDv7
+ * @returns The UUIDv7 string decoded from the input Base62 string
+ */
+export function base62Decode(base62: string): string {
   let n = 0n;
-  for (const c of base62) n = n * 62n + BigInt(alphabet.indexOf(c));
+
+  // For each Base62 digit, shift n left by one Base62 digit and add the value of the digit.
+  for (const char of base62) {
+    n = n * 62n + BigInt(alphabet.indexOf(char));
+  }
   const hex = n.toString(16).padStart(32, "0");
 
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-// encode("00000000-0000-7000-8000-000000000000") — reserved UUIDv7 (timestamp=0, variant=10xx, rand=0)
-export const spotIdExample = "000000002dwHTRTFRxWLTM";
-
-const meta = {
-  description: "Spot ID (Base62-encoded UUIDv7, 22 characters)",
-  example: spotIdExample,
-};
-
-export const spotIdParamSchema = z
+export const publicIdSchema = z
   .string()
   .regex(/^[0-9A-Za-z]{22}$/)
-  .transform(decode)
-  .pipe(SpotId)
-  .meta(meta);
-
-export const spotIdOutputSchema = SpotId.transform(encode).meta(meta);
+  .transform(base62Decode);
