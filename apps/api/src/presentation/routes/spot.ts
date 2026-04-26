@@ -9,7 +9,6 @@ import {
   getSpotRequestParamsSchema,
   getSpotResponseSchema,
   listSpotsResponseSchema,
-  toSpotResponse,
 } from "@/presentation/schemas/spot";
 
 import type { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
@@ -85,7 +84,7 @@ export function createSpotRoute({
         const result = await listSpotsUsecase.execute();
 
         return result.match(
-          (spots) => context.json({ spots: spots.map((spot) => toSpotResponse(spot)) }),
+          (spots) => context.json(listSpotsResponseSchema.parse({ spots })),
           (error) => {
             const apiError = toApiError(error);
 
@@ -122,7 +121,7 @@ export function createSpotRoute({
         const result = await getSpotUsecase.execute({ spotId });
 
         return result.match(
-          (spot) => context.json({ spot: toSpotResponse(spot) }),
+          (spot) => context.json(getSpotResponseSchema.parse({ spot })),
           (error) => {
             const apiError = toApiError(error);
 
