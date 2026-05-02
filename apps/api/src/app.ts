@@ -36,7 +36,7 @@ export function createApp({ databaseUrl }: AppDeps) {
     return context.json<ApiError>(
       {
         code: "UNKNOWN_ERROR",
-        message: "internal server error",
+        message: "Internal server error",
       },
       toHttpStatus("UNKNOWN_ERROR"),
     );

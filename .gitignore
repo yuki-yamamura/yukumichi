@@ -6,6 +6,9 @@ generated
 storybook-static
 *.tsbuildinfo
 
+# Claude Code
+.claude/worktrees/
+
 # Terraform
 .terraform/
 *.tfstate

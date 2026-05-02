@@ -53,7 +53,7 @@ export function SpotRepository(db: Database): SpotRepository {
         .where(eq(spots.id, id));
 
       if (rows.length === 0) {
-        return err({ kind: "not_found", message: `archived spot not found: ${id}` });
+        return err({ kind: "not_found", message: `Archived spot not found: ${id}` });
       }
 
       const { archived_spots: archived, spots: row } = rows[0];
@@ -79,7 +79,7 @@ export function SpotRepository(db: Database): SpotRepository {
         );
 
       if (rows.length === 0) {
-        return err({ kind: "not_found", message: `spot not found: ${id}` });
+        return err({ kind: "not_found", message: `Spot not found: ${id}` });
       }
 
       const row = rows[0];

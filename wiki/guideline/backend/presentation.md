@@ -47,6 +47,34 @@ You must:
 - Translate application errors to `ApiError` via `toApiError`.
 - Keep `toHttpStatus` cases ordered by ascending HTTP status for readability.
 
+## Error Messages
+
+Developer-written error `message` strings — those constructed anywhere in `apps/api` and passed through the `{ kind, message }` shape used by domain, application, and `ApiError` results — must follow these rules:
+
+- **Sentence case**: capitalize the first letter; leave the rest as ordinary prose.
+- **No trailing period**: messages are fragments, not sentences.
+- **Noun phrases for generic errors**: prefer a noun phrase that names the condition. Append context after a colon when an identifier or detail is helpful.
+
+This applies only to messages authored in this repository. Messages forwarded from a lower layer (`error.message` from a domain or library result) keep whatever form their source produced.
+
+Positive examples:
+
+```typescript
+return err({ kind: "not_found", message: `Spot not found: ${id}` });
+return err({ kind: "data_integrity", message: `Archived spot not found: ${id}` });
+return c.json({ code: "UNKNOWN_ERROR", message: "Internal server error" }, 500);
+```
+
+Negative examples:
+
+```typescript
+// Lowercase first letter
+return err({ kind: "not_found", message: `spot not found: ${id}` });
+
+// Trailing period
+return err({ kind: "not_found", message: `Spot not found: ${id}.` });
+```
+
 ## Route Testing
 
 Routes are exercised in two layers, split by responsibility.
