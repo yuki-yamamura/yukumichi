@@ -23,13 +23,13 @@ type SpotRouteDeps = {
   listSpotsUsecase: ListSpotsUsecase;
 };
 
-export function createSpotRoute({
+const _createSpotRoute = ({
   archiveSpotUsecase,
   createSpotUsecase,
   getSpotUsecase,
   listSpotsUsecase,
-}: SpotRouteDeps) {
-  return new Hono()
+}: SpotRouteDeps) =>
+  new Hono()
     .post(
       "/",
       describeRoute({
@@ -166,4 +166,7 @@ export function createSpotRoute({
         );
       },
     );
+
+export function createSpotRoute(deps: SpotRouteDeps): ReturnType<typeof _createSpotRoute> {
+  return _createSpotRoute(deps);
 }
