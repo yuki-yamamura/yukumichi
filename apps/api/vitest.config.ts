@@ -1,4 +1,4 @@
-import path, { join } from "node:path";
+import { join } from "node:path";
 
 import { defineConfig } from "vitest/config";
 
@@ -10,8 +10,25 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    globalSetup: "./src/test/database/vitest.setup.ts",
-    hookTimeout: 30_000,
-    maxWorkers: 1,
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "small",
+          include: ["./src/**/*.test.ts"],
+          exclude: ["./src/**/*.medium.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "medium",
+          include: ["./src/**/*.medium.test.ts"],
+          globalSetup: "./vitest.setup.medium.ts",
+          hookTimeout: 30_000,
+          maxWorkers: 1,
+        },
+      },
+    ],
   },
 });
