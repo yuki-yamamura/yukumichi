@@ -8,12 +8,6 @@ COPY apps/web/package.json apps/web/
 COPY packages/eslint-config/package.json packages/eslint-config/
 RUN pnpm install
 
-# Development stage
-FROM base AS development
-COPY . .
-EXPOSE 3010
-ENTRYPOINT ["pnpm", "--filter", "@sanpo/api", "dev"]
-
 # Build stage
 FROM base AS builder
 COPY . .
