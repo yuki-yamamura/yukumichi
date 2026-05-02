@@ -33,6 +33,18 @@ const eslintConfig = defineConfig([
     ...testingLibrary.configs["flat/react"],
   },
   {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/components/ui/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [{ group: ["@base-ui/react"] }],
+        },
+      ],
+    },
+  },
+  {
     files: ["**/*.tsx"],
     rules: {
       "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
