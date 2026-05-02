@@ -19,7 +19,7 @@ type AppDeps = {
   databaseUrl: string;
 };
 
-export function createApp({ databaseUrl }: AppDeps) {
+const buildApp = ({ databaseUrl }: AppDeps) => {
   const db = createDatabase(databaseUrl);
   const spotRepository = SpotRepository(db);
 
@@ -83,6 +83,10 @@ export function createApp({ databaseUrl }: AppDeps) {
   _app.get("/ui", swaggerUI({ url: "/doc" }));
 
   return app;
-}
+};
 
-export type AppType = ReturnType<typeof createApp>;
+export type AppType = ReturnType<typeof buildApp>;
+
+export function createApp(deps: AppDeps): AppType {
+  return buildApp(deps);
+}

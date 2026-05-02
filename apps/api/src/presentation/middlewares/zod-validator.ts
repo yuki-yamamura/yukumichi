@@ -6,11 +6,11 @@ import { toApiError, toHttpStatus } from "@/presentation/schemas/error";
 import type { ValidationTargets } from "hono";
 import type { ZodType } from "zod";
 
-export function zValidator<Target extends keyof ValidationTargets, Schema extends ZodType>(
+const buildZValidator = <Target extends keyof ValidationTargets, Schema extends ZodType>(
   target: Target,
   schema: Schema,
-) {
-  return baseZodValidator(target, schema, (result, context) => {
+) =>
+  baseZodValidator(target, schema, (result, context) => {
     if (!result.success) {
       return context.json(
         toApiError({
@@ -21,4 +21,10 @@ export function zValidator<Target extends keyof ValidationTargets, Schema extend
       );
     }
   });
+
+export function zValidator<Target extends keyof ValidationTargets, Schema extends ZodType>(
+  target: Target,
+  schema: Schema,
+): ReturnType<typeof buildZValidator<Target, Schema>> {
+  return buildZValidator(target, schema);
 }
