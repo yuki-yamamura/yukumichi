@@ -1,7 +1,12 @@
 packages:
   - "apps/*"
   - "packages/*"
-
+verifyDepsBeforeRun: false
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
 catalog:
   eslint: 9.39.3
   "@faker-js/faker": ^10.4.0
