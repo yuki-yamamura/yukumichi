@@ -23,7 +23,7 @@ type SpotRouteDeps = {
   listSpotsUsecase: ListSpotsUsecase;
 };
 
-const buildSpotRoute = ({
+const _createSpotRoute = ({
   archiveSpotUsecase,
   createSpotUsecase,
   getSpotUsecase,
@@ -167,6 +167,6 @@ const buildSpotRoute = ({
       },
     );
 
-export function createSpotRoute(deps: SpotRouteDeps): ReturnType<typeof buildSpotRoute> {
-  return buildSpotRoute(deps);
+export function createSpotRoute(deps: SpotRouteDeps): ReturnType<typeof _createSpotRoute> {
+  return _createSpotRoute(deps);
 }

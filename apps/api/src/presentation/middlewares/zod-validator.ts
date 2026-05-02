@@ -6,7 +6,7 @@ import { toApiError, toHttpStatus } from "@/presentation/schemas/error";
 import type { ValidationTargets } from "hono";
 import type { ZodType } from "zod";
 
-const buildZValidator = <Target extends keyof ValidationTargets, Schema extends ZodType>(
+const _zValidator = <Target extends keyof ValidationTargets, Schema extends ZodType>(
   target: Target,
   schema: Schema,
 ) =>
@@ -25,6 +25,6 @@ const buildZValidator = <Target extends keyof ValidationTargets, Schema extends 
 export function zValidator<Target extends keyof ValidationTargets, Schema extends ZodType>(
   target: Target,
   schema: Schema,
-): ReturnType<typeof buildZValidator<Target, Schema>> {
-  return buildZValidator(target, schema);
+): ReturnType<typeof _zValidator<Target, Schema>> {
+  return _zValidator(target, schema);
 }

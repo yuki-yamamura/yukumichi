@@ -19,7 +19,7 @@ type AppDeps = {
   databaseUrl: string;
 };
 
-const buildApp = ({ databaseUrl }: AppDeps) => {
+const _createApp = ({ databaseUrl }: AppDeps) => {
   const db = createDatabase(databaseUrl);
   const spotRepository = SpotRepository(db);
 
@@ -85,8 +85,8 @@ const buildApp = ({ databaseUrl }: AppDeps) => {
   return app;
 };
 
-export type AppType = ReturnType<typeof buildApp>;
+export type AppType = ReturnType<typeof _createApp>;
 
 export function createApp(deps: AppDeps): AppType {
-  return buildApp(deps);
+  return _createApp(deps);
 }
