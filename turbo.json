@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
+  "globalPassThroughEnv": ["pnpm_config_*"],
   "tasks": {
     "check-types": {
       "dependsOn": ["^check-types"]
