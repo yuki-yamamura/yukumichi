@@ -22,6 +22,7 @@ describe("ArchiveSpotUsecase", () => {
           .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(ok(spot)),
         findMany: vi.fn(),
+        update: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
@@ -50,6 +51,7 @@ describe("ArchiveSpotUsecase", () => {
           .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
         findMany: vi.fn(),
+        update: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
@@ -77,6 +79,7 @@ describe("ArchiveSpotUsecase", () => {
         findArchivedSpotById: vi.fn().mockResolvedValue(ok(archivedSpot)),
         findById: vi.fn(),
         findMany: vi.fn(),
+        update: vi.fn(),
       };
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,

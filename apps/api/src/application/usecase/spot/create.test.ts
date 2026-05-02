@@ -19,6 +19,7 @@ describe("CreateSpotUsecase", () => {
         findArchivedSpotById: vi.fn(),
         findById: vi.fn(),
         findMany: vi.fn(),
+        update: vi.fn(),
       };
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
@@ -43,6 +44,7 @@ describe("CreateSpotUsecase", () => {
         findArchivedSpotById: vi.fn(),
         findById: vi.fn(),
         findMany: vi.fn(),
+        update: vi.fn(),
       };
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 

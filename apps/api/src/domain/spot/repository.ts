@@ -10,4 +10,5 @@ export type SpotRepository = {
   ) => Promise<Result<ArchivedSpot, DataIntegrityError | NotFoundError>>;
   findById: (id: SpotId) => Promise<Result<Spot, DataIntegrityError | NotFoundError>>;
   findMany: () => Promise<Result<Spot[], DataIntegrityError>>;
+  update: (spot: Spot) => Promise<Result<Spot, DataIntegrityError | NotFoundError>>;
 };

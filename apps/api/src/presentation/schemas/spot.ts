@@ -17,6 +17,10 @@ const spotSchema = z.object({
 
 const spotIdParamSchema = publicIdSchema.pipe(SpotId);
 
+export const spotPathParamsSchema = z.object({
+  spotId: spotIdParamSchema,
+});
+
 export const createSpotRequestBodySchema = z.object({
   description: z.string().min(1).optional(),
   latitude: latitudeSchema,
@@ -24,18 +28,19 @@ export const createSpotRequestBodySchema = z.object({
   name: z.string().min(1),
 });
 
+export const updateSpotRequestBodySchema = z
+  .object({
+    description: z.string().min(1),
+    latitude: latitudeSchema,
+    longitude: longitudeSchema,
+    name: z.string().min(1),
+  })
+  .partial();
+
 export const listSpotsResponseSchema = z.object({
   spots: z.array(spotSchema),
 });
 
-export const getSpotRequestParamsSchema = z.object({
-  spotId: spotIdParamSchema,
-});
-
 export const getSpotResponseSchema = z.object({
   spot: spotSchema,
-});
-
-export const archiveSpotRequestParamsSchema = z.object({
-  spotId: spotIdParamSchema,
 });

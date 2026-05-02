@@ -18,6 +18,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn().mockResolvedValue(ok()) },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -42,6 +43,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -65,6 +67,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -89,6 +92,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -116,6 +120,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn().mockResolvedValue(ok(spots)) },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -137,6 +142,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn().mockResolvedValue(ok(spot)) },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -157,6 +163,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -183,6 +190,7 @@ describe("createSpotRoute", () => {
           ),
         },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -199,6 +207,83 @@ describe("createSpotRoute", () => {
     });
   });
 
+  describe("patch /spots/:spotId", () => {
+    it("should update a spot and return 204 status code", async () => {
+      // Given
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: { execute: vi.fn() },
+        createSpotUsecase: { execute: vi.fn() },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn().mockResolvedValue(ok()) },
+      });
+      const client = testClient(new Hono().route("/spots", spotRoute));
+
+      // When
+      const response = await client.spots[":spotId"].$patch({
+        json: {
+          name: "Updated Spot Name",
+        },
+        param: { spotId: base62Encode(createSpotId()) },
+      });
+
+      expect(response.status).toBe(204);
+      expect(await response.text()).toBe("");
+    });
+
+    it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
+      // Given
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: { execute: vi.fn() },
+        createSpotUsecase: { execute: vi.fn() },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
+      });
+      const client = testClient(new Hono().route("/spots", spotRoute));
+
+      // When
+      const response = await client.spots[":spotId"].$patch({
+        json: {
+          name: "Updated Spot Name",
+        },
+        param: { spotId: "not-a-uuid" },
+      });
+
+      // Then
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
+    });
+
+    it("should return 404 status code when a spot is not found", async () => {
+      // Given
+      const spotRoute = createSpotRoute({
+        archiveSpotUsecase: { execute: vi.fn() },
+        createSpotUsecase: { execute: vi.fn() },
+        getSpotUsecase: { execute: vi.fn() },
+        listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: {
+          execute: vi
+            .fn()
+            .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
+        },
+      });
+      const client = testClient(new Hono().route("/spots", spotRoute));
+
+      // When
+      const result = await client.spots[":spotId"]["$patch"]({
+        json: {
+          name: "Updated name",
+        },
+        param: { spotId: base62Encode(createSpotId()) },
+      });
+
+      // Then
+      expect(result.status).toBe(404);
+      expect(await result.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
+    });
+  });
+
   describe("post /spots/:spotId/archive", () => {
     it("should return 204 status code", async () => {
       // Given
@@ -207,6 +292,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -227,6 +313,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -237,6 +324,7 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
     });
 
     it("should return 404 status code when a spot is not found", async () => {
@@ -250,6 +338,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
@@ -274,6 +363,7 @@ describe("createSpotRoute", () => {
         createSpotUsecase: { execute: vi.fn() },
         getSpotUsecase: { execute: vi.fn() },
         listSpotsUsecase: { execute: vi.fn() },
+        updateSpotUsecase: { execute: vi.fn() },
       });
       const client = testClient(new Hono().route("/spots", spotRoute));
 
