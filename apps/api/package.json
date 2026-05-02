@@ -14,7 +14,7 @@
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node24 --format=cjs --alias:@=./src src/lambda.ts",
     "check-types": "tsc",
     "test": "vitest run",
-    "test:unit": "vitest run --project unit",
+    "test:small": "vitest run --project small",
     "test:medium": "vitest run --project medium",
     "test:watch": "vitest watch",
     "format": "prettier --check \"./src/**/*.{ts,json,md}\"",

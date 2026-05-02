@@ -14,17 +14,17 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "unit",
-          include: ["src/**/*.test.ts"],
-          exclude: ["src/**/*.medium.test.ts"],
+          name: "small",
+          include: ["./src/**/*.test.ts"],
+          exclude: ["./src/**/*.medium.test.ts"],
         },
       },
       {
         extends: true,
         test: {
           name: "medium",
-          include: ["src/**/*.medium.test.ts"],
-          globalSetup: "./src/test/vitest.setup.medium.ts",
+          include: ["./src/**/*.medium.test.ts"],
+          globalSetup: "./vitest.setup.medium.ts",
           hookTimeout: 30_000,
           maxWorkers: 1,
         },
