@@ -36,7 +36,7 @@ export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): 
 
       const archivedResult = await spotRepository.findArchivedSpotById(spotId);
       if (archivedResult.isOk()) {
-        return err({ kind: "conflict", message: `spot is already archived: ${spotId}` });
+        return err({ kind: "conflict", message: `Spot is already archived: ${spotId}` });
       }
       if (archivedResult.error.kind === "data_integrity") {
         return err(archivedResult.error);

@@ -47,6 +47,49 @@ You must:
 - Translate application errors to `ApiError` via `toApiError`.
 - Keep `toHttpStatus` cases ordered by ascending HTTP status for readability.
 
+## Error Messages
+
+Developer-written error `message` strings — those constructed anywhere in `apps/api` and passed through the `{ kind, message }` shape used by domain, application, and `ApiError` results — must follow these rules:
+
+- **Sentence case**: capitalize the first letter; leave the rest as ordinary prose.
+- **No trailing period**: messages are fragments, not sentences.
+- **Noun phrases for generic errors**: prefer a noun phrase that names the condition. Append context after a colon when an identifier or detail is helpful.
+- **Predicate form only for state or rule violations**: use a subject-verb form when the message describes that an entity is in a state that blocks the requested action.
+
+This applies only to messages authored in this repository. Messages forwarded from a lower layer (`error.message` from a domain or library result) keep whatever form their source produced.
+
+Positive examples:
+
+```typescript
+// Generic error — noun phrase
+return err({ kind: "not_found", message: `Spot not found: ${id}` });
+return err({ kind: "data_integrity", message: `Archived spot not found: ${id}` });
+return c.json({ code: "UNKNOWN_ERROR", message: "Internal server error" }, 500);
+
+// State or rule violation — predicate form
+return err({ kind: "conflict", message: `Spot is already archived: ${spotId}` });
+```
+
+Negative examples:
+
+```typescript
+// Lowercase first letter
+return err({ kind: "not_found", message: `spot not found: ${id}` });
+
+// Trailing period
+return err({ kind: "not_found", message: `Spot not found: ${id}.` });
+
+// Predicate form used for a generic not-found
+return err({ kind: "not_found", message: `Spot does not exist: ${id}` });
+```
+
+Rationale:
+
+- Backend `message` values are not rendered in the frontend; they are read by developers in CloudWatch structured logs, where Sentence case is easier to scan.
+- Go's lowercase convention exists because errors are wrapped by string concatenation (`fmt.Errorf("foo: %w", err)`). This codebase uses discriminated `Result<T, DomainError>` via neverthrow with no string concatenation — the rationale does not transfer.
+- Zod-originated messages are already Sentence case; aligning developer-written messages removes the internal/external inconsistency.
+- `"Internal server error"` matches the HTTP 500 reason phrase exactly, aiding log recognition.
+
 ## Route Testing
 
 Routes are exercised in two layers, split by responsibility.
