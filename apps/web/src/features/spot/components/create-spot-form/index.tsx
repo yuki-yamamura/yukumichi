@@ -11,7 +11,7 @@ import type { SpotFormInput } from "@/features/spot/form/spot-form";
 export function CreateSpotForm() {
   const router = useRouter();
 
-  const defaultValues = {
+  const defaultValues: SpotFormInput = {
     latitude: "",
     longitude: "",
     name: "",
