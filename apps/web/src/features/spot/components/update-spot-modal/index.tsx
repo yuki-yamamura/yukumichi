@@ -29,7 +29,7 @@ export function UpdateSpotModal({ spot }: Props) {
       <DialogTrigger render={<Button variant="outline">Edit</Button>} />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Spot</DialogTitle>
+          <DialogTitle>{`Editing ${spot.name}`}</DialogTitle>
         </DialogHeader>
         <UpdateSpotForm spot={spot} onSubmit={closeModal} />
       </DialogContent>

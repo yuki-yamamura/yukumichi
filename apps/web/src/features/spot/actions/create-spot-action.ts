@@ -1,20 +1,15 @@
 "use server";
 
 import { createServerValidate, ServerValidateError } from "@tanstack/react-form-nextjs";
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-import { updateSpot } from "@/features/spot/api/update-spot";
+import { createSpot } from "@/features/spot/api/create-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
 
 import type { SpotForm } from "@/features/spot/form/spot-form";
-import type { SpotItem } from "@/features/spot/types/api";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function updateSpotAction(
-  spotId: SpotItem["id"],
-  _previousState: unknown,
-  formData: FormData,
-) {
+export async function createSpotAction(_previousState: unknown, formData: FormData) {
   let values: SpotForm;
 
   try {
@@ -28,8 +23,8 @@ export async function updateSpotAction(
     throw error;
   }
 
-  await updateSpot({ json: values, param: { spotId } });
-  revalidatePath("/");
+  await createSpot({ json: values });
+  redirect("/spots");
 }
 
 const serverValidate = createServerValidate({

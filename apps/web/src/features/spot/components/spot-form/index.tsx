@@ -1,41 +1,36 @@
 "use client";
 
-import { formOptions } from "@tanstack/react-form";
+import { mergeForm, useTransform } from "@tanstack/react-form-nextjs";
 
 import { SpinnerIcon } from "@/components/icons/spinner-icon";
 import { Button } from "@/components/ui/button";
-import { spotFormSchema } from "@/features/spot/form/spot-form";
+import { createSpotFormOptions } from "@/features/spot/form/spot-form";
 import { useAppForm } from "@/libs/tanstack-form/use-app-form";
 
 import type { SpotFormInput } from "@/features/spot/form/spot-form";
+import type { ServerFormState } from "@tanstack/react-form";
 
 import styles from "./index.module.css";
 
 type Props = {
+  isPending: boolean;
   defaultValues?: SpotFormInput;
-  onSubmit: ({ value }: { value: SpotFormInput }) => Promise<void>;
+  serverFormState?: ServerFormState<unknown, undefined>;
+  action: (formData: FormData) => void;
+  onSubmit?: () => void;
 };
 
-export function SpotForm({ defaultValues, onSubmit }: Props) {
-  const form = useAppForm(
-    formOptions({
-      defaultValues,
-      onSubmit,
-      validators: {
-        onChange: spotFormSchema,
-      },
-    }),
-  );
+export function SpotForm({ action, defaultValues, isPending, onSubmit, serverFormState }: Props) {
+  const form = useAppForm({
+    ...createSpotFormOptions({ defaultValues, onSubmit }),
+    transform: useTransform(
+      (baseForm) => (serverFormState ? mergeForm(baseForm, serverFormState) : baseForm),
+      [serverFormState],
+    ),
+  });
 
   return (
-    <form
-      noValidate
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-      className={styles.base}
-    >
+    <form noValidate action={action} onSubmit={form.handleSubmit} className={styles.base}>
       <div className={styles.content}>
         <form.AppField name="name">
           {(field) => <field.TextField required label="Name" placeholder="Central Park" />}
@@ -70,16 +65,11 @@ export function SpotForm({ defaultValues, onSubmit }: Props) {
         </form.AppField>
       </div>
       <div className={styles.actions}>
-        <Button
-          type="reset"
-          variant="outline"
-          disabled={form.state.isSubmitting}
-          onClick={() => form.reset()}
-        >
+        <Button type="reset" variant="outline" disabled={isPending} onClick={() => form.reset()}>
           Reset
         </Button>
-        <Button type="submit" disabled={form.state.isSubmitting}>
-          {form.state.isSubmitting ?? <SpinnerIcon />}
+        <Button type="submit" disabled={isPending}>
+          {isPending && <SpinnerIcon />}
           Submit
         </Button>
       </div>

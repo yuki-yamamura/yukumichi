@@ -28,17 +28,14 @@ export type UpdateSpotUsecase = {
 export function UpdateSpotUsecase({ spotRepository }: UpdateSpotUsecaseDeps): UpdateSpotUsecase {
   return {
     execute: async ({ id, ...rest }) => {
-      console.log("execute runs");
       const idResult = SpotId.safeParse(id);
       if (!idResult.success) {
         return err({ kind: "validation", message: idResult.error.message });
       }
-      console.log("id parsed");
       const existingSpotResult = await spotRepository.findById(idResult.data);
       if (existingSpotResult.isErr()) {
         return err(existingSpotResult.error);
       }
-      console.log("existing spot found");
 
       const spotResult = Spot({
         description: existingSpotResult.value.description,
@@ -51,10 +48,8 @@ export function UpdateSpotUsecase({ spotRepository }: UpdateSpotUsecaseDeps): Up
       if (spotResult.isErr()) {
         return err(spotResult.error);
       }
-      console.log("spot created");
 
       const updateResult = await spotRepository.update(spotResult.value);
-      console.log("update success");
 
       return updateResult.andThen(() => ok());
     },

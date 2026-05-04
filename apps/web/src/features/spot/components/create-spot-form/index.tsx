@@ -1,27 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useActionState } from "react";
 
-import { createSpot } from "@/features/spot/api/create-spot";
+import { createSpotAction } from "@/features/spot/actions/create-spot-action";
 import { SpotForm } from "@/features/spot/components/spot-form";
-import { spotFormSchema } from "@/features/spot/form/spot-form";
-
-import type { SpotFormInput } from "@/features/spot/form/spot-form";
 
 export function CreateSpotForm() {
-  const router = useRouter();
+  const [formState, action, isPending] = useActionState(createSpotAction, undefined);
 
-  const defaultValues: SpotFormInput = {
-    latitude: "",
-    longitude: "",
-    name: "",
-  };
-
-  const handleSubmit = async ({ value }: { value: SpotFormInput }) => {
-    const parsedValue = spotFormSchema.parse(value);
-    await createSpot(parsedValue);
-    router.push("/spots");
-  };
-
-  return <SpotForm defaultValues={defaultValues} onSubmit={handleSubmit} />;
+  return <SpotForm isPending={isPending} action={action} serverFormState={formState} />;
 }
