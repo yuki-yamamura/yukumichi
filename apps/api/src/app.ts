@@ -12,6 +12,8 @@ import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
 import { errorResponseSchema, toHttpStatus } from "@/presentation/schemas/error";
 
+import { UpdateSpotUsecase } from "./application/usecase/spot/update";
+
 import type { ApiError } from "@/presentation/schemas/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
@@ -49,6 +51,7 @@ const _createApp = ({ databaseUrl }: AppDeps) => {
       createSpotUsecase: CreateSpotUsecase({ spotRepository }),
       getSpotUsecase: GetSpotUsecase({ spotRepository }),
       listSpotsUsecase: ListSpotsUsecase({ spotRepository }),
+      updateSpotUsecase: UpdateSpotUsecase({ spotRepository }),
     }),
   );
 

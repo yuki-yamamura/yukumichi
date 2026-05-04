@@ -18,6 +18,7 @@ describe("ListSpotsUsecase", () => {
         findArchivedSpotById: vi.fn(),
         findById: vi.fn(),
         findMany: vi.fn().mockResolvedValue(ok(spots)),
+        update: vi.fn(),
       };
       const listSpotsUsecase = ListSpotsUsecase({ spotRepository });
 

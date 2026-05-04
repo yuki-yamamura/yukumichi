@@ -13,4 +13,13 @@ export type SpotItem = Extract<
 
 export type Coordinate = Spot["coordinate"];
 
-export type CreateSpotRequestBody = InferRequestType<(typeof fetchClient.spots)["$post"]>["json"];
+export type CreateSpotRequest = InferRequestType<(typeof fetchClient.spots)["$post"]>;
+
+export type UpdateSpotRequest = InferRequestType<(typeof fetchClient.spots)[":spotId"]["$patch"]>;
+
+export type ListSpotsResponse = Extract<
+  InferResponseType<typeof fetchClient.spots.$get>,
+  { spots: unknown }
+>;
+
+export type ListSpotsItem = ListSpotsResponse["spots"][number];

@@ -158,6 +158,93 @@ describe("SpotRepository", () => {
     });
   });
 
+  describe("update", () => {
+    it("should update a spot and return the updated spot", async () => {
+      // Given
+      const spot = createSpot();
+      const updatedSpot = createSpot({
+        coordinate: createCoordinate({
+          latitude: 20,
+          longitude: 30,
+        }),
+        description: "Updated description",
+        id: spot.id,
+        name: "Updated name",
+      });
+
+      const {
+        coordinate: { latitude, longitude },
+        description,
+        id,
+        name,
+      } = spot;
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
+
+      // When
+      const result = await repository.update(updatedSpot);
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual(updatedSpot);
+
+      // Postcondition
+      const rows = await testDb.db.select().from(spots).where(eq(spots.id, spot.id));
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toEqual({
+        createdAt: expect.any(Date),
+        description: updatedSpot.description,
+        id: updatedSpot.id,
+        latitude: updatedSpot.coordinate.latitude,
+        longitude: updatedSpot.coordinate.longitude,
+        name: updatedSpot.name,
+        updatedAt: expect.any(Date),
+      });
+    });
+
+    it("should return not_found when the spot does not exist", async () => {
+      // Given
+      const spot = createSpot();
+
+      // When
+      const result = await repository.update(spot);
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "not_found",
+        message: expect.any(String),
+      });
+    });
+
+    it("should return not_found when the spot is archived", async () => {
+      // Given
+      const spot = createSpot();
+      const updatedSpot = createSpot({
+        ...spot,
+        name: "Updated name",
+      });
+
+      const {
+        coordinate: { latitude, longitude },
+        description,
+        id,
+        name,
+      } = spot;
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
+      await testDb.db.insert(archivedSpots).values({ archivedAt: new Date(), spotId: spot.id });
+
+      // When
+      const result = await repository.update(updatedSpot);
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "not_found",
+        message: expect.any(String),
+      });
+    });
+  });
+
   describe("archive", () => {
     it("should store an archived spot and return its id", async () => {
       // Given

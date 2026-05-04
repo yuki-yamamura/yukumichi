@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { UpdateSpotModal } from "@/features/spot/components/update-spot-modal";
 
 import type { SpotItem } from "@/features/spot/types/api";
 
@@ -20,9 +21,10 @@ export function SpotListPresenter({ spots }: Props) {
           <Button
             variant="link"
             nativeButton={false}
-            render={<Link href={`/spots/${spot.id as string}`}>{spot.name}</Link>}
+            render={<Link href={`/spots/${spot.id}`}>{spot.name}</Link>}
           />
           <div>({spot.description})</div>
+          <UpdateSpotModal spot={spot} />
         </li>
       ))}
     </ul>

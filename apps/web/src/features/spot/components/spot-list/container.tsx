@@ -1,14 +1,9 @@
-import { fetchClient } from "@/libs/hono";
+import { listSpots } from "@/features/spot/api/list-spots";
 
 import { SpotListPresenter } from "./presenter";
 
 export async function SpotListContainer() {
-  const res = await fetchClient.spots.$get();
-  const data = await res.json();
+  const { spots } = await listSpots();
 
-  if ("code" in data) {
-    throw new Error("something went wrong");
-  }
-
-  return <SpotListPresenter spots={data.spots} />;
+  return <SpotListPresenter spots={spots} />;
 }

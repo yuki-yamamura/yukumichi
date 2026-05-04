@@ -121,5 +121,38 @@ export function SpotRepository(db: Database): SpotRepository {
         }),
       );
     },
+    update: async (spot) => {
+      const rows = await db
+        .update(spots)
+        .set({
+          description: spot.description,
+          latitude: spot.coordinate.latitude,
+          longitude: spot.coordinate.longitude,
+          name: spot.name,
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(spots.id, spot.id),
+            notExists(db.select().from(archivedSpots).where(eq(archivedSpots.spotId, spots.id))),
+          ),
+        )
+        .returning();
+
+      if (rows.length === 0) {
+        return err({ kind: "not_found", message: `Spot not found: ${spot.id}` });
+      }
+
+      const row = rows[0];
+      const idResult = SpotId.safeParse(row.id);
+      if (!idResult.success) {
+        return err({ kind: "data_integrity", message: idResult.error.message });
+      }
+
+      return Spot({ ...row, id: idResult.data }).mapErr((error) => ({
+        kind: "data_integrity",
+        message: error.message,
+      }));
+    },
   };
 }

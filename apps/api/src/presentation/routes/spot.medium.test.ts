@@ -91,6 +91,27 @@ describe("get /spots/:spotId", () => {
   });
 });
 
+describe("patch /spots/:spotId", () => {
+  it("should update a specified spot and return a success response", async () => {
+    // When
+    const response = await client.spots[":spotId"].$patch({
+      json: {
+        description: "Updated description",
+        latitude: 10,
+        longitude: 20,
+        name: "Updated name",
+      },
+      param: {
+        spotId: base62Encode(spotA.id),
+      },
+    });
+
+    // Then
+    expect(response.status).toBe(204);
+    expect(await response.text()).toBe("");
+  });
+});
+
 describe("post /spots/:spotId/archive", () => {
   it("should archive a specified spot and return a success response", async () => {
     // When
