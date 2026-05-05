@@ -2,8 +2,9 @@ import z from "zod";
 
 import { latitudeSchema, longitudeSchema } from "@/domain/spot/models/coordinate";
 import { SpotId } from "@/domain/spot/models/spot";
+import { base62Encode } from "@/presentation/helpers/id";
 
-import { base62Encode, publicIdSchema } from "./id";
+import { publicIdSchema } from "./id";
 
 const spotSchema = z.object({
   coordinate: z.object({

@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { testClient } from "hono/testing";
 import { err, ok } from "neverthrow";
 
-import { base62Encode } from "@/presentation/schemas/id";
+import { base62Encode } from "@/presentation/helpers/id";
 import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
 import { createSpot, createSpotId } from "@/test/fixtures/spot";
 

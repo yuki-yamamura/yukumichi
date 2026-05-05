@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-import { base62Decode, base62Encode } from "./id";
+import { base62Decode, base62Encode } from "@/presentation/helpers/id";
 
 describe("base62Encode", () => {
   it("encodes a UUIDv7 to a 22-character Base62 string", () => {

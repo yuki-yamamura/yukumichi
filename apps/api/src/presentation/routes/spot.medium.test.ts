@@ -4,7 +4,7 @@ import { inject } from "vitest";
 
 import { createApp } from "@/app";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
-import { base62Encode } from "@/presentation/schemas/id";
+import { base62Encode } from "@/presentation/helpers/id";
 import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
 import { createTestDatabase } from "@/test/database/helpers";
 import { createSpot } from "@/test/fixtures/spot";
