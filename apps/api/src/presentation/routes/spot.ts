@@ -7,7 +7,7 @@ import {
   createSpotRequestBodySchema,
   getSpotResponseSchema,
   listSpotsResponseSchema,
-  spotPathParamsSchema,
+  spotParamSchema,
   updateSpotRequestBodySchema,
 } from "@/presentation/schemas/spot";
 
@@ -118,7 +118,7 @@ export function createSpotRoute({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
         const result = await getSpotUsecase.execute({ spotId });
@@ -156,7 +156,7 @@ export function createSpotRoute({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       zValidator("json", updateSpotRequestBodySchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
@@ -195,7 +195,7 @@ export function createSpotRoute({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
         const result = await archiveSpotUsecase.execute({ spotId });
