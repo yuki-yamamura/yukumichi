@@ -129,19 +129,6 @@ export const baseConfig = [
     },
   },
   {
-    files: ["**/*.ts"],
-    rules: {
-      "@typescript-eslint/explicit-module-boundary-types": [
-        "error",
-        {
-          allowDirectConstAssertionInArrowFunctions: false,
-          allowHigherOrderFunctions: false,
-          allowTypedFunctionExpressions: false,
-        },
-      ],
-    },
-  },
-  {
     ignores: ["**/*.config.{js,mjs,ts,mts,cts}"],
   },
 ];

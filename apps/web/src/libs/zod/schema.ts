@@ -2,9 +2,7 @@ import z from "zod";
 
 import { toCustomIssueParams } from "./custom-issue";
 
-export function createFloatSchema(
-  inner: z.ZodNumber,
-): z.ZodPipe<z.ZodPipe<z.ZodString, z.ZodTransform<number, string>>, z.ZodNumber> {
+export function createFloatSchema(inner: z.ZodNumber) {
   return z
     .string()
     .min(1)

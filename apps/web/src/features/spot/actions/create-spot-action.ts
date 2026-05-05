@@ -8,7 +8,6 @@ import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot
 
 import type { SpotForm } from "@/features/spot/form/spot-form";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function createSpotAction(_previousState: unknown, formData: FormData) {
   let values: SpotForm;
 

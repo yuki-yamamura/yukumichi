@@ -13,7 +13,6 @@ export const spotFormSchema = z.object({
   name: z.string().min(1),
 });
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createSpotFormOptions({
   defaultValues = {
     description: "",
