@@ -10,11 +10,12 @@ import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
-import { errorResponseSchema, toHttpStatus } from "@/presentation/schemas/error";
+import { errorResponseSchema } from "@/presentation/schemas/error";
 
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
+import { toHttpStatus } from "./presentation/helpers/error";
 
-import type { ApiError } from "@/presentation/schemas/error";
+import type { ApiError } from "./presentation/types/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 type AppDeps = {
