@@ -10,7 +10,7 @@ export function toApiError(error: { kind: ErrorKind; message: string }): ApiErro
   };
 }
 
-export function toHttpStatus(code: ErrorCode): ContentfulStatusCode {
+export function toHttpStatusCode(code: ErrorCode): ContentfulStatusCode {
   switch (code) {
     case "VALIDATION_ERROR": {
       return 400;

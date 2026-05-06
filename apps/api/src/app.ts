@@ -13,7 +13,6 @@ import { createSpotRoute } from "@/presentation/routes/spot";
 import { errorResponseSchema } from "@/presentation/schemas/error";
 
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
-import { toHttpStatus } from "./presentation/helpers/error";
 
 import type { ApiError } from "./presentation/types/error";
 import type { DescribeRouteOptions } from "hono-openapi";
@@ -41,7 +40,7 @@ export function createApp({ databaseUrl }: AppDeps) {
         code: "UNKNOWN_ERROR",
         message: "Internal server error",
       },
-      toHttpStatus("UNKNOWN_ERROR"),
+      500,
     );
   });
 

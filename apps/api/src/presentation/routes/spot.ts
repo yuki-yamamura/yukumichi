@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
-import { toApiError, toHttpStatus } from "@/presentation/helpers/error";
+import { toApiError, toHttpStatusCode } from "@/presentation/helpers/error";
 import { zValidator } from "@/presentation/middlewares/zod-validator";
 import { errorResponseSchema } from "@/presentation/schemas/error";
 import {
@@ -63,7 +63,7 @@ export function createSpotRoute({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -92,7 +92,7 @@ export function createSpotRoute({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -129,7 +129,7 @@ export function createSpotRoute({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -170,7 +170,7 @@ export function createSpotRoute({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -206,7 +206,7 @@ export function createSpotRoute({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },

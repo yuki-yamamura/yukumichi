@@ -1,4 +1,4 @@
-import { toApiError, toHttpStatus } from "./error";
+import { toApiError, toHttpStatusCode } from "./error";
 
 import type { ApiError, ErrorCode, ErrorKind } from "@/presentation/types/error";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
@@ -43,7 +43,7 @@ describe("toHttpStatus", () => {
     ["UNKNOWN_ERROR", 500],
   ])('can convert "%s" to a ContentfulStatusCode', (code, expected) => {
     // When
-    const result = toHttpStatus(code);
+    const result = toHttpStatusCode(code);
 
     // Then
     expect(result).toBe(expected);
