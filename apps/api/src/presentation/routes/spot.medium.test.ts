@@ -36,7 +36,7 @@ afterAll(async () => {
 });
 
 describe("post /spots", () => {
-  it("should create a new spot and return created status", async () => {
+  it("should create a new spot and return 201 status code", async () => {
     // When
     const response = await client.spots.$post({
       json: {
@@ -50,7 +50,6 @@ describe("post /spots", () => {
     expect(response.status).toBe(201);
     expect(await response.text()).toBe("");
 
-    // Postcondition
     const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
     expect(rows).toHaveLength(3);
     expect(rows[0]).toEqual({
@@ -109,6 +108,18 @@ describe("patch /spots/:spotId", () => {
     // Then
     expect(response.status).toBe(204);
     expect(await response.text()).toBe("");
+
+    const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toEqual({
+      createdAt: expect.any(Date),
+      description: "Updated description",
+      id: expect.any(String),
+      latitude: 10,
+      longitude: 20,
+      name: "Updated name",
+      updatedAt: expect.any(Date),
+    });
   });
 });
 
