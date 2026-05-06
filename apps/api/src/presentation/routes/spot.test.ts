@@ -14,7 +14,7 @@ describe("createSpotRoute", () => {
     it("should create a new spot and return 201 status code", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           createSpotUsecase: { execute: vi.fn().mockResolvedValue(ok()) },
         }),
       );
@@ -58,7 +58,7 @@ describe("createSpotRoute", () => {
       ],
     ])("should return 400 status code when schema violation is found: %o", async (requestBody) => {
       // Given
-      const spotRoute = createSpotRoute(createSpoRouteDeps());
+      const spotRoute = createSpotRoute(createSpotRouteDeps());
       const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
@@ -77,7 +77,7 @@ describe("createSpotRoute", () => {
       // Given
       const spots = [createSpot(), createSpot()];
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           listSpotsUsecase: { execute: vi.fn().mockResolvedValue(ok(spots)) },
         }),
       );
@@ -97,7 +97,7 @@ describe("createSpotRoute", () => {
       // Given
       const spot = createSpot();
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           getSpotUsecase: { execute: vi.fn().mockResolvedValue(ok(spot)) },
         }),
       );
@@ -115,7 +115,7 @@ describe("createSpotRoute", () => {
 
     it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
       // Given
-      const spotRoute = createSpotRoute(createSpoRouteDeps());
+      const spotRoute = createSpotRoute(createSpotRouteDeps());
       const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
@@ -130,7 +130,7 @@ describe("createSpotRoute", () => {
     it("should return 404 status code when a spot is not found", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           getSpotUsecase: {
             execute: vi.fn().mockResolvedValue(
               err({
@@ -160,7 +160,7 @@ describe("createSpotRoute", () => {
     it("should update a spot and return 204 status code", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           updateSpotUsecase: { execute: vi.fn().mockResolvedValue(ok()) },
         }),
       );
@@ -180,7 +180,7 @@ describe("createSpotRoute", () => {
 
     it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
       // Given
-      const spotRoute = createSpotRoute(createSpoRouteDeps());
+      const spotRoute = createSpotRoute(createSpotRouteDeps());
       const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
@@ -199,7 +199,7 @@ describe("createSpotRoute", () => {
     it("should return 404 status code when a spot is not found", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           updateSpotUsecase: {
             execute: vi
               .fn()
@@ -227,7 +227,7 @@ describe("createSpotRoute", () => {
     it("should return 204 status code", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           archiveSpotUsecase: { execute: vi.fn().mockResolvedValue(ok()) },
         }),
       );
@@ -245,7 +245,7 @@ describe("createSpotRoute", () => {
 
     it("should return 400 status code when spotId is not a valid Base62-encoded ID", async () => {
       // Given
-      const spotRoute = createSpotRoute(createSpoRouteDeps());
+      const spotRoute = createSpotRoute(createSpotRouteDeps());
       const client = testClient(new Hono().route("/spots", spotRoute));
 
       // When
@@ -261,7 +261,7 @@ describe("createSpotRoute", () => {
     it("should return 404 status code when a spot is not found", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           archiveSpotUsecase: {
             execute: vi
               .fn()
@@ -284,7 +284,7 @@ describe("createSpotRoute", () => {
     it("should return 409 status code when a spot is already archived", async () => {
       // Given
       const spotRoute = createSpotRoute(
-        createSpoRouteDeps({
+        createSpotRouteDeps({
           archiveSpotUsecase: {
             execute: vi
               .fn()
@@ -306,7 +306,7 @@ describe("createSpotRoute", () => {
   });
 });
 
-function createSpoRouteDeps(
+function createSpotRouteDeps(
   overwrites: Partial<Parameters<typeof createSpotRoute>[0]> = {},
 ): Parameters<typeof createSpotRoute>[0] {
   const defaultDeps = {
