@@ -1,7 +1,7 @@
 import { zValidator as baseZodValidator } from "@hono/zod-validator";
 import z from "zod";
 
-import { toApiError, toHttpStatus } from "@/presentation/helpers/error";
+import { toApiError } from "@/presentation/helpers/error";
 
 import type { ValidationTargets } from "hono";
 import type { ZodType } from "zod";
@@ -17,7 +17,7 @@ export function zValidator<Target extends keyof ValidationTargets, Schema extend
           kind: "validation",
           message: z.prettifyError(result.error),
         }),
-        toHttpStatus("VALIDATION_ERROR"),
+        400,
       );
     }
   });
