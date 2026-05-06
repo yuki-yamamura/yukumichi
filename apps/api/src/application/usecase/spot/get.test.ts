@@ -14,14 +14,9 @@ describe("GetSpotUsecase", () => {
       const spot = createSpot();
       const spotId = spot.id;
 
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findById: vi.fn().mockResolvedValue(ok(spot)),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const getSpotUsecase = GetSpotUsecase({
         spotRepository,
       });
@@ -39,14 +34,9 @@ describe("GetSpotUsecase", () => {
     it("should return an error when a spot is not found", async () => {
       // Given
       const message = faker.lorem.sentence();
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const getSpotUsecase = GetSpotUsecase({
         spotRepository,
       });
@@ -63,3 +53,16 @@ describe("GetSpotUsecase", () => {
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}

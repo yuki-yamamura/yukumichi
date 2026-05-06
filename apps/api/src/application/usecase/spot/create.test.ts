@@ -13,14 +13,9 @@ describe("CreateSpotUsecase", () => {
       // Given
       const spot = createSpot();
 
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
+      const spotRepository = createSpotRepository({
         create: vi.fn().mockResolvedValue(ok(spot.id)),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn(),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
@@ -38,14 +33,7 @@ describe("CreateSpotUsecase", () => {
 
     it("should return a validation error for invalid coordinates", async () => {
       // Given
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn(),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      const spotRepository = createSpotRepository();
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
       const input = {
@@ -63,3 +51,16 @@ describe("CreateSpotUsecase", () => {
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}

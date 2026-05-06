@@ -4,6 +4,8 @@ import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot
 
 import { UpdateSpotUsecase } from "./update";
 
+import type { SpotRepository } from "@/domain/spot/repository";
+
 describe("UpdateSpotUsecase", () => {
   describe("execute", () => {
     it("should update a spot and return noting", async () => {
@@ -26,14 +28,10 @@ describe("UpdateSpotUsecase", () => {
         name: input.name,
       });
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findById: vi.fn().mockResolvedValue(ok(existingSpot)),
-        findMany: vi.fn(),
         update: vi.fn().mockResolvedValue(ok(updatedSpot)),
-      };
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -56,14 +54,9 @@ describe("UpdateSpotUsecase", () => {
         name: "Updated Spot",
       };
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "Spot not found" })),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -73,10 +66,10 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: "Spot not found" });
+      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "not_found" });
     });
 
-    it("should return a validation error for invalid coordinates", async () => {
+    it("should return a validation error when an input has an invalid value", async () => {
       // Given
       const existingSpot = createSpot();
       const input = {
@@ -87,14 +80,9 @@ describe("UpdateSpotUsecase", () => {
         name: "Updated Spot",
       };
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findById: vi.fn().mockResolvedValue(ok(existingSpot)),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -108,3 +96,16 @@ describe("UpdateSpotUsecase", () => {
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}

@@ -12,14 +12,9 @@ describe("ListSpotsUsecase", () => {
       // Given
       const spots = [createSpot(), createSpot()];
 
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn(),
+      const spotRepository = createSpotRepository({
         findMany: vi.fn().mockResolvedValue(ok(spots)),
-        update: vi.fn(),
-      };
+      });
       const listSpotsUsecase = ListSpotsUsecase({ spotRepository });
 
       // When
@@ -31,3 +26,16 @@ describe("ListSpotsUsecase", () => {
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}

@@ -14,16 +14,13 @@ describe("ArchiveSpotUsecase", () => {
       const spot = createSpot();
       const spotId = spot.id;
 
-      const spotRepository: SpotRepository = {
+      const spotRepository = createSpotRepository({
         archive: vi.fn().mockResolvedValue(ok(spot.id)),
-        create: vi.fn(),
         findArchivedSpotById: vi
           .fn()
           .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(ok(spot)),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
       });
@@ -43,16 +40,12 @@ describe("ArchiveSpotUsecase", () => {
       const spotId = createSpotId();
       const message = faker.lorem.sentence();
 
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
+      const spotRepository = createSpotRepository({
         findArchivedSpotById: vi
           .fn()
           .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
         findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
       });
@@ -73,14 +66,9 @@ describe("ArchiveSpotUsecase", () => {
       const spotId = spot.id;
       const archivedSpot = { ...spot, archivedAt: faker.date.past() };
 
-      const spotRepository: SpotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
+      const spotRepository = createSpotRepository({
         findArchivedSpotById: vi.fn().mockResolvedValue(ok(archivedSpot)),
-        findById: vi.fn(),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
       });
@@ -96,3 +84,16 @@ describe("ArchiveSpotUsecase", () => {
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}
