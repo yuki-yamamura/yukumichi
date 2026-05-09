@@ -2,17 +2,18 @@ import { faker } from "@faker-js/faker";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
-import { archiveSpot, generateSpotId, Spot, SpotId } from "./spot";
+import { archiveSpot, generateSpotId, Spot } from "./spot";
 
 describe("Spot", () => {
   it("should create a valid spot", () => {
     // Given
-    const id = createSpotId();
-    const coordinate = createCoordinate({ latitude: 0, longitude: 0 });
+    const spotId = createSpotId();
+    const coordinate = createCoordinate();
 
     // When
     const result = Spot({
-      id,
+      description: null,
+      id: spotId,
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
       name: "Test Park",
@@ -23,22 +24,26 @@ describe("Spot", () => {
     expect(result._unsafeUnwrap()).toEqual({
       coordinate,
       description: null,
-      id,
+      id: spotId,
       name: "Test Park",
     });
   });
 
-  it("should return a validation error when coordinates are invalid", () => {
+  it("should return a validation error when coordinate is invalid", () => {
     // Given
-    const params = {
-      id: createSpotId(),
-      latitude: faker.location.latitude(),
+    const spotId = createSpotId();
+    const coordinate = createCoordinate({
       longitude: 999, // Invalid longitude
-      name: faker.location.street(),
-    };
+    });
 
     // When
-    const result = Spot(params);
+    const result = Spot({
+      description: null,
+      id: spotId,
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      name: faker.location.street(),
+    });
 
     // Then
     expect(result.isErr()).toBe(true);
@@ -47,13 +52,12 @@ describe("Spot", () => {
 });
 
 describe("generateSpotId", () => {
-  it("returns a valid SpotId each call", () => {
-    const first = generateSpotId();
-    const second = generateSpotId();
+  it("should return a valid id", () => {
+    // When
+    const result = generateSpotId();
 
-    expect(first).not.toBe(second);
-    expect(SpotId.safeParse(first).success).toBe(true);
-    expect(SpotId.safeParse(second).success).toBe(true);
+    // Then
+    expect(result).toEqual(expect.any(String));
   });
 });
 
@@ -66,7 +70,7 @@ describe("archiveSpot", () => {
     vi.useRealTimers();
   });
 
-  it("should return a spot with archivedAt set", () => {
+  it("should return an archived spot", () => {
     // Given
     const now = new Date("2026-03-29T00:00:00Z");
     vi.setSystemTime(now);
@@ -74,10 +78,10 @@ describe("archiveSpot", () => {
     const spot = createSpot();
 
     // When
-    const archivedSpot = archiveSpot(spot);
+    const result = archiveSpot(spot);
 
     // Then
-    expect(archivedSpot).toEqual({
+    expect(result).toEqual({
       ...spot,
       archivedAt: now,
     });

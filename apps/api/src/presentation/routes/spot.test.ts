@@ -68,7 +68,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
-      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message: expect.any(String),
+      });
     });
   });
 
@@ -125,6 +128,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message: expect.any(String),
+      });
     });
 
     it("should return 404 status code when a spot is not found", async () => {
@@ -152,7 +159,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(404);
-      expect(await response.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "NOT_FOUND_ERROR",
+        message: expect.any(String),
+      });
     });
   });
 
@@ -193,7 +203,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
-      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message: expect.any(String),
+      });
     });
 
     it("should return 404 status code when a spot is not found", async () => {
@@ -219,7 +232,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(result.status).toBe(404);
-      expect(await result.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
+      expect(await result.json()).toEqual({
+        code: "NOT_FOUND_ERROR",
+        message: expect.any(String),
+      });
     });
   });
 
@@ -255,7 +271,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(400);
-      expect(await response.json()).toMatchObject({ code: "VALIDATION_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "VALIDATION_ERROR",
+        message: expect.any(String),
+      });
     });
 
     it("should return 404 status code when a spot is not found", async () => {
@@ -278,7 +297,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(404);
-      expect(await response.json()).toMatchObject({ code: "NOT_FOUND_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "NOT_FOUND_ERROR",
+        message: expect.any(String),
+      });
     });
 
     it("should return 409 status code when a spot is already archived", async () => {
@@ -301,7 +323,10 @@ describe("createSpotRoute", () => {
 
       // Then
       expect(response.status).toBe(409);
-      expect(await response.json()).toMatchObject({ code: "CONFLICT_ERROR" });
+      expect(await response.json()).toEqual({
+        code: "CONFLICT_ERROR",
+        message: expect.any(String),
+      });
     });
   });
 });

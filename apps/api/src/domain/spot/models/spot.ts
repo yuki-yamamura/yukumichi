@@ -22,26 +22,19 @@ export type Spot = Readonly<{
   name: string;
 }>;
 
-export type ArchivedSpot = Spot &
-  Readonly<{
-    archivedAt: Date;
-  }>;
-
-type SpotParams = {
-  id: SpotId;
-  latitude: number;
-  longitude: number;
-  name: string;
-  description?: string | null;
-};
-
 export function Spot({
   description,
   id,
   latitude,
   longitude,
   name,
-}: SpotParams): Result<Spot, ValidationError> {
+}: {
+  description: string | null;
+  id: SpotId;
+  latitude: number;
+  longitude: number;
+  name: string;
+}): Result<Spot, ValidationError> {
   const coordinateResult = Coordinate({ latitude, longitude });
   if (coordinateResult.isErr()) {
     return err(coordinateResult.error);
@@ -49,11 +42,16 @@ export function Spot({
 
   return ok({
     coordinate: coordinateResult.value,
-    description: description ?? null,
+    description,
     id,
     name,
   });
 }
+
+export type ArchivedSpot = Spot &
+  Readonly<{
+    archivedAt: Date;
+  }>;
 
 export function archiveSpot(spot: Spot): ArchivedSpot {
   return {

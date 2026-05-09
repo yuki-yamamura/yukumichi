@@ -23,8 +23,8 @@ export type CreateSpotUsecase = {
 
 export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): CreateSpotUsecase {
   return {
-    execute: async (input) => {
-      const spotResult = Spot({ id: generateSpotId(), ...input });
+    execute: async ({ description, ...rest }) => {
+      const spotResult = Spot({ description: description ?? null, id: generateSpotId(), ...rest });
       if (spotResult.isErr()) {
         return err(spotResult.error);
       }
