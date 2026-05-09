@@ -109,8 +109,20 @@ describe("patch /spots/:spotId", () => {
     expect(response.status).toBe(204);
     expect(await response.text()).toBe("");
 
+    // Postcondition
     const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
     expect(rows).toHaveLength(2);
+
+    expect(rows[0]).toEqual({
+      createdAt: expect.any(Date),
+      description: spotB.description,
+      id: spotB.id,
+      latitude: spotB.coordinate.latitude,
+      longitude: spotB.coordinate.longitude,
+      name: spotB.name,
+      updatedAt: expect.any(Date),
+    });
+
     expect(rows[1]).toEqual({
       createdAt: expect.any(Date),
       description: "Updated description",
