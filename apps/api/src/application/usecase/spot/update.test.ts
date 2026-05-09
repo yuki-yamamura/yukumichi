@@ -1,4 +1,4 @@
-import { err, ok } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
@@ -29,8 +29,8 @@ describe("UpdateSpotUsecase", () => {
       });
 
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockResolvedValue(ok(existingSpot)),
-        update: vi.fn().mockResolvedValue(ok(updatedSpot)),
+        findById: vi.fn().mockReturnValue(okAsync(existingSpot)),
+        update: vi.fn().mockReturnValue(okAsync(updatedSpot)),
       });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
@@ -55,7 +55,9 @@ describe("UpdateSpotUsecase", () => {
       };
 
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "Spot not found" })),
+        findById: vi
+          .fn()
+          .mockReturnValue(errAsync({ kind: "not_found", message: "Spot not found" })),
       });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
@@ -81,7 +83,7 @@ describe("UpdateSpotUsecase", () => {
       };
 
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockResolvedValue(ok(existingSpot)),
+        findById: vi.fn().mockReturnValue(okAsync(existingSpot)),
       });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,

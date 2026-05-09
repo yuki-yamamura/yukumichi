@@ -15,7 +15,7 @@ describe("GetSpotUsecase", () => {
       const spotId = spot.id;
 
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockResolvedValue(ok(spot)),
+        findById: vi.fn().mockReturnValue(ok(spot)),
       });
       const getSpotUsecase = GetSpotUsecase({
         spotRepository,
@@ -35,7 +35,7 @@ describe("GetSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
+        findById: vi.fn().mockReturnValue(err({ kind: "not_found", message })),
       });
       const getSpotUsecase = GetSpotUsecase({
         spotRepository,

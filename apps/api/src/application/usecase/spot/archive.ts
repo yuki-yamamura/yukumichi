@@ -1,15 +1,16 @@
-import { err, ok } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 
 import { archiveSpot, SpotId } from "@/domain/spot/models/spot";
 
 import type {
   ConflictError,
+  DatabaseError,
   DataIntegrityError,
   NotFoundError,
   ValidationError,
 } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
-import type { Result } from "neverthrow";
+import type { ResultAsync } from "neverthrow";
 
 type ArchiveSpotUsecaseDeps = {
   spotRepository: SpotRepository;
@@ -22,35 +23,37 @@ type ArchiveSpotUsecaseInput = {
 export type ArchiveSpotUsecase = {
   execute: (
     input: ArchiveSpotUsecaseInput,
-  ) => Promise<Result<void, ConflictError | DataIntegrityError | NotFoundError | ValidationError>>;
+  ) => ResultAsync<
+    void,
+    ConflictError | DatabaseError | DataIntegrityError | NotFoundError | ValidationError
+  >;
 };
 
 export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
-    execute: async (input) => {
+    execute: (input) => {
       const idResult = SpotId.safeParse(input.spotId);
       if (!idResult.success) {
-        return err({ kind: "validation", message: idResult.error.message });
-      }
-      const spotId = idResult.data;
-
-      const archivedResult = await spotRepository.findArchivedSpotById(spotId);
-      if (archivedResult.isOk()) {
-        return err({ kind: "conflict", message: `Spot is already archived: ${spotId}` });
-      }
-      if (archivedResult.error.kind === "data_integrity") {
-        return err(archivedResult.error);
+        return errAsync({ kind: "validation", message: idResult.error.message });
       }
 
-      const spotResult = await spotRepository.findById(spotId);
-      if (spotResult.isErr()) {
-        return err(spotResult.error);
-      }
+      return spotRepository
+        .findArchivedSpotById(idResult.data)
+        .andThen((archivedSpot) => {
+          return errAsync({
+            kind: "conflict" as const,
+            message: `Spot is already archived: ${archivedSpot.id}`,
+          });
+        })
+        .orElse((error) =>
+          error.kind === "not_found" ? spotRepository.findById(idResult.data) : errAsync(error),
+        )
+        .andThen((spot) => {
+          const archivedSpot = archiveSpot(spot);
 
-      const archivedSpot = archiveSpot(spotResult.value);
-      const archiveResult = await spotRepository.archive(archivedSpot);
-
-      return archiveResult.andThen(() => ok());
+          return spotRepository.archive(archivedSpot);
+        })
+        .andThen(() => okAsync());
     },
   };
 }

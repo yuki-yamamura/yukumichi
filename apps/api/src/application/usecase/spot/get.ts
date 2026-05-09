@@ -1,11 +1,16 @@
-import { err } from "neverthrow";
+import { errAsync } from "neverthrow";
 
 import { SpotId } from "@/domain/spot/models/spot";
 
-import type { DataIntegrityError, NotFoundError, ValidationError } from "@/domain/error";
+import type {
+  DatabaseError,
+  DataIntegrityError,
+  NotFoundError,
+  ValidationError,
+} from "@/domain/error";
 import type { Spot } from "@/domain/spot/models/spot";
 import type { SpotRepository } from "@/domain/spot/repository";
-import type { Result } from "neverthrow";
+import type { ResultAsync } from "neverthrow";
 
 type GetSpotUsecaseDeps = {
   spotRepository: SpotRepository;
@@ -18,18 +23,18 @@ type GetSpotUsecaseInput = {
 export type GetSpotUsecase = {
   execute: (
     input: GetSpotUsecaseInput,
-  ) => Promise<Result<Spot, DataIntegrityError | NotFoundError | ValidationError>>;
+  ) => ResultAsync<Spot, DatabaseError | DataIntegrityError | NotFoundError | ValidationError>;
 };
 
 export function GetSpotUsecase({ spotRepository }: GetSpotUsecaseDeps): GetSpotUsecase {
   return {
-    execute: async (input) => {
-      const idResult = SpotId.safeParse(input.spotId);
+    execute: ({ spotId }) => {
+      const idResult = SpotId.safeParse(spotId);
       if (!idResult.success) {
-        return err({ kind: "validation", message: idResult.error.message });
+        return errAsync({ kind: "validation", message: idResult.error.message });
       }
 
-      return await spotRepository.findById(idResult.data);
+      return spotRepository.findById(idResult.data);
     },
   };
 }

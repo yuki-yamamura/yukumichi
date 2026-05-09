@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { err, ok } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 
 import { createSpot, createSpotId } from "@/test/fixtures/spot";
 
@@ -15,11 +15,11 @@ describe("ArchiveSpotUsecase", () => {
       const spotId = spot.id;
 
       const spotRepository = createSpotRepository({
-        archive: vi.fn().mockResolvedValue(ok(spot.id)),
+        archive: vi.fn().mockReturnValue(okAsync(spot.id)),
         findArchivedSpotById: vi
           .fn()
-          .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
-        findById: vi.fn().mockResolvedValue(ok(spot)),
+          .mockReturnValue(errAsync({ kind: "not_found", message: faker.lorem.sentence() })),
+        findById: vi.fn().mockReturnValue(okAsync(spot)),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
@@ -43,8 +43,8 @@ describe("ArchiveSpotUsecase", () => {
       const spotRepository = createSpotRepository({
         findArchivedSpotById: vi
           .fn()
-          .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message })),
+          .mockReturnValue(errAsync({ kind: "not_found", message: faker.lorem.sentence() })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "not_found", message })),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
@@ -67,7 +67,7 @@ describe("ArchiveSpotUsecase", () => {
       const archivedSpot = { ...spot, archivedAt: faker.date.past() };
 
       const spotRepository = createSpotRepository({
-        findArchivedSpotById: vi.fn().mockResolvedValue(ok(archivedSpot)),
+        findArchivedSpotById: vi.fn().mockReturnValue(okAsync(archivedSpot)),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,

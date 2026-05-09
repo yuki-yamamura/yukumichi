@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { ok } from "neverthrow";
+import { okAsync } from "neverthrow";
 
 import { createSpot } from "@/test/fixtures/spot";
 
@@ -14,7 +14,7 @@ describe("CreateSpotUsecase", () => {
       const spot = createSpot();
 
       const spotRepository = createSpotRepository({
-        create: vi.fn().mockResolvedValue(ok(spot.id)),
+        create: vi.fn().mockReturnValue(okAsync(spot.id)),
       });
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 

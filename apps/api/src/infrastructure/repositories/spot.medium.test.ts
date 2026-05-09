@@ -24,15 +24,7 @@ describe("SpotRepository", () => {
     it("should store a spot and return its id", async () => {
       // Given
       const id = createSpotId();
-      const spot = createSpot({
-        coordinate: createCoordinate({
-          latitude: 0,
-          longitude: 0,
-        }),
-        description: "A nice park to relax",
-        id,
-        name: "Test Park",
-      });
+      const spot = createSpot({ id });
 
       // When
       const result = await repository.create(spot);

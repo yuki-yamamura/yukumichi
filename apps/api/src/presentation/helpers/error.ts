@@ -22,6 +22,7 @@ export function toHttpStatusCode(code: ErrorCode): ContentfulStatusCode {
       return 409;
     }
     case "DATA_INTEGRITY_ERROR":
+    case "DATABASE_ERROR":
     case "UNKNOWN_ERROR": {
       return 500;
     }
