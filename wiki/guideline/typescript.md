@@ -45,16 +45,16 @@ Align the name with the array method it summarises:
 
 ```typescript
 // ✅ Correct - same directory
-import { foo } from "./foo";
+import { formatDate } from "./format-date";
 
 // ✅ Correct - descendant directory
-import { bar } from "./bar/baz";
+import { parseDate } from "./date/parse-date";
 
-// ✅ Correct - cross-feature via absolute alias
-import { fetchBar } from "@/features/bar/api/fetch-bar";
+// ✅ Correct - other directory via absolute alias
+import { formatDate } from "@/utils/format-date";
 
 // ❌ Incorrect - parent traversal via relative path
-import { fetchBar } from "../bar/api/fetch-bar";
+import { formatDate } from "../utils/format-date";
 ```
 
 ## Function Definitions
