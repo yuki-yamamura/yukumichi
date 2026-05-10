@@ -31,29 +31,21 @@ export type ArchiveSpotUsecase = {
 
 export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
-    execute: (input) => {
-      const idResult = SpotId.safeParse(input.spotId);
-      if (!idResult.success) {
-        return errAsync({ kind: "validation", message: idResult.error.message });
-      }
-
-      return spotRepository
-        .findArchivedSpotById(idResult.data)
-        .andThen((archivedSpot) => {
-          return errAsync({
-            kind: "conflict" as const,
-            message: `Spot is already archived: ${archivedSpot.id}`,
-          });
-        })
-        .orElse((error) =>
-          error.kind === "not_found" ? spotRepository.findById(idResult.data) : errAsync(error),
-        )
-        .andThen((spot) => {
-          const archivedSpot = archiveSpot(spot);
-
-          return spotRepository.archive(archivedSpot);
-        })
-        .andThen(() => okAsync());
-    },
+    execute: (input) =>
+      SpotId(input.spotId).asyncAndThen((spotId) =>
+        spotRepository
+          .findArchivedSpotById(spotId)
+          .andThen((archivedSpot) =>
+            errAsync({
+              kind: "conflict" as const,
+              message: `Spot is already archived: ${archivedSpot.id}`,
+            }),
+          )
+          .orElse((error) =>
+            error.kind === "not_found" ? spotRepository.findById(spotId) : errAsync(error),
+          )
+          .andThen((spot) => spotRepository.archive(archiveSpot(spot)))
+          .andThen(() => okAsync()),
+      ),
   };
 }

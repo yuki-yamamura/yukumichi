@@ -1,4 +1,4 @@
-import { errAsync, ok } from "neverthrow";
+import { okAsync } from "neverthrow";
 
 import { Spot, SpotId } from "@/domain/spot/models/spot";
 
@@ -32,26 +32,22 @@ export type UpdateSpotUsecase = {
 
 export function UpdateSpotUsecase({ spotRepository }: UpdateSpotUsecaseDeps): UpdateSpotUsecase {
   return {
-    execute: ({ id, ...rest }) => {
-      const idResult = SpotId.safeParse(id);
-      if (!idResult.success) {
-        return errAsync({ kind: "validation", message: idResult.error.message });
-      }
-
-      return spotRepository
-        .findById(idResult.data)
-        .andThen((existingSpot) =>
-          Spot({
-            description: existingSpot.description,
-            id: existingSpot.id,
-            latitude: existingSpot.coordinate.latitude,
-            longitude: existingSpot.coordinate.longitude,
-            name: existingSpot.name,
-            ...rest,
-          }),
-        )
-        .andThen((spot) => spotRepository.update(spot))
-        .andThen(() => ok());
-    },
+    execute: ({ id, ...rest }) =>
+      SpotId(id).asyncAndThen((spotId) =>
+        spotRepository
+          .findById(spotId)
+          .andThen((existingSpot) =>
+            Spot({
+              description: existingSpot.description,
+              id: existingSpot.id,
+              latitude: existingSpot.coordinate.latitude,
+              longitude: existingSpot.coordinate.longitude,
+              name: existingSpot.name,
+              ...rest,
+            }),
+          )
+          .andThen((spot) => spotRepository.update(spot))
+          .andThen(() => okAsync()),
+      ),
   };
 }

@@ -1,5 +1,3 @@
-import { errAsync } from "neverthrow";
-
 import { SpotId } from "@/domain/spot/models/spot";
 
 import type {
@@ -28,13 +26,6 @@ export type GetSpotUsecase = {
 
 export function GetSpotUsecase({ spotRepository }: GetSpotUsecaseDeps): GetSpotUsecase {
   return {
-    execute: ({ spotId }) => {
-      const idResult = SpotId.safeParse(spotId);
-      if (!idResult.success) {
-        return errAsync({ kind: "validation", message: idResult.error.message });
-      }
-
-      return spotRepository.findById(idResult.data);
-    },
+    execute: ({ spotId }) => SpotId(spotId).asyncAndThen((id) => spotRepository.findById(id)),
   };
 }

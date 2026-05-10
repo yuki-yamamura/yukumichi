@@ -7,12 +7,20 @@ import { Coordinate } from "./coordinate";
 import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
-export const SpotId = z.uuidv7().brand<"SpotId">();
+export const spotIdSchema = z.uuidv7().brand<"SpotId">();
 
-export type SpotId = z.infer<typeof SpotId>;
+export type SpotId = z.infer<typeof spotIdSchema>;
+
+export function SpotId(value: string): Result<SpotId, ValidationError> {
+  const result = spotIdSchema.safeParse(value);
+
+  return result.success
+    ? ok(result.data)
+    : err({ kind: "validation", message: result.error.message });
+}
 
 export function generateSpotId(): SpotId {
-  return SpotId.parse(uuidv7());
+  return spotIdSchema.parse(uuidv7());
 }
 
 export type Spot = Readonly<{
