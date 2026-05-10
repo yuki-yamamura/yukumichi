@@ -105,22 +105,10 @@
   }
 }
 
-html,
-body {
-  max-inline-size: 100vw;
-  overflow-x: hidden;
-}
-
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   color: var(--foreground);
   background: var(--background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  border-color: var(--border);
 }
 
 @media (prefers-color-scheme: dark) {
