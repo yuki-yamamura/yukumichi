@@ -6,12 +6,12 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const { id } = await params;
-  const res = await fetchClient.spots[":spotId"].$get({
+  const response = await fetchClient.spots[":spotId"].$get({
     param: {
       spotId: id,
     },
   });
-  const data = await res.json();
+  const data = await response.json();
 
   if ("code" in data) {
     throw new Error("something went wrong");
