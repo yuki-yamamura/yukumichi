@@ -131,14 +131,15 @@ You must acknowledge these information and use it like a map that tell you how t
 | Category  | Technology                                     |
 | --------- | ---------------------------------------------- |
 | Runner    | Playwright                                     |
-| Structure | Page Object Models + reusable scenarios        |
+| Structure | Page Object Models composed by tests           |
 | Targets   | Web app driven through real browser (Chromium) |
 
 **Core E2E patterns:**
 
 - Page Object Model: per-page selectors and actions live in `pages/`
-- User scenario tests in `usecase/scenarios/` walk through end-to-end user journeys
-- Function-based test cases in `usecase/test-cases/` cover individual feature units
+- `usecase/scenarios/` and `usecase/test-cases/` are independent siblings; both compose page objects, neither depends on the other
+- `usecase/scenarios/` holds user scenario tests (multi-step flows)
+- `usecase/test-cases/` holds feature tests (single feature units)
 
 ### Infrastructure
 
