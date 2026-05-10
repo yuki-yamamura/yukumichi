@@ -1,7 +1,7 @@
 import { definePreview } from "@storybook/nextjs-vite";
 
-import "../src/libs/zod";
-import "../src/app/globals.css";
+import "@/libs/zod";
+import "@/app/globals.css";
 
 export default definePreview({
   addons: [],

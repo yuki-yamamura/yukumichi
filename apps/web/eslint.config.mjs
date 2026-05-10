@@ -21,6 +21,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "generated/**",
     "storybook-static/**",
+    "vitest.d.ts",
+    "vitest.setup.ts",
   ]),
   reactHooks.configs.flat["recommended-latest"],
   ...storybook.configs["flat/recommended"],

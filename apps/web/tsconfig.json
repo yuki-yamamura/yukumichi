@@ -30,8 +30,10 @@
   },
   "include": [
     "next-env.d.ts",
+    "vitest.setup.ts",
     "vitest.d.ts",
     "src",
+    ".storybook",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
