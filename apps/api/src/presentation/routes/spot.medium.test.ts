@@ -6,13 +6,13 @@ import { createApp } from "@/app";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { base62Encode } from "@/presentation/helpers/id";
 import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
-import { createTestDatabase } from "@/test/database/helpers";
+import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
 import { createSpot } from "@/test/fixtures/spot";
 
 const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
 const env = { APP_ENV: appEnv, DATABASE_URL: databaseUrl };
-const testDb = createTestDatabase(env);
+const testDb = createTestDatabaseHelper(env);
 const app = createApp(env);
 const client = testClient(app);
 

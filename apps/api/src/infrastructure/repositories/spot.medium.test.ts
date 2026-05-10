@@ -2,14 +2,14 @@ import { eq } from "drizzle-orm";
 import { inject } from "vitest";
 
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
-import { createTestDatabase } from "@/test/database/helpers";
+import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { SpotRepository } from "./spot";
 
 const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabase({ APP_ENV: appEnv, DATABASE_URL: databaseUrl });
+const testDb = createTestDatabaseHelper({ APP_ENV: appEnv, DATABASE_URL: databaseUrl });
 const repository = SpotRepository(testDb.db);
 
 describe("SpotRepository", () => {

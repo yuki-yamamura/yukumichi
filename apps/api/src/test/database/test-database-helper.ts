@@ -11,18 +11,18 @@ const tableNames = Object.values(schema)
   .filter(isTable)
   .map((table) => getTableName(table));
 
-type TestDatabase = {
+type TestDatabaseHelper = {
   db: Database;
   cleanup: () => Promise<void>;
   truncateTables: () => Promise<void>;
 };
 
-export function createTestDatabase(env: Env): TestDatabase {
-  const client = postgres(env.DATABASE_URL);
-  const db = drizzle(client, { casing: "snake_case", schema });
+export function createTestDatabaseHelper(env: Env): TestDatabaseHelper {
+  const sqlClient = postgres(env.DATABASE_URL);
+  const db = drizzle(sqlClient, { casing: "snake_case", schema });
 
   return {
-    cleanup: () => client.end(),
+    cleanup: () => sqlClient.end(),
     db,
     truncateTables: async () => {
       await db.execute(sql.raw(`TRUNCATE TABLE ${tableNames.join(", ")} CASCADE`));
