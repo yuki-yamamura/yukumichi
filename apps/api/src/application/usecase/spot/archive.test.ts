@@ -80,7 +80,10 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "conflict" });
+      expect(result._unsafeUnwrapErr()).toMatchObject({
+        kind: "conflict",
+        message: expect.any(String),
+      });
     });
   });
 });

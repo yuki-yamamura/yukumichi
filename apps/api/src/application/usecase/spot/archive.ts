@@ -31,8 +31,8 @@ export type ArchiveSpotUsecase = {
 
 export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): ArchiveSpotUsecase {
   return {
-    execute: (input) =>
-      SpotId(input.spotId).asyncAndThen((spotId) =>
+    execute: ({ spotId }) =>
+      SpotId(spotId).asyncAndThen((spotId) =>
         spotRepository
           .findArchivedSpotById(spotId)
           .andThen((archivedSpot) =>

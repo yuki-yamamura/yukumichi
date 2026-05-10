@@ -1,4 +1,4 @@
-import { ok } from "neverthrow";
+import { okAsync } from "neverthrow";
 
 import { generateSpotId, Spot } from "@/domain/spot/models/spot";
 
@@ -26,7 +26,7 @@ export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): Cr
     execute: ({ description, ...rest }) => {
       return Spot({ description: description ?? null, id: generateSpotId(), ...rest })
         .asyncAndThen((spot) => spotRepository.create(spot))
-        .andThen(() => ok());
+        .andThen(() => okAsync());
     },
   };
 }
