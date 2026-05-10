@@ -1,10 +1,6 @@
 import { fetchClient } from "@/libs/hono";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
-
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps<"/spots/[id]">) {
   const { id } = await params;
   const response = await fetchClient.spots[":spotId"].$get({
     param: {
