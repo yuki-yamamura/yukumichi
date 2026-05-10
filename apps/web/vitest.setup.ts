@@ -4,7 +4,7 @@ import type { FormValidateAsyncFn, ServerFormState } from "@tanstack/react-form"
 import type { MockedFunction } from "vitest";
 import type z from "zod";
 
-import "@/libs/zod/config";
+import "@/lib/zod/config";
 
 expect.extend({
   toHaveBeenCalledWithFormData<

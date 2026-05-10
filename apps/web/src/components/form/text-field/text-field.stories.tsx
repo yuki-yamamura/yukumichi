@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { useAppForm } from "@/libs/tanstack-form/app-form";
+import { useAppForm } from "@/lib/tanstack-form/app-form";
 
 import preview from "#.storybook/preview";
 

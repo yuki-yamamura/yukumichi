@@ -1,4 +1,4 @@
-import type { fetchClient } from "@/libs/hono";
+import type { fetchClient } from "@/lib/hono";
 import type { InferRequestType, InferResponseType } from "hono";
 
 type Client = typeof fetchClient;

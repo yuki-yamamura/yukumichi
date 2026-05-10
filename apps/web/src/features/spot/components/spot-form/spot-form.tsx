@@ -5,7 +5,7 @@ import { mergeForm, useTransform } from "@tanstack/react-form-nextjs";
 import { SpinnerIcon } from "@/components/icons/spinner-icon";
 import { Button } from "@/components/ui/button";
 import { createSpotFormOptions } from "@/features/spot/form/spot-form";
-import { useAppForm } from "@/libs/tanstack-form/app-form";
+import { useAppForm } from "@/lib/tanstack-form/app-form";
 
 import type { SpotFormInput } from "@/features/spot/form/spot-form";
 import type { ServerFormState } from "@tanstack/react-form";

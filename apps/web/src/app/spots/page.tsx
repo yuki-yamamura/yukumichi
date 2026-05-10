@@ -1,5 +1,5 @@
 import { SpotList } from "@/features/spot/components/spot-list";
-import { fetchClient, toResult } from "@/libs/hono";
+import { fetchClient, toResult } from "@/lib/hono";
 
 export const dynamic = "force-dynamic";
 

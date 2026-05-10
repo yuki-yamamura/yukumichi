@@ -1,6 +1,6 @@
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useFieldContext } from "@/libs/tanstack-form/form-context";
+import { useFieldContext } from "@/lib/tanstack-form/form-context";
 
 import type { ComponentProps, PropsWithChildren } from "react";
 
