@@ -4,14 +4,16 @@ import { inject } from "vitest";
 
 import { createApp } from "@/app";
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
-import { base62Encode } from "@/presentation/schemas/id";
+import { base62Encode } from "@/presentation/helpers/id";
 import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
-import { createTestDatabase } from "@/test/database/helpers";
+import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
 import { createSpot } from "@/test/fixtures/spot";
 
+const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabase(databaseUrl);
-const app = createApp({ databaseUrl });
+const env = { APP_ENV: appEnv, DATABASE_URL: databaseUrl };
+const testDb = createTestDatabaseHelper(env);
+const app = createApp(env);
 const client = testClient(app);
 
 const spotA = createSpot();
@@ -36,7 +38,7 @@ afterAll(async () => {
 });
 
 describe("post /spots", () => {
-  it("should create a new spot and return created status", async () => {
+  it("should create a new spot and return 201 status code", async () => {
     // When
     const response = await client.spots.$post({
       json: {
@@ -50,7 +52,6 @@ describe("post /spots", () => {
     expect(response.status).toBe(201);
     expect(await response.text()).toBe("");
 
-    // Postcondition
     const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
     expect(rows).toHaveLength(3);
     expect(rows[0]).toEqual({
@@ -109,6 +110,30 @@ describe("patch /spots/:spotId", () => {
     // Then
     expect(response.status).toBe(204);
     expect(await response.text()).toBe("");
+
+    // Postcondition
+    const rows = await testDb.db.select().from(spots).orderBy(desc(spots.createdAt));
+    expect(rows).toHaveLength(2);
+
+    expect(rows[0]).toEqual({
+      createdAt: expect.any(Date),
+      description: spotB.description,
+      id: spotB.id,
+      latitude: spotB.coordinate.latitude,
+      longitude: spotB.coordinate.longitude,
+      name: spotB.name,
+      updatedAt: expect.any(Date),
+    });
+
+    expect(rows[1]).toEqual({
+      createdAt: expect.any(Date),
+      description: "Updated description",
+      id: expect.any(String),
+      latitude: 10,
+      longitude: 20,
+      name: "Updated name",
+      updatedAt: expect.any(Date),
+    });
   });
 });
 

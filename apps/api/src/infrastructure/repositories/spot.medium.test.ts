@@ -2,13 +2,14 @@ import { eq } from "drizzle-orm";
 import { inject } from "vitest";
 
 import { archivedSpots, spots } from "@/infrastructure/database/schema";
-import { createTestDatabase } from "@/test/database/helpers";
+import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { SpotRepository } from "./spot";
 
+const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabase(databaseUrl);
+const testDb = createTestDatabaseHelper({ APP_ENV: appEnv, DATABASE_URL: databaseUrl });
 const repository = SpotRepository(testDb.db);
 
 describe("SpotRepository", () => {
@@ -24,15 +25,7 @@ describe("SpotRepository", () => {
     it("should store a spot and return its id", async () => {
       // Given
       const id = createSpotId();
-      const spot = createSpot({
-        coordinate: createCoordinate({
-          latitude: 0,
-          longitude: 0,
-        }),
-        description: "A nice park to relax",
-        id,
-        name: "Test Park",
-      });
+      const spot = createSpot({ id });
 
       // When
       const result = await repository.create(spot);
@@ -275,6 +268,29 @@ describe("SpotRepository", () => {
         archivedAt,
         spotId: spot.id,
       });
+    });
+  });
+
+  describe("findArchivedSpotById", () => {
+    it("should return an archived spot by id", async () => {
+      // Given
+      const spot = createSpot();
+      const {
+        coordinate: { latitude, longitude },
+        description,
+        id,
+        name,
+      } = spot;
+      const archivedAt = new Date();
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
+      await testDb.db.insert(archivedSpots).values({ archivedAt, spotId: spot.id });
+
+      // When
+      const result = await repository.findArchivedSpotById(spot.id);
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual({ ...spot, archivedAt });
     });
   });
 });

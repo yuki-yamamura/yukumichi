@@ -7,12 +7,20 @@ import { Coordinate } from "./coordinate";
 import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
-export const SpotId = z.uuidv7().brand<"SpotId">();
+export const spotIdSchema = z.uuidv7().brand<"SpotId">();
 
-export type SpotId = z.infer<typeof SpotId>;
+export type SpotId = z.infer<typeof spotIdSchema>;
+
+export function SpotId(value: string): Result<SpotId, ValidationError> {
+  const result = spotIdSchema.safeParse(value);
+
+  return result.success
+    ? ok(result.data)
+    : err({ kind: "validation", message: result.error.message });
+}
 
 export function generateSpotId(): SpotId {
-  return SpotId.parse(uuidv7());
+  return spotIdSchema.parse(uuidv7());
 }
 
 export type Spot = Readonly<{
@@ -22,26 +30,19 @@ export type Spot = Readonly<{
   name: string;
 }>;
 
-export type ArchivedSpot = Spot &
-  Readonly<{
-    archivedAt: Date;
-  }>;
-
-type SpotParams = {
-  id: SpotId;
-  latitude: number;
-  longitude: number;
-  name: string;
-  description?: string | null;
-};
-
 export function Spot({
   description,
   id,
   latitude,
   longitude,
   name,
-}: SpotParams): Result<Spot, ValidationError> {
+}: {
+  description: string | null;
+  id: SpotId;
+  latitude: number;
+  longitude: number;
+  name: string;
+}): Result<Spot, ValidationError> {
   const coordinateResult = Coordinate({ latitude, longitude });
   if (coordinateResult.isErr()) {
     return err(coordinateResult.error);
@@ -49,11 +50,16 @@ export function Spot({
 
   return ok({
     coordinate: coordinateResult.value,
-    description: description ?? null,
+    description,
     id,
     name,
   });
 }
+
+export type ArchivedSpot = Spot &
+  Readonly<{
+    archivedAt: Date;
+  }>;
 
 export function archiveSpot(spot: Spot): ArchivedSpot {
   return {

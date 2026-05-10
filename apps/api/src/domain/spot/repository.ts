@@ -1,14 +1,14 @@
 import type { ArchivedSpot, Spot, SpotId } from "./models/spot";
-import type { ConflictError, DataIntegrityError, NotFoundError } from "@/domain/error";
-import type { Result } from "neverthrow";
+import type { DatabaseError, DataIntegrityError, NotFoundError } from "@/domain/error";
+import type { ResultAsync } from "neverthrow";
 
 export type SpotRepository = {
-  archive: (archivedSpot: ArchivedSpot) => Promise<Result<SpotId, ConflictError | NotFoundError>>;
-  create: (spot: Spot) => Promise<Result<SpotId, never>>;
+  archive: (archivedSpot: ArchivedSpot) => ResultAsync<SpotId, DatabaseError>;
+  create: (spot: Spot) => ResultAsync<SpotId, DatabaseError>;
   findArchivedSpotById: (
     id: SpotId,
-  ) => Promise<Result<ArchivedSpot, DataIntegrityError | NotFoundError>>;
-  findById: (id: SpotId) => Promise<Result<Spot, DataIntegrityError | NotFoundError>>;
-  findMany: () => Promise<Result<Spot[], DataIntegrityError>>;
-  update: (spot: Spot) => Promise<Result<Spot, DataIntegrityError | NotFoundError>>;
+  ) => ResultAsync<ArchivedSpot, DatabaseError | DataIntegrityError | NotFoundError>;
+  findById: (id: SpotId) => ResultAsync<Spot, DatabaseError | DataIntegrityError | NotFoundError>;
+  findMany: () => ResultAsync<Spot[], DatabaseError | DataIntegrityError>;
+  update: (spot: Spot) => ResultAsync<Spot, DatabaseError | DataIntegrityError | NotFoundError>;
 };

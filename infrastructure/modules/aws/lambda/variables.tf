@@ -9,6 +9,11 @@ variable "database_url" {
   sensitive   = true
 }
 
+variable "app_env" {
+  type        = string
+  description = "Application environment (e.g., development, production, test)"
+}
+
 variable "image_uri" {
   type        = string
   description = "ECR image URI for the Lambda function"

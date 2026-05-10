@@ -1,30 +1,24 @@
 import { zValidator as baseZodValidator } from "@hono/zod-validator";
 import z from "zod";
 
-import { toApiError, toHttpStatus } from "@/presentation/schemas/error";
+import { toApiError } from "@/presentation/helpers/error";
 
 import type { ValidationTargets } from "hono";
 import type { ZodType } from "zod";
 
-const _zValidator = <Target extends keyof ValidationTargets, Schema extends ZodType>(
+export function zValidator<Target extends keyof ValidationTargets, Schema extends ZodType>(
   target: Target,
   schema: Schema,
-) =>
-  baseZodValidator(target, schema, (result, context) => {
+) {
+  return baseZodValidator(target, schema, (result, context) => {
     if (!result.success) {
       return context.json(
         toApiError({
           kind: "validation",
           message: z.prettifyError(result.error),
         }),
-        toHttpStatus("VALIDATION_ERROR"),
+        400,
       );
     }
   });
-
-export function zValidator<Target extends keyof ValidationTargets, Schema extends ZodType>(
-  target: Target,
-  schema: Schema,
-): ReturnType<typeof _zValidator<Target, Schema>> {
-  return _zValidator(target, schema);
 }

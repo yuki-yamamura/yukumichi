@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
+import { toApiError, toHttpStatusCode } from "@/presentation/helpers/error";
 import { zValidator } from "@/presentation/middlewares/zod-validator";
-import { errorResponseSchema, toApiError, toHttpStatus } from "@/presentation/schemas/error";
+import { errorResponseSchema } from "@/presentation/schemas/error";
 import {
   createSpotRequestBodySchema,
   getSpotResponseSchema,
   listSpotsResponseSchema,
-  spotPathParamsSchema,
+  spotParamSchema,
   updateSpotRequestBodySchema,
 } from "@/presentation/schemas/spot";
 
@@ -25,14 +26,14 @@ type SpotRouteDeps = {
   updateSpotUsecase: UpdateSpotUsecase;
 };
 
-const _createSpotRoute = ({
+export function createSpotRoute({
   archiveSpotUsecase,
   createSpotUsecase,
   getSpotUsecase,
   listSpotsUsecase,
   updateSpotUsecase,
-}: SpotRouteDeps) =>
-  new Hono()
+}: SpotRouteDeps) {
+  return new Hono()
     .post(
       "/",
       describeRoute({
@@ -62,7 +63,7 @@ const _createSpotRoute = ({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -91,7 +92,7 @@ const _createSpotRoute = ({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -118,7 +119,7 @@ const _createSpotRoute = ({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
         const result = await getSpotUsecase.execute({ spotId });
@@ -128,7 +129,7 @@ const _createSpotRoute = ({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -156,7 +157,7 @@ const _createSpotRoute = ({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       zValidator("json", updateSpotRequestBodySchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
@@ -169,7 +170,7 @@ const _createSpotRoute = ({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
@@ -195,7 +196,7 @@ const _createSpotRoute = ({
         },
         tags: ["spots"],
       }),
-      zValidator("param", spotPathParamsSchema),
+      zValidator("param", spotParamSchema),
       async (context) => {
         const { spotId } = context.req.valid("param");
         const result = await archiveSpotUsecase.execute({ spotId });
@@ -205,12 +206,9 @@ const _createSpotRoute = ({
           (error) => {
             const apiError = toApiError(error);
 
-            return context.json(apiError, toHttpStatus(apiError.code));
+            return context.json(apiError, toHttpStatusCode(apiError.code));
           },
         );
       },
     );
-
-export function createSpotRoute(deps: SpotRouteDeps): ReturnType<typeof _createSpotRoute> {
-  return _createSpotRoute(deps);
 }

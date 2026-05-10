@@ -1,10 +1,10 @@
-import { err, ok } from "neverthrow";
+import { okAsync } from "neverthrow";
 
 import { generateSpotId, Spot } from "@/domain/spot/models/spot";
 
-import type { ValidationError } from "@/domain/error";
+import type { DatabaseError, ValidationError } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
-import type { Result } from "neverthrow";
+import type { ResultAsync } from "neverthrow";
 
 type CreateSpotUsecaseDeps = {
   spotRepository: SpotRepository;
@@ -18,20 +18,14 @@ type CreateSpotUsecaseInput = {
 };
 
 export type CreateSpotUsecase = {
-  execute: (input: CreateSpotUsecaseInput) => Promise<Result<void, ValidationError>>;
+  execute: (input: CreateSpotUsecaseInput) => ResultAsync<void, DatabaseError | ValidationError>;
 };
 
 export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): CreateSpotUsecase {
   return {
-    execute: async (input) => {
-      const spotResult = Spot({ id: generateSpotId(), ...input });
-      if (spotResult.isErr()) {
-        return err(spotResult.error);
-      }
-
-      const createResult = await spotRepository.create(spotResult.value);
-
-      return createResult.andThen(() => ok());
-    },
+    execute: ({ description, ...rest }) =>
+      Spot({ description: description ?? null, id: generateSpotId(), ...rest })
+        .asyncAndThen((spot) => spotRepository.create(spot))
+        .andThen(() => okAsync()),
   };
 }

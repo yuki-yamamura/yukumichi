@@ -1,5 +1,6 @@
 locals {
   environment = "production"
+  app_env     = "production"
   region      = "ap-northeast-1"
   db_name     = "sanpo"
   db_username = "sanpo"
@@ -78,6 +79,7 @@ module "lambda" {
   rds_security_group_id = module.rds.security_group_id
   image_uri             = "${module.ecr.repository_url}:latest"
   database_url          = "postgresql://${local.db_username}:${urlencode(data.aws_ssm_parameter.db_password.value)}@${module.rds.endpoint}/${local.db_name}"
+  app_env               = local.app_env
 }
 
 # -----------------------------------------------------------------------------

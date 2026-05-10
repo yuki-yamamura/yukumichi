@@ -97,6 +97,8 @@ export const baseConfig = [
         },
       ],
       "prefer-arrow-callback": "error",
+      "arrow-body-style": ["error", "as-needed"],
+      "no-nested-ternary": "error",
       "padding-line-between-statements": [
         "error",
         { blankLine: "always", prev: "export", next: "export" },
@@ -126,19 +128,6 @@ export const baseConfig = [
       ],
       "perfectionist/sort-named-imports": ["error"],
       "perfectionist/sort-named-exports": ["error"],
-    },
-  },
-  {
-    files: ["**/*.ts"],
-    rules: {
-      "@typescript-eslint/explicit-module-boundary-types": [
-        "error",
-        {
-          allowDirectConstAssertionInArrowFunctions: false,
-          allowHigherOrderFunctions: false,
-          allowTypedFunctionExpressions: false,
-        },
-      ],
     },
   },
   {

@@ -3,15 +3,16 @@ import postgres from "postgres";
 
 import * as schema from "./schema";
 
+import type { Env } from "@/env";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-export function createDatabase(url: string): PostgresJsDatabase<typeof schema> {
-  const ssl = url.includes("rds.amazonaws.com");
-  const sql = postgres(url, {
-    ssl: ssl ? { rejectUnauthorized: false } : false,
+export function createDatabase(env: Env): PostgresJsDatabase<typeof schema> {
+  const isSsl = env.APP_ENV === "production";
+  const sqlClient = postgres(env.DATABASE_URL, {
+    ssl: isSsl ? { rejectUnauthorized: false } : false,
   });
 
-  return drizzle(sql, { casing: "snake_case", schema });
+  return drizzle(sqlClient, { casing: "snake_case", schema });
 }
 
 export type Database = ReturnType<typeof createDatabase>;

@@ -1,8 +1,11 @@
-import { err, ok } from "neverthrow";
+import { faker } from "@faker-js/faker";
+import { errAsync, okAsync } from "neverthrow";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
 import { UpdateSpotUsecase } from "./update";
+
+import type { SpotRepository } from "@/domain/spot/repository";
 
 describe("UpdateSpotUsecase", () => {
   describe("execute", () => {
@@ -26,14 +29,10 @@ describe("UpdateSpotUsecase", () => {
         name: input.name,
       });
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn().mockResolvedValue(ok(existingSpot)),
-        findMany: vi.fn(),
-        update: vi.fn().mockResolvedValue(ok(updatedSpot)),
-      };
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(okAsync(existingSpot)),
+        update: vi.fn().mockReturnValue(okAsync(updatedSpot)),
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -56,14 +55,11 @@ describe("UpdateSpotUsecase", () => {
         name: "Updated Spot",
       };
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn().mockResolvedValue(err({ kind: "not_found", message: "Spot not found" })),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      const spotRepository = createSpotRepository({
+        findById: vi
+          .fn()
+          .mockReturnValue(errAsync({ kind: "not_found", message: "Spot not found" })),
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -73,10 +69,13 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: "Spot not found" });
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "not_found",
+        message: expect.any(String),
+      });
     });
 
-    it("should return a validation error for invalid coordinates", async () => {
+    it("should return a validation error when an input has an invalid value", async () => {
       // Given
       const existingSpot = createSpot();
       const input = {
@@ -87,14 +86,9 @@ describe("UpdateSpotUsecase", () => {
         name: "Updated Spot",
       };
 
-      const spotRepository = {
-        archive: vi.fn(),
-        create: vi.fn(),
-        findArchivedSpotById: vi.fn(),
-        findById: vi.fn().mockResolvedValue(ok(existingSpot)),
-        findMany: vi.fn(),
-        update: vi.fn(),
-      };
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(okAsync(existingSpot)),
+      });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
       });
@@ -104,7 +98,61 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "validation" });
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "validation",
+        message: expect.any(String),
+      });
+    });
+
+    it("should return a database error when the repository fails", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+      });
+      const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
+
+      // When
+      const result = await updateSpotUsecase.execute({
+        id: createSpotId(),
+        name: "Updated",
+      });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+    });
+
+    it("should return a data integrity error when the repository data is corrupted", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "data_integrity", message })),
+      });
+      const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
+
+      // When
+      const result = await updateSpotUsecase.execute({
+        id: createSpotId(),
+        name: "Updated",
+      });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
     });
   });
 });
+
+function createSpotRepository(overwrites: Partial<SpotRepository> = {}): SpotRepository {
+  const defaultRepository: SpotRepository = {
+    archive: vi.fn(),
+    create: vi.fn(),
+    findArchivedSpotById: vi.fn(),
+    findById: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+  };
+
+  return { ...defaultRepository, ...overwrites };
+}

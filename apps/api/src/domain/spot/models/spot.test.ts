@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import z from "zod";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
@@ -7,12 +8,13 @@ import { archiveSpot, generateSpotId, Spot, SpotId } from "./spot";
 describe("Spot", () => {
   it("should create a valid spot", () => {
     // Given
-    const id = createSpotId();
-    const coordinate = createCoordinate({ latitude: 0, longitude: 0 });
+    const spotId = createSpotId();
+    const coordinate = createCoordinate();
 
     // When
     const result = Spot({
-      id,
+      description: null,
+      id: spotId,
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
       name: "Test Park",
@@ -23,22 +25,26 @@ describe("Spot", () => {
     expect(result._unsafeUnwrap()).toEqual({
       coordinate,
       description: null,
-      id,
+      id: spotId,
       name: "Test Park",
     });
   });
 
-  it("should return a validation error when coordinates are invalid", () => {
+  it("should return a validation error when coordinate is invalid", () => {
     // Given
-    const params = {
-      id: createSpotId(),
-      latitude: faker.location.latitude(),
+    const spotId = createSpotId();
+    const coordinate = createCoordinate({
       longitude: 999, // Invalid longitude
-      name: faker.location.street(),
-    };
+    });
 
     // When
-    const result = Spot(params);
+    const result = Spot({
+      description: null,
+      id: spotId,
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      name: faker.location.street(),
+    });
 
     // Then
     expect(result.isErr()).toBe(true);
@@ -46,14 +52,39 @@ describe("Spot", () => {
   });
 });
 
-describe("generateSpotId", () => {
-  it("returns a valid SpotId each call", () => {
-    const first = generateSpotId();
-    const second = generateSpotId();
+describe("SpotId", () => {
+  it("should return the branded id when the input is a valid uuidv7", () => {
+    // Given
+    const value = faker.string.uuid({ version: 7 });
 
-    expect(first).not.toBe(second);
-    expect(SpotId.safeParse(first).success).toBe(true);
-    expect(SpotId.safeParse(second).success).toBe(true);
+    // When
+    const result = SpotId(value);
+
+    // Then
+    expect(result.isOk()).toBe(true);
+    expect(result._unsafeUnwrap()).toBe(value);
+  });
+
+  it("should return a validation error when the input is not a valid uuidv7", () => {
+    // When
+    const result = SpotId("not-a-uuid");
+
+    // Then
+    expect(result.isErr()).toBe(true);
+    expect(result._unsafeUnwrapErr()).toEqual({
+      kind: "validation",
+      message: expect.any(String),
+    });
+  });
+});
+
+describe("generateSpotId", () => {
+  it("should return a valid id", () => {
+    // When
+    const result = generateSpotId();
+
+    // Then
+    expect(z.uuidv7().safeParse(result).success).toBe(true);
   });
 });
 
@@ -66,7 +97,7 @@ describe("archiveSpot", () => {
     vi.useRealTimers();
   });
 
-  it("should return a spot with archivedAt set", () => {
+  it("should return an archived spot", () => {
     // Given
     const now = new Date("2026-03-29T00:00:00Z");
     vi.setSystemTime(now);
@@ -74,10 +105,10 @@ describe("archiveSpot", () => {
     const spot = createSpot();
 
     // When
-    const archivedSpot = archiveSpot(spot);
+    const result = archiveSpot(spot);
 
     // Then
-    expect(archivedSpot).toEqual({
+    expect(result).toEqual({
       ...spot,
       archivedAt: now,
     });

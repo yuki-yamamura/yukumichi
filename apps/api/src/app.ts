@@ -10,19 +10,16 @@ import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
-import { errorResponseSchema, toHttpStatus } from "@/presentation/schemas/error";
+import { errorResponseSchema } from "@/presentation/schemas/error";
 
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
 
-import type { ApiError } from "@/presentation/schemas/error";
+import type { ApiError } from "./presentation/types/error";
+import type { Env } from "@/env";
 import type { DescribeRouteOptions } from "hono-openapi";
 
-type AppDeps = {
-  databaseUrl: string;
-};
-
-const _createApp = ({ databaseUrl }: AppDeps) => {
-  const db = createDatabase(databaseUrl);
+export function createApp(env: Env) {
+  const db = createDatabase(env);
   const spotRepository = SpotRepository(db);
 
   const _app = new Hono();
@@ -40,7 +37,7 @@ const _createApp = ({ databaseUrl }: AppDeps) => {
         code: "UNKNOWN_ERROR",
         message: "Internal server error",
       },
-      toHttpStatus("UNKNOWN_ERROR"),
+      500,
     );
   });
 
@@ -86,10 +83,6 @@ const _createApp = ({ databaseUrl }: AppDeps) => {
   _app.get("/ui", swaggerUI({ url: "/doc" }));
 
   return app;
-};
-
-export type AppType = ReturnType<typeof _createApp>;
-
-export function createApp(deps: AppDeps): AppType {
-  return _createApp(deps);
 }
+
+export type AppType = ReturnType<typeof createApp>;

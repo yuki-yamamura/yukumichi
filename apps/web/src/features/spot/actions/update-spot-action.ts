@@ -9,7 +9,6 @@ import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot
 import type { SpotForm } from "@/features/spot/form/spot-form";
 import type { SpotItem } from "@/features/spot/types/api";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function updateSpotAction(
   spotId: SpotItem["id"],
   _previousState: unknown,
