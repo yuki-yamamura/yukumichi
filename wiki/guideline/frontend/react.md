@@ -13,7 +13,7 @@ You must follow this exact structure for all React components:
 "use client";
 
 // 2. External library imports (node_modules, runtime dependencies)
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // 3. Internal library imports with absolute path (@/)
 import { someUtil } from "@/lib/utils";
@@ -26,7 +26,7 @@ import type { SomeType } from "@/path/to/types";
 import type { PropsWithChildren } from "react";
 
 // 6. Style imports
-import styles from "./index.module.css";
+import styles from "./component-name.module.css";
 
 // 7. Props type definition
 type Props = PropsWithChildren<{
@@ -36,7 +36,6 @@ type Props = PropsWithChildren<{
 // 8. Component implementation (exported as named export)
 export function ComponentName({ name, children }: Props) {
   // 1. Hook calls
-  const [state, setState] = useState();
   const {
     data: { items },
     isLoading,
@@ -64,7 +63,7 @@ export function ComponentName({ name, children }: Props) {
 You must follow these component conventions:
 
 - Use early returns when possible instead of conditional rendering in JSX
-- Keep JSX as pure markup as much as possible, but use inline callback functions when it's simple (e.g. `(isOpen: boolean) => setIsOpen(true)`)
+- Keep JSX as pure markup as much as possible, but use inline callback functions when it's simple (e.g. `(isOpen: boolean) => setIsOpen(false)`)
 - Use named exports for components unless the library or framework requires default exports
 
 ## Props Conventions
@@ -111,7 +110,7 @@ type Props = {
   onOpenChange: (isOpen: boolean) => void;
 };
 
-export function DialogComponent({ onOpenChange }: Props) {
+export function SomeDialogComponent({ onOpenChange }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   //  ✅ Correct - Define handler outside JSX
@@ -134,16 +133,16 @@ Exception for loops and simple cases:
 //  ✅ Acceptable - Handler in loop
 {
   items.map((item) => (
-    <button key={item.id} type="button" onClick={() => handleItemClick(item.id)}>
+    <Button key={item.id} type="button" onClick={() => handleItemClick(item.id)}>
       {item.name}
-    </button>
+    </Button>
   ));
 }
 
 //  ✅ Acceptable - Extremely simple handler
-<button type="button" onClick={() => setIsOpen(true)}>
+<Button type="button" onClick={() => setIsOpen(true)}>
   Open
-</button>;
+</Button>;
 ```
 
 ## Directory Structure
@@ -152,17 +151,28 @@ You must follow these directory structure patterns:
 
 ### Standard Component Structure
 
-Place each component in its own directory with these files:
+Place each component in its own directory. The directory is exposed via a barrel `index.ts` that re-exports from a file named after the directory:
 
 ```
 component-name/
-├── index.tsx              # Component implementation
-├── index.module.css       # Component-specific styles
-├── index.test.ts          # Tests (if needed)
-├── use-xxx.ts             # Hooks only used in the component (if needed)
-└── child-component-name/  # Child component (if needed)
-    ├── index.tsx
-    └── index.module.css
+├── index.ts                       # Barrel file
+├── component-name.tsx             # Component implementation
+├── component-name.module.css      # Component-specific styles
+├── component-name.stories.tsx     # Storybook stories (if needed)
+├── component-name.test.tsx        # Tests (if needed)
+└── child-component-name/          # Child component (if needed, same pattern)
+    ├── index.ts
+    ├── child-component-name.tsx
+    ├── child-component-name.module.css
+    ├── child-component-name.stories.tsx
+    └── child-component-name.test.tsx
+```
+
+Barrel file:
+
+```ts
+// index.ts
+export { ComponentName } from "./component-name";
 ```
 
 ### Container/Presenter Pattern Structure
@@ -177,15 +187,17 @@ Directory structure:
 
 ```
 component-name/
-├── index.ts               # Barrel file
-├── container.tsx          # Component having async/await, executed in server-side
-├── presenter.tsx          # Component having `use client` directive, executed in the browser
-├── presenter.module.css   # Component-specific styles
-└── presenter.test.ts      # Tests (if needed)
-├── use-xxx.ts             # Hooks only used in the component (if needed)
-└── child-component-name/  # Child component (if needed)
-    ├── index.tsx
-    └── index.module.css
+├── index.ts                       # Barrel file
+├── container.tsx                  # Component having async/await, executed in server-side
+├── presenter.tsx                  # Component having `use client` directive, executed in the browser
+├── presenter.module.css           # Component-specific styles
+├── presenter.stories.tsx          # Storybook stories (if needed)
+├── presenter.test.tsx             # Tests (if needed)
+└── child-component-name/          # Child component (if needed, follows the standard pattern)
+    ├── index.ts
+    ├── child-component-name.tsx
+    ├── child-component-name.module.css
+    └── child-component-name.test.tsx
 ```
 
 Example implementation:
@@ -194,10 +206,10 @@ Example implementation:
 // container.tsx - Server Component
 import { UserProfilePresenter } from "./presenter";
 
-import type { User } from "@/features/account/types";
+import type { UserId } from "@/features/account/types/api";
 
 type Props = {
-  userId: User["id"];
+  userId: UserId;
 };
 
 export async function UserProfileContainer({ userId }: Props) {
@@ -211,7 +223,7 @@ export async function UserProfileContainer({ userId }: Props) {
 // presenter.tsx - Client Component
 "use client";
 
-import type { User } from "@/features/account/types";
+import type { User } from "@/features/account/types/api";
 
 import styles from "./presenter.module.css";
 
@@ -247,17 +259,17 @@ import { cva } from "class-variance-authority";
 
 import type { VariantProps } from "class-variance-authority";
 
-import styles from "./index.module.css";
+import styles from "./tag.module.css";
 
 const tag = cva(styles.base, {
+  defaultVariants: {
+    variant: "primary",
+  },
   variants: {
     variant: {
       primary: styles.primary,
       secondary: styles.secondary,
     },
-  },
-  defaultVariants: {
-    variant: "primary",
   },
 });
 
@@ -269,12 +281,3 @@ export function Tag({ label, variant }: Props) {
   return <div className={tag({ variant })}>{label}</div>;
 }
 ```
-
-## Base UI Component Wrapper Pattern
-
-You must create wrapper components for Base UI primitives:
-
-- Create wrapper components for each Base UI primitive. Do not import Base UI components directly inside the components under `features` directory
-- Omit `className` from props types for components that apply project-specific styles
-- Apply project-specific CSS Module styles directly in wrapper components
-- Export with short names (e.g., `Root`, `Trigger`) because they are supposed to be imported wth namespace (e.g. `import * as Dialog from "@/components/dialog"`)
