@@ -123,7 +123,7 @@ You must acknowledge these information and use it like a map that tell you how t
 **Core API Architecture:**
 
 - Tactical DDD (Tactical Domain-Driven Design)
-- [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/): every fallible operation returns `Result<T, E>` (`neverthrow`), and pipelines compose with `.andThen` / `.map` so success and failure tracks stay separated end-to-end
+- [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 - RESTful API with OpenAPI generated from Zod schemas
 
 ### E2E
