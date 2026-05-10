@@ -2,7 +2,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 
 import preview from "#.storybook/preview";
 
-import { Textarea } from ".";
+import { Textarea } from "./textarea";
 
 const meta = preview.meta({
   component: Textarea,

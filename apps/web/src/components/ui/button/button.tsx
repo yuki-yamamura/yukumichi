@@ -7,7 +7,7 @@ import clsx from "clsx";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
-import styles from "./index.module.css";
+import styles from "./button.module.css";
 
 const button = cva(styles.base, {
   defaultVariants: {

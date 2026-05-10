@@ -4,7 +4,7 @@ import { useAppForm } from "@/libs/tanstack-form";
 
 import preview from "#.storybook/preview";
 
-import { TextField } from ".";
+import { TextField } from "./text-field";
 
 import type { Decorator } from "@storybook/nextjs-vite";
 

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 
 import { spotFormSchema } from "@/features/spot/form/spot-form";
 
-import { SpotForm } from ".";
+import { SpotForm } from "./spot-form";
 
 import type { UserEvent } from "@testing-library/user-event";
 

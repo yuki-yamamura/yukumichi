@@ -2,7 +2,7 @@ import { createSpot } from "@/test/fixtures/spot";
 
 import preview from "#.storybook/preview";
 
-import { UpdateSpotModal } from ".";
+import { UpdateSpotModal } from "./update-spot-modal";
 
 const meta = preview.meta({
   component: UpdateSpotModal,

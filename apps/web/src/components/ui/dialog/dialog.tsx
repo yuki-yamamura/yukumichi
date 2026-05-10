@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 import type { ComponentProps } from "react";
 
-import styles from "./index.module.css";
+import styles from "./dialog.module.css";
 
 function Dialog(props: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;

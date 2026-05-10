@@ -1,6 +1,6 @@
 import preview from "#.storybook/preview";
 
-import { CreateSpotForm } from ".";
+import { CreateSpotForm } from "./create-spot-form";
 
 const meta = preview.meta({
   component: CreateSpotForm,

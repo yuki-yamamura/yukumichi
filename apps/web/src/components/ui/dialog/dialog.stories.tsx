@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from ".";
+} from "./dialog";
 
 const meta = preview.meta({
   component: Dialog,

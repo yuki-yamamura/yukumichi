@@ -2,7 +2,7 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 
 import preview from "#.storybook/preview";
 
-import { Input } from ".";
+import { Input } from "./input";
 
 const meta = preview.meta({
   component: Input,

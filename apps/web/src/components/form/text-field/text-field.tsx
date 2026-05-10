@@ -1,16 +1,19 @@
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { useFieldContext } from "@/libs/tanstack-form";
 
-import styles from "./index.module.css";
+import type { ComponentProps, PropsWithChildren } from "react";
 
-type Props = {
+import styles from "./text-field.module.css";
+
+type Props = PropsWithChildren<{
   label: string;
   placeholder: string;
   required?: boolean;
-};
+}> &
+  Pick<ComponentProps<"input">, "inputMode">;
 
-export function TextareaField({ label, placeholder, required = false }: Props) {
+export function TextField({ inputMode, label, placeholder, required = false }: Props) {
   const field = useFieldContext<string>();
   const { errors, isDirty, isValid } = field.state.meta;
   const hasSubmitted = field.form.state.submissionAttempts > 0;
@@ -19,10 +22,12 @@ export function TextareaField({ label, placeholder, required = false }: Props) {
   return (
     <Field className={styles.base}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-      <Textarea
+      <Input
         id={field.name}
-        name={field.name}
+        type="text"
+        inputMode={inputMode}
         required={required}
+        name={field.name}
         value={field.state.value}
         aria-invalid={isInvalid}
         placeholder={placeholder}

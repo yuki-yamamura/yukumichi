@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import type { ComponentProps } from "react";
 
-import styles from "./index.module.css";
+import styles from "./label.module.css";
 
 type Props = ComponentProps<"label">;
 

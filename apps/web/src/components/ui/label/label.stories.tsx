@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 
 import preview from "#.storybook/preview";
 
-import { Label } from ".";
+import { Label } from "./label";
 
 const meta = preview.meta({
   component: Label,

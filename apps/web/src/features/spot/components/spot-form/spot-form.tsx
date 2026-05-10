@@ -10,7 +10,7 @@ import { useAppForm } from "@/libs/tanstack-form/use-app-form";
 import type { SpotFormInput } from "@/features/spot/form/spot-form";
 import type { ServerFormState } from "@tanstack/react-form";
 
-import styles from "./index.module.css";
+import styles from "./spot-form.module.css";
 
 type Props = {
   isPending: boolean;

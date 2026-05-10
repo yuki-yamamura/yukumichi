@@ -13,7 +13,7 @@ import {
   FieldSeparator,
   FieldSet,
   FieldTitle,
-} from ".";
+} from "./field";
 
 const meta = preview.meta({
   component: Field,

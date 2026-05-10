@@ -2,7 +2,7 @@ import { ChevronRightIcon, LoaderCircleIcon, MailIcon } from "lucide-react";
 
 import preview from "#.storybook/preview";
 
-import { Button } from ".";
+import { Button } from "./button";
 
 const meta = preview.meta({
   component: Button,

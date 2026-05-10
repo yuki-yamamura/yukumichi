@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
-import styles from "./index.module.css";
+import styles from "./field.module.css";
 
 function FieldSet({ className, ...props }: ComponentProps<"fieldset">) {
   return <fieldset data-slot="field-set" className={clsx(styles.fieldSet, className)} {...props} />;
