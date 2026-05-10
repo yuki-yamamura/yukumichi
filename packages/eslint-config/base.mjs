@@ -97,6 +97,8 @@ export const baseConfig = [
         },
       ],
       "prefer-arrow-callback": "error",
+      "arrow-body-style": ["error", "as-needed"],
+      "no-nested-ternary": "error",
       "padding-line-between-statements": [
         "error",
         { blankLine: "always", prev: "export", next: "export" },

@@ -9,8 +9,8 @@ import type { Database } from "@/infrastructure/database/client";
 
 export function SpotRepository(db: Database): SpotRepository {
   return {
-    archive: (archivedSpot) => {
-      return ResultAsync.fromPromise(
+    archive: (archivedSpot) =>
+      ResultAsync.fromPromise(
         db
           .insert(archivedSpots)
           .values({
@@ -20,13 +20,11 @@ export function SpotRepository(db: Database): SpotRepository {
           .returning({
             spotId: archivedSpots.spotId,
           }),
-        (error) => {
-          return error instanceof Error
+        (error) =>
+          error instanceof Error
             ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) };
-        },
-      ).andThen((rows) => ok(spotIdSchema.parse(rows[0].spotId)));
-    },
+            : { kind: "database" as const, message: String(error) },
+      ).andThen((rows) => ok(spotIdSchema.parse(rows[0].spotId))),
 
     create({ coordinate: { latitude, longitude }, description, id, name }) {
       return ResultAsync.fromPromise(
@@ -50,8 +48,8 @@ export function SpotRepository(db: Database): SpotRepository {
       ).andThen((rows) => ok(spotIdSchema.parse(rows[0].id)));
     },
 
-    findArchivedSpotById: (id: SpotId) => {
-      return ResultAsync.fromPromise(
+    findArchivedSpotById: (id: SpotId) =>
+      ResultAsync.fromPromise(
         db
           .select()
           .from(spots)
@@ -62,11 +60,11 @@ export function SpotRepository(db: Database): SpotRepository {
             ? { kind: "database" as const, message: error.message }
             : { kind: "database" as const, message: String(error) },
       )
-        .andThen((rows) => {
-          return rows.length === 0
+        .andThen((rows) =>
+          rows.length === 0
             ? err({ kind: "not_found" as const, message: `Archived spot not found: ${id}` })
-            : ok(rows[0]);
-        })
+            : ok(rows[0]),
+        )
         .andThen(({ archived_spots: archivedSpot, spots: spot }) =>
           SpotId(spot.id)
             .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }))
@@ -78,11 +76,10 @@ export function SpotRepository(db: Database): SpotRepository {
                 }))
                 .map((spot) => ({ ...spot, archivedAt: archivedSpot.archivedAt })),
             ),
-        );
-    },
+        ),
 
-    findById: (id: SpotId) => {
-      return ResultAsync.fromPromise(
+    findById: (id: SpotId) =>
+      ResultAsync.fromPromise(
         db
           .select()
           .from(spots)
@@ -111,11 +108,10 @@ export function SpotRepository(db: Database): SpotRepository {
                 message: error.message,
               })),
             ),
-        );
-    },
+        ),
 
-    findMany: () => {
-      return ResultAsync.fromPromise(
+    findMany: () =>
+      ResultAsync.fromPromise(
         db
           .select()
           .from(spots)
@@ -140,10 +136,9 @@ export function SpotRepository(db: Database): SpotRepository {
               ),
           ),
         ),
-      );
-    },
-    update: (spot) => {
-      return ResultAsync.fromPromise(
+      ),
+    update: (spot) =>
+      ResultAsync.fromPromise(
         db
           .update(spots)
           .set({
@@ -179,7 +174,6 @@ export function SpotRepository(db: Database): SpotRepository {
                 message: error.message,
               })),
             ),
-        );
-    },
+        ),
   };
 }

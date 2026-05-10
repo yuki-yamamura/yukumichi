@@ -23,10 +23,9 @@ export type CreateSpotUsecase = {
 
 export function CreateSpotUsecase({ spotRepository }: CreateSpotUsecaseDeps): CreateSpotUsecase {
   return {
-    execute: ({ description, ...rest }) => {
-      return Spot({ description: description ?? null, id: generateSpotId(), ...rest })
+    execute: ({ description, ...rest }) =>
+      Spot({ description: description ?? null, id: generateSpotId(), ...rest })
         .asyncAndThen((spot) => spotRepository.create(spot))
-        .andThen(() => okAsync());
-    },
+        .andThen(() => okAsync()),
   };
 }
