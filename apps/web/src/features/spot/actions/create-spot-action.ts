@@ -6,14 +6,13 @@ import { redirect } from "next/navigation";
 import { createSpot } from "@/features/spot/api/create-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
 
-import type { SpotForm } from "@/features/spot/form/spot-form";
-
 export async function createSpotAction(_previousState: unknown, formData: FormData) {
-  let values: SpotForm;
-
   try {
     const validatedData = await serverValidate(formData);
-    values = spotFormSchema.parse(validatedData);
+    const formValues = spotFormSchema.parse(validatedData);
+
+    await createSpot({ json: formValues });
+    redirect("/spots");
   } catch (error) {
     if (error instanceof ServerValidateError) {
       return error.formState;
@@ -21,9 +20,6 @@ export async function createSpotAction(_previousState: unknown, formData: FormDa
 
     throw error;
   }
-
-  await createSpot({ json: values });
-  redirect("/spots");
 }
 
 const serverValidate = createServerValidate({

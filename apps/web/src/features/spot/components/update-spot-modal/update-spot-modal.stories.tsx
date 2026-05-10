@@ -8,7 +8,7 @@ const meta = preview.meta({
   component: UpdateSpotModal,
   decorators: [
     (Story) => (
-      <div style={{ width: "390px" }}>
+      <div style={{ maxWidth: "400px" }}>
         <Story />
       </div>
     ),

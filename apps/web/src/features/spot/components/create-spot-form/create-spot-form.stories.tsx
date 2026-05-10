@@ -6,7 +6,7 @@ const meta = preview.meta({
   component: CreateSpotForm,
   decorators: [
     (Story) => (
-      <div style={{ width: "390px" }}>
+      <div style={{ maxWidth: "400px" }}>
         <Story />
       </div>
     ),
