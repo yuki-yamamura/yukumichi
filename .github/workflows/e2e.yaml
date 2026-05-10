@@ -24,6 +24,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
+      APP_ENV: test
       DATABASE_URL: postgres://sanpo:sanpo@localhost:5432/sanpo
       API_BASE_URL: http://localhost:3010
     steps:

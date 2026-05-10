@@ -15,14 +15,11 @@ import { errorResponseSchema } from "@/presentation/schemas/error";
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
 
 import type { ApiError } from "./presentation/types/error";
+import type { Env } from "@/env";
 import type { DescribeRouteOptions } from "hono-openapi";
 
-type AppDeps = {
-  databaseUrl: string;
-};
-
-export function createApp({ databaseUrl }: AppDeps) {
-  const db = createDatabase(databaseUrl);
+export function createApp(env: Env) {
+  const db = createDatabase(env);
   const spotRepository = SpotRepository(db);
 
   const _app = new Hono();

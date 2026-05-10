@@ -86,6 +86,7 @@ resource "aws_lambda_function" "this" {
   environment {
     variables = {
       DATABASE_URL = var.database_url
+      APP_ENV      = var.app_env
     }
   }
 

@@ -9,9 +9,11 @@ import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/s
 import { createTestDatabase } from "@/test/database/helpers";
 import { createSpot } from "@/test/fixtures/spot";
 
+const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabase(databaseUrl);
-const app = createApp({ databaseUrl });
+const env = { APP_ENV: appEnv, DATABASE_URL: databaseUrl };
+const testDb = createTestDatabase(env);
+const app = createApp(env);
 const client = testClient(app);
 
 const spotA = createSpot();

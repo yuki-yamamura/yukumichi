@@ -7,13 +7,12 @@ import type { TestProject } from "vitest/node";
 
 declare module "vitest" {
   export interface ProvidedContext {
+    appEnv: "development" | "production" | "test";
     databaseUrl: string;
   }
 }
 
-export default async function setup({
-  provide,
-}: TestProject): Promise<() => Promise<void>> {
+export default async function setup({ provide }: TestProject): Promise<() => Promise<void>> {
   const container = await new PostgreSqlContainer("postgres:17-alpine").start();
   const url = container.getConnectionUri();
 
@@ -24,6 +23,7 @@ export default async function setup({
   await client.end();
 
   provide("databaseUrl", url);
+  provide("appEnv", "test");
 
   return async (): Promise<void> => {
     await container.stop();

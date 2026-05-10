@@ -4,6 +4,7 @@ import postgres from "postgres";
 
 import * as schema from "@/infrastructure/database/schema";
 
+import type { Env } from "@/env";
 import type { Database } from "@/infrastructure/database/client";
 
 const tableNames = Object.values(schema)
@@ -16,8 +17,8 @@ type TestDatabase = {
   truncateTables: () => Promise<void>;
 };
 
-export function createTestDatabase(url: string): TestDatabase {
-  const client = postgres(url);
+export function createTestDatabase(env: Env): TestDatabase {
+  const client = postgres(env.DATABASE_URL);
   const db = drizzle(client, { casing: "snake_case", schema });
 
   return {
