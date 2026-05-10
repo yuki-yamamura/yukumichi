@@ -270,4 +270,27 @@ describe("SpotRepository", () => {
       });
     });
   });
+
+  describe("findArchivedSpotById", () => {
+    it("should return an archived spot by id", async () => {
+      // Given
+      const spot = createSpot();
+      const {
+        coordinate: { latitude, longitude },
+        description,
+        id,
+        name,
+      } = spot;
+      const archivedAt = new Date();
+      await testDb.db.insert(spots).values({ description, id, latitude, longitude, name });
+      await testDb.db.insert(archivedSpots).values({ archivedAt, spotId: spot.id });
+
+      // When
+      const result = await repository.findArchivedSpotById(spot.id);
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual({ ...spot, archivedAt });
+    });
+  });
 });

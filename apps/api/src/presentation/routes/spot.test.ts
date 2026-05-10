@@ -209,6 +209,28 @@ describe("createSpotRoute", () => {
       });
     });
 
+    it.each([[{ description: "" }], [{ latitude: 91 }], [{ longitude: 181 }], [{ name: "" }]])(
+      "should return 400 status code when body field is invalid: %o",
+      async (partialBody) => {
+        // Given
+        const spotRoute = createSpotRoute(createSpotRouteDeps());
+        const client = testClient(new Hono().route("/spots", spotRoute));
+
+        // When
+        const response = await client.spots[":spotId"].$patch({
+          json: partialBody,
+          param: { spotId: base62Encode(createSpotId()) },
+        });
+
+        // Then
+        expect(response.status).toBe(400);
+        expect(await response.json()).toEqual({
+          code: "VALIDATION_ERROR",
+          message: expect.any(String),
+        });
+      },
+    );
+
     it("should return 404 status code when a spot is not found", async () => {
       // Given
       const spotRoute = createSpotRoute(

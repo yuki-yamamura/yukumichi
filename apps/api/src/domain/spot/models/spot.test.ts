@@ -3,7 +3,7 @@ import z from "zod";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
-import { archiveSpot, generateSpotId, Spot } from "./spot";
+import { archiveSpot, generateSpotId, Spot, SpotId } from "./spot";
 
 describe("Spot", () => {
   it("should create a valid spot", () => {
@@ -49,6 +49,32 @@ describe("Spot", () => {
     // Then
     expect(result.isErr()).toBe(true);
     expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
+  });
+});
+
+describe("SpotId", () => {
+  it("should return the branded id when the input is a valid uuidv7", () => {
+    // Given
+    const value = faker.string.uuid({ version: 7 });
+
+    // When
+    const result = SpotId(value);
+
+    // Then
+    expect(result.isOk()).toBe(true);
+    expect(result._unsafeUnwrap()).toBe(value);
+  });
+
+  it("should return a validation error when the input is not a valid uuidv7", () => {
+    // When
+    const result = SpotId("not-a-uuid");
+
+    // Then
+    expect(result.isErr()).toBe(true);
+    expect(result._unsafeUnwrapErr()).toEqual({
+      kind: "validation",
+      message: expect.any(String),
+    });
   });
 });
 

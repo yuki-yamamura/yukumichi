@@ -80,10 +80,60 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toMatchObject({
+      expect(result._unsafeUnwrapErr()).toEqual({
         kind: "conflict",
         message: expect.any(String),
       });
+    });
+
+    it("should return a validation error when the spot id is invalid", async () => {
+      // Given
+      const spotRepository = createSpotRepository();
+      const archiveSpotUsecase = ArchiveSpotUsecase({ spotRepository });
+
+      // When
+      const result = await archiveSpotUsecase.execute({ spotId: "not-a-uuid" });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "validation",
+        message: expect.any(String),
+      });
+    });
+
+    it("should return a database error when the repository fails", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findArchivedSpotById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+      });
+      const archiveSpotUsecase = ArchiveSpotUsecase({ spotRepository });
+
+      // When
+      const result = await archiveSpotUsecase.execute({ spotId: createSpotId() });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+    });
+
+    it("should return a data integrity error when the repository data is corrupted", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findArchivedSpotById: vi
+          .fn()
+          .mockReturnValue(errAsync({ kind: "data_integrity", message })),
+      });
+      const archiveSpotUsecase = ArchiveSpotUsecase({ spotRepository });
+
+      // When
+      const result = await archiveSpotUsecase.execute({ spotId: createSpotId() });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
     });
   });
 });

@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { errAsync, okAsync } from "neverthrow";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
@@ -68,7 +69,10 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "not_found" });
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "not_found",
+        message: expect.any(String),
+      });
     });
 
     it("should return a validation error when an input has an invalid value", async () => {
@@ -94,7 +98,48 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toMatchObject({ kind: "validation" });
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "validation",
+        message: expect.any(String),
+      });
+    });
+
+    it("should return a database error when the repository fails", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+      });
+      const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
+
+      // When
+      const result = await updateSpotUsecase.execute({
+        id: createSpotId(),
+        name: "Updated",
+      });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+    });
+
+    it("should return a data integrity error when the repository data is corrupted", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "data_integrity", message })),
+      });
+      const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
+
+      // When
+      const result = await updateSpotUsecase.execute({
+        id: createSpotId(),
+        name: "Updated",
+      });
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
     });
   });
 });

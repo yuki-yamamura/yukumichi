@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { okAsync } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 
 import { createSpot } from "@/test/fixtures/spot";
 
@@ -52,6 +52,28 @@ describe("CreateSpotUsecase", () => {
         kind: "validation",
         message: expect.any(String),
       });
+    });
+
+    it("should return a database error when the repository fails", async () => {
+      // Given
+      const message = faker.lorem.sentence();
+      const spotRepository = createSpotRepository({
+        create: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+      });
+      const createSpotUsecase = CreateSpotUsecase({ spotRepository });
+
+      const input = {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+        name: faker.location.street(),
+      };
+
+      // When
+      const result = await createSpotUsecase.execute(input);
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
     });
   });
 });
