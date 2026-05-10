@@ -4,101 +4,16 @@ paths: "apps/api/src/presentation/**/*.ts"
 
 # Presentation Layer Guidelines
 
-The presentation layer is the HTTP boundary. It translates wire-format payloads into calls to the application layer and translates application results back into HTTP responses.
+## Mutation Responses
 
-See `architecture.md` for the layer overview, dependency direction, and the validation decision table.
+Create, update, and archive endpoints return `204 No Content` with an empty body. The frontend does not consume the response body for these operations, so returning the mutated resource adds wire weight and an unnecessary serialization path without value.
 
-## Request and Response Schemas
+## Error Code Contract
 
-Define Zod schemas under `apps/api/src/presentation/schemas/` and apply them via the project's `zValidator` wrapper at `@/presentation/middlewares/zod-validator`. The wrapper translates Zod validation failures into the project's `ApiError` shape with the correct HTTP status; do not import `@hono/zod-validator` directly outside the wrapper itself.
+`ApiError.code` is the public contract that the frontend branches on for user-facing message rendering. `ApiError.message` is for developer debugging only — the frontend must not display it. Treat `code` as a stable enum and `message` as free-form text that may change without coordination.
 
-Schemas must:
+Developer-written `message` strings (those constructed in `apps/api`, not forwarded from a lower layer) follow a small style rule for log readability:
 
-- Validate wire format (types, shapes, required fields).
-- Include range, length, and format constraints that belong to the definition of the value. When such a constraint is also enforced by the domain, import the shared schema or constant from the domain module rather than inlining the literal — the domain owns the definition.
-- Produce HTTP 400 with a field-level error path before any use case runs.
-
-Example:
-
-```typescript
-// apps/api/src/presentation/schemas/spot.ts
-import z from "zod";
-
-import { latitudeSchema, longitudeSchema } from "@/domain/spot/models/coordinate";
-
-export const createSpotRequestBodySchema = z.object({
-  name: z.string().min(1).max(100),
-  latitude: latitudeSchema,
-  longitude: longitudeSchema,
-});
-```
-
-## Error Translation
-
-Domain errors must not leak into HTTP responses. The application layer converts domain results into either a success DTO or an `ApplicationError`. Presentation then maps `ApplicationError` to an HTTP status via `toHttpStatus` in `apps/api/src/presentation/schemas/error.ts`.
-
-You must not:
-
-- Return a domain error type (e.g., `ValidationError` from `@/domain/error`) directly from a route handler.
-- Construct HTTP status codes inside the domain or application layer.
-
-You must:
-
-- Translate application errors to `ApiError` via `toApiError`.
-- Keep `toHttpStatus` cases ordered by ascending HTTP status for readability.
-
-## Error Messages
-
-Developer-written error `message` strings — those constructed anywhere in `apps/api` and passed through the `{ kind, message }` shape used by domain, application, and `ApiError` results — must follow these rules:
-
-- **Sentence case**: capitalize the first letter; leave the rest as ordinary prose.
-- **No trailing period**: messages are fragments, not sentences.
-- **Noun phrases for generic errors**: prefer a noun phrase that names the condition. Append context after a colon when an identifier or detail is helpful.
-
-This applies only to messages authored in this repository. Messages forwarded from a lower layer (`error.message` from a domain or library result) keep whatever form their source produced.
-
-Positive examples:
-
-```typescript
-return err({ kind: "not_found", message: `Spot not found: ${id}` });
-return err({ kind: "data_integrity", message: `Archived spot not found: ${id}` });
-return c.json({ code: "UNKNOWN_ERROR", message: "Internal server error" }, 500);
-```
-
-Negative examples:
-
-```typescript
-// Lowercase first letter
-return err({ kind: "not_found", message: `spot not found: ${id}` });
-
-// Trailing period
-return err({ kind: "not_found", message: `Spot not found: ${id}.` });
-```
-
-## Route Testing
-
-Routes are exercised in two layers, split by responsibility.
-
-### Small Tests (`routes/*.test.ts`)
-
-Construct the route with use cases mocked via `vi.fn()`, then assert one HTTP status code per test.
-
-- Mock every use case the route depends on. The handler must never reach a real use case implementation in this layer.
-- Mount the route under its production prefix when constructing the test client, so the client shape matches the production RPC type:
-
-  ```ts
-  const client = testClient(new Hono().route("/spots", spotRoute));
-  ```
-
-  Without the wrapper, `testClient(spotRoute)` exposes `client.index.*` because the route file declares relative paths and the prefix lives in `app.ts`.
-
-- Write one test per HTTP status code the route documents in `describeRoute`. Each test triggers exactly one status; do not bundle multiple statuses into a single case. This keeps the small-test set in lockstep with the OpenAPI response declarations.
-
-### Medium Tests (`routes/*.medium.test.ts`)
-
-Boot the full app via `createApp` against the testcontainers PostgreSQL provided by `globalSetup`, and exercise only the happy path of each endpoint.
-
-- Real database, real repositories, real use cases — only the connection URL is supplied externally via `inject("databaseUrl")`.
-- One happy-path test per endpoint. Validation failures, not-found, conflict, and internal errors are intentionally covered by small tests instead; medium tests must not duplicate them.
-- Truncate tables in `beforeEach` and close the connection in `afterAll`.
-- Each medium test asserts both the HTTP response and a database postcondition (rows present, archived, etc.) so the integration boundary is validated end-to-end.
+- Sentence case (capitalize first letter, plain prose otherwise).
+- No trailing period.
+- Prefer noun phrases for the condition; append context after a colon when an identifier helps.

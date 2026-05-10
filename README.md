@@ -23,3 +23,5 @@ docker compose up -d postgres                  # start Postgres in the backgroun
 pnpm --filter @sanpo/api db:migrate            # apply schema migrations
 pnpm --filter @sanpo/api dev                   # start the API on http://localhost:3010
 ```
+
+Swagger UI: <http://localhost:3010/ui>
