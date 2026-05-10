@@ -4,7 +4,9 @@ paths: "apps/api/src/**/*.test.ts"
 
 # Backend Testing Guidelines
 
-Tests come in two layers: **Small** (in-process, mocked dependencies) and **Medium** (real PostgreSQL via testcontainers, real adapters). Each architectural layer below specifies which test types apply and what they must cover.
+Tests come in two sizes following Google's test size taxonomy: **Small** (in-process, mocked dependencies, no I/O) and **Medium** (localhost-only, real PostgreSQL via testcontainers, real adapters). Each architectural layer below specifies which sizes apply and what they must cover.
+
+Reference: <https://testing.googleblog.com/2010/12/test-sizes.html>
 
 ## Presentation
 
