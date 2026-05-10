@@ -15,7 +15,7 @@ Reference: <https://testing.googleblog.com/2010/12/test-sizes.html>
 | Presentation | Small + Medium | Small: every declared HTTP status, with one 4xx case per validated field. Medium: one happy path per endpoint with a DB postcondition. |
 | Use Case     | Small          | Every error `kind` in `execute`'s return-type union, including pass-throughs from domain or repository.               |
 | Domain       | Small          | Every behavioral condition per pure function — success path, invariant violations, and boundary values.               |
-| Repository   | Medium         | Each public method's happy path, asserting the return value and (for mutations) the resulting database row state.     |
+| Repository   | Medium         | Each public method's happy path and any errors the repository itself produces (NotFound, Conflict, DataIntegrity). For mutations, assert the resulting database row state. |
 
 ## Presentation
 
@@ -39,4 +39,4 @@ One test per behavioral condition of each pure function. Cover the success path,
 
 ## Repository (`infrastructure/repositories/**/*.test.ts`)
 
-Medium tests only — repositories make no sense isolated from the database. Cover each public method's happy path, asserting the return value and, for mutating methods, the resulting database row state. Error paths are covered by the owning higher layer (use case small tests, route small tests).
+Medium tests only — repositories make no sense isolated from the database. Each public method covers its happy path plus the errors the repository itself produces: NotFound when a query returns no rows, Conflict on unique-constraint violations, DataIntegrity when a stored row fails to reconstruct as a domain object. For mutations, assert the resulting database row state. Errors that the repository merely propagates from the driver (e.g., DatabaseError) are not the repository's responsibility — they are exercised at the use case layer.

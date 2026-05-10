@@ -6,7 +6,10 @@
   "scripts": {
     "test": "playwright test",
     "lint": "eslint",
-    "check-types": "tsc --noEmit"
+    "lint:fix": "eslint --fix",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --check \"./**/*.{ts,json,md}\"",
+    "format:fix": "prettier --write \"./**/*.{ts,json,md}\""
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
@@ -14,6 +17,7 @@
     "@types/node": "24.11.0",
     "eslint": "catalog:",
     "eslint-plugin-playwright": "^2.10.1",
+    "prettier": "catalog:",
     "typescript": "catalog:"
   }
 }
