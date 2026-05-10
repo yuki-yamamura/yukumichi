@@ -20,9 +20,9 @@ Cover every HTTP status declared in the route's `describeRoute`. Mock every use 
 
 ## Use Case (`application/usecase/**/*.test.ts`)
 
-Small tests only — use cases are exercised end-to-end by presentation medium tests.
+Small tests only — presentation medium tests cover end-to-end paths.
 
-For every distinct `kind` in the `E` of `execute`'s return type `ResultAsync<T, E>`, the file must contain at least one case that asserts `result._unsafeUnwrapErr().kind === <kind>`. Coverage is measured against the type signature, not against where the error is constructed — errors that pass through unchanged from a domain factory or repository still count and must still be exercised.
+Every error `kind` in `execute`'s return-type union must be asserted by at least one test, including kinds that pass through unchanged from domain or repository.
 
 ## Domain (`domain/**/*.test.ts`)
 
