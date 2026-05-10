@@ -1,3 +1,5 @@
+@import url("@unocss/reset/tailwind-v4.css");
+
 :root {
   --background: oklch(100% 0 0deg);
   --foreground: oklch(25.54% 0.0212 66.6369deg);
@@ -118,15 +120,7 @@ body {
 }
 
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
   border-color: var(--border);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 @media (prefers-color-scheme: dark) {
