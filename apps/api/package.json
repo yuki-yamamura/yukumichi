@@ -23,8 +23,7 @@
     "lint:fix": "eslint --fix",
     "knip": "knip --directory ../.. --workspace @sanpo/api",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.11",

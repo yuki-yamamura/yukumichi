@@ -4,12 +4,13 @@ paths: "**/*.test.{ts,tsx}"
 
 # Testing Guidelines
 
-## Accurate Assertions
+## Accurate Tests
 
-Write the most specific assertion that captures the rule under test, but do not assert against values that are implementation details. The shape of a test should change only when the contract changes, never when arbitrary internals do.
+A test must verify the system's contract — the behavior it offers callers — not the implementation that happens to fulfill that contract today. Internals change without the contract changing; tests bound to internals decay.
 
-- Prefer property access over `toMatchObject` when verifying a single field. `expect(error.kind).toBe("not_found")` is sharper than `expect(error).toMatchObject({ kind: "not_found" })` — `toMatchObject` silently accepts extra unrelated fields and weakens the check.
-- Do not assert against fixture-generated random values (faker output, timestamps produced inside the system under test, etc.).
+- Cover both preconditions and postconditions. Confirm setup state before the action so the test is not silently dependent on shared state, and assert observable outcomes after (return value, persisted state, emitted events, etc.). A test that skips either side is incomplete.
+- Do not assert against implementation details: the order of internal calls, helper invocations, intermediate data structures, or values the system computes but does not promise.
+- Use `toEqual` (or your runner's equivalent strict-equality matcher) to verify object shapes. Avoid `toMatchObject` — it silently accepts extra unrelated fields and weakens the check.
 
 ## Test Fixtures
 
@@ -24,5 +25,3 @@ Each test is structured in three sections, in this order:
 - **Given**: declare all inputs, configure every mock or stub, and verify any precondition the test depends on. All preparation, including assertions on setup state, completes here.
 - **When**: invoke the system under test exactly once.
 - **Then**: assert the return value, side effects, and any postcondition.
-
-Anything that verifies *setup* rather than *result* belongs in Given. Example: a test that inserts a row and then asserts it is the only row present must verify "the table is empty" inside Given (before the insert), not after When alongside the post-insert assertion.
