@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import z from "zod";
 
 import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot";
 
@@ -57,7 +58,7 @@ describe("generateSpotId", () => {
     const result = generateSpotId();
 
     // Then
-    expect(result).toEqual(expect.any(String));
+    expect(z.uuidv7().safeParse(result).success).toBe(true);
   });
 });
 
