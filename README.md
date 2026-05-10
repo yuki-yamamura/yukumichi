@@ -1,14 +1,12 @@
 # Sanpo
 
-## Local Development
-
-### Prerequisites
+## Prerequisites
 
 - [mise](https://mise.jdx.dev/) — pins Node, pnpm, and other CLI versions (see `mise.toml`)
 - [Docker](https://docs.docker.com/get-docker/) — runs Postgres locally
 - Port `5432` free on the host
 
-### First-time setup
+## First-time setup
 
 ```sh
 mise install                                   # install pinned tool versions
@@ -16,7 +14,7 @@ pnpm install                                   # install workspace dependencies
 cp apps/api/.env.example apps/api/.env         # API env (DATABASE_URL)
 ```
 
-### Run the API
+## Run the API
 
 ```sh
 docker compose up -d postgres                  # start Postgres in the background

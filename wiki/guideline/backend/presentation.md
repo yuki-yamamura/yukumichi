@@ -6,7 +6,7 @@ paths: "apps/api/src/presentation/**/*.ts"
 
 ## Mutation Responses
 
-Create, update, and archive endpoints return `204 No Content` with an empty body. The frontend does not consume the response body for these operations, so returning the mutated resource adds wire weight and an unnecessary serialization path without value.
+Mutation endpoints respond with an empty body. Create returns `201 Created`; updates, archives, deletes, and similar mutations return `204 No Content`. The frontend does not consume the body for any of these, so serializing the mutated resource adds wire weight without value.
 
 ## Error Code Contract
 
