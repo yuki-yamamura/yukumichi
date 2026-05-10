@@ -1,6 +1,7 @@
 import { createFormHook } from "@tanstack/react-form";
 
-import { TextareaField, TextField } from "@/components/form";
+import { TextField } from "@/components/form/text-field";
+import { TextareaField } from "@/components/form/textarea-field";
 
 import { fieldContext, formContext } from "./use-field-context";
 
