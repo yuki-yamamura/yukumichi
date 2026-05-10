@@ -1,19 +1,24 @@
-import { fetchClient } from "@/libs/hono";
+import { notFound } from "next/navigation";
+
+import { fetchClient, toResult } from "@/libs/hono";
 
 export default async function Page({ params }: PageProps<"/spots/[id]">) {
   const { id } = await params;
-  const response = await fetchClient.spots[":spotId"].$get({
-    param: {
-      spotId: id,
-    },
-  });
-  const data = await response.json();
+  const result = await toResult(
+    fetchClient.spots[":spotId"].$get({
+      param: {
+        spotId: id,
+      },
+    }),
+  );
 
-  if ("code" in data) {
-    throw new Error("something went wrong");
+  if (result.isErr) {
+    if (result.error.code === "NOT_FOUND_ERROR") {
+      notFound();
+    }
+
+    throw new Error(result.error.message);
   }
 
-  const { spot } = data;
-
-  return <div>{spot.name}</div>;
+  return <div>{result.value.spot.name}</div>;
 }

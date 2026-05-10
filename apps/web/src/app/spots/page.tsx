@@ -1,14 +1,13 @@
 import { SpotList } from "@/features/spot/components/spot-list";
-import { fetchClient } from "@/libs/hono";
+import { fetchClient, toResult } from "@/libs/hono";
 
 export const dynamic = "force-dynamic";
 
 export default async function SpotsPage() {
-  const res = await fetchClient.spots.$get();
-  const data = await res.json();
+  const result = await toResult(fetchClient.spots.$get());
 
-  if ("code" in data) {
-    throw new Error(data.message);
+  if (result.isErr) {
+    throw new Error(result.error.message);
   }
 
   return (

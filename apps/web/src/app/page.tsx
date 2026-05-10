@@ -1,20 +1,19 @@
-import { fetchClient } from "@/libs/hono";
+import { fetchClient, toResult } from "@/libs/hono";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const response = await fetchClient.spots.$get();
-  const data = await response.json();
+  const result = await toResult(fetchClient.spots.$get());
 
-  if ("code" in data) {
-    throw new Error(data.message);
+  if (result.isErr) {
+    throw new Error(result.error.message);
   }
 
   return (
     <main>
       <h1>Sanpo v0.2.0</h1>
       <ul>
-        {data.spots.map((spot) => (
+        {result.value.spots.map((spot) => (
           <li key={spot.id}>{spot.name}</li>
         ))}
       </ul>

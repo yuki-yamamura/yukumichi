@@ -7,10 +7,10 @@ import { updateSpot } from "@/features/spot/api/update-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
 
 import type { SpotForm } from "@/features/spot/form/spot-form";
-import type { SpotItem } from "@/features/spot/types/api";
+import type { SpotId } from "@/features/spot/types/api";
 
 export async function updateSpotAction(
-  spotId: SpotItem["id"],
+  spotId: SpotId,
   _previousState: unknown,
   formData: FormData,
 ) {

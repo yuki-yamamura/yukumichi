@@ -86,3 +86,5 @@ export function createApp(env: Env) {
 }
 
 export type AppType = ReturnType<typeof createApp>;
+
+export type { ApiError, ErrorCode } from "@/presentation/types/error";
