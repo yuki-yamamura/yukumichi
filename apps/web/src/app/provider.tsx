@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from "react";
 
-import "@/libs/zod";
+import "@/libs/zod/config";
 
 type Props = PropsWithChildren;
 

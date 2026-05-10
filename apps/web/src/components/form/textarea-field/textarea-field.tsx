@@ -1,6 +1,6 @@
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { useFieldContext } from "@/libs/tanstack-form";
+import { useFieldContext } from "@/libs/tanstack-form/form-context";
 
 import styles from "./textarea-field.module.css";
 

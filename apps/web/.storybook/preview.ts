@@ -1,6 +1,6 @@
 import { definePreview } from "@storybook/nextjs-vite";
 
-import "@/libs/zod";
+import "@/libs/zod/config";
 import "@/app/globals.css";
 
 export default definePreview({

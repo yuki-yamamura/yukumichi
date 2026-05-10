@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { customIssueParamsSchema } from "./custom-issue";
+import { customIssueParamsSchema } from "./schema";
 
 import type { $ZodErrorMap } from "zod/v4/core";
 
