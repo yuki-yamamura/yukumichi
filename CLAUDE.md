@@ -1,6 +1,6 @@
-# Project Maps
+# CLAUDE.md
 
-You must acknowledge these information and use it like a map that tell you how to walk with this project).
+You must acknowledge these information and use it like a map that tell you how to walk with this project.
 
 ## Project Structure
 
@@ -149,3 +149,11 @@ You must acknowledge these information and use it like a map that tell you how t
 | Cloud    | AWS (Lambda, RDS, ECR, VPC, SSM, CI roles) |
 | State    | S3 (remote state per environment)          |
 | Tooling  | mise (tool versions), lefthook (git hooks) |
+
+## Next.js
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+Before any Next.js work, find and read the relevant doc in `apps/web/node_modules/next/dist/docs/`. Your training data is outdated — the docs are the source of truth.
+
+<!-- END:nextjs-agent-rules -->

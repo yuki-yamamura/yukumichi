@@ -11,7 +11,8 @@
 ```sh
 mise install                                   # install pinned tool versions
 pnpm install                                   # install workspace dependencies
-cp apps/api/.env.example apps/api/.env         # API env (DATABASE_URL)
+cp apps/api/.env.example apps/api/.env         # API env
+cp apps/web/.env.example apps/web/.env         # Web env
 ```
 
 ## Run the API
@@ -23,3 +24,12 @@ pnpm --filter @sanpo/api dev                   # start the API on http://localho
 ```
 
 Swagger UI: <http://localhost:3010/ui>
+
+## Run the Web
+
+```sh
+pnpm --filter @sanpo/web dev                   # start Next.js on http://localhost:3000
+pnpm --filter @sanpo/web storybook             # start Storybook on http://localhost:6006
+```
+
+The web app talks to the API at `NEXT_PUBLIC_API_BASE_URL`, so make sure the API is running first.
