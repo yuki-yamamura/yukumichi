@@ -108,18 +108,19 @@ When components must layer above others (modals, headers, tooltips, etc.):
 
 - Define z-index values as CSS custom properties in global styles
 - Components reference these variables instead of hardcoding numbers
+- shadcn/ui unifies every floating layer at `z-50`; this project follows the same convention. Do not subdivide the overlay band per primitive (modal vs. popover vs. tooltip) — rely on Base UI portal source order to resolve stacking between them.
 
 ```css
 /* In global CSS */
 :root {
-  --z-index-header: 100;
-  --z-index-modal: 200;
-  --z-index-tooltip: 300;
+  --z-index-sticky: 10; /* header / sticky sidebar, etc. (in normal flow) */
+  --z-index-overlay: 50; /* all portaled overlays (modal/popover/dropdown/tooltip/sheet/drawer) */
+  --z-index-toast: 60; /* notifications that must sit above overlays */
 }
 
 /* In component CSS */
 .modal {
-  z-index: var(--z-index-modal);
+  z-index: var(--z-index-overlay);
 }
 ```
 
