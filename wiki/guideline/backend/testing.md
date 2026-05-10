@@ -8,6 +8,15 @@ Tests come in two sizes following Google's test size taxonomy: **Small** (in-pro
 
 Reference: <https://testing.googleblog.com/2010/12/test-sizes.html>
 
+## Summary
+
+| Layer        | Sizes          | Covers                                                                                                                |
+| ------------ | -------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Presentation | Small + Medium | Small: every declared HTTP status, with one 4xx case per validated field. Medium: one happy path per endpoint with a DB postcondition. |
+| Use Case     | Small          | Every error `kind` in `execute`'s return-type union, including pass-throughs from domain or repository.               |
+| Domain       | Small          | Every behavioral condition per pure function — success path, invariant violations, and boundary values.               |
+| Repository   | Medium         | Each public method's happy path, asserting the return value and (for mutations) the resulting database row state.     |
+
 ## Presentation
 
 ### Medium (`routes/*.medium.test.ts`)
