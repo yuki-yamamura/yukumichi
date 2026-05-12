@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { updateSpot } from "@/features/spot/api/update-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
+import { mustBeSuccess } from "@/utils/must-be-success";
 
 import type { SpotId } from "@/features/spot/types/api";
 
@@ -17,7 +18,7 @@ export async function updateSpotAction(
     const validatedData = await serverValidate(formData);
     const formValues = spotFormSchema.parse(validatedData);
 
-    await updateSpot({ json: formValues, param: { spotId } });
+    mustBeSuccess(await updateSpot({ json: formValues, param: { spotId } }));
     revalidatePath("/");
   } catch (error) {
     if (error instanceof ServerValidateError) {

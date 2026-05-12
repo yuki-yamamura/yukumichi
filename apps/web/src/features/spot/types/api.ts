@@ -10,6 +10,8 @@ export type SpotId = Spot["id"];
 
 export type Coordinate = Spot["coordinate"];
 
+export type GetSpotRequest = InferRequestType<(typeof fetchClient)["spots"][":spotId"]["$get"]>;
+
 export type CreateSpotRequest = InferRequestType<(typeof fetchClient)["spots"]["$post"]>;
 
 export type UpdateSpotRequest = InferRequestType<

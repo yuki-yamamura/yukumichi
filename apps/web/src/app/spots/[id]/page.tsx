@@ -1,25 +1,17 @@
 import { notFound } from "next/navigation";
 
-import { fetchClient } from "@/lib/hono/client";
-import { toResult } from "@/lib/hono/converter";
+import { getSpot } from "@/features/spot/api/get-spot";
+import { mustBeSuccess } from "@/utils/must-be-success";
 
 export default async function Page({ params }: PageProps<"/spots/[id]">) {
   const { id } = await params;
-  const result = await toResult(
-    fetchClient.spots[":spotId"].$get({
-      param: {
-        spotId: id,
-      },
-    }),
-  );
+  const result = await getSpot({ param: { spotId: id } });
 
-  if (result.isErr) {
-    if (result.error.code === "NOT_FOUND_ERROR") {
-      notFound();
-    }
-
-    throw new Error(result.error.message);
+  if (result.isErr && result.error.code === "NOT_FOUND_ERROR") {
+    notFound();
   }
 
-  return <div>{result.value.spot.name}</div>;
+  const { spot } = mustBeSuccess(result);
+
+  return <div>{spot.name}</div>;
 }
