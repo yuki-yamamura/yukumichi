@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { fetchClient, toResult } from "@/lib/hono";
+import { fetchClient } from "@/lib/hono/client";
+import { toResult } from "@/lib/hono/converter";
 
 export default async function Page({ params }: PageProps<"/spots/[id]">) {
   const { id } = await params;

@@ -1,4 +1,5 @@
-import { fetchClient, toResult } from "@/lib/hono";
+import { fetchClient } from "@/lib/hono/client";
+import { toResult } from "@/lib/hono/converter";
 
 export const dynamic = "force-dynamic";
 

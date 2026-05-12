@@ -1,4 +1,4 @@
-import type { fetchClient } from "@/lib/hono";
+import type { fetchClient } from "@/lib/hono/client";
 import type { InferRequestType, InferResponseType } from "hono";
 
 export type Spot = Extract<

@@ -1,4 +1,5 @@
-import { fetchClient, toResult } from "@/lib/hono";
+import { fetchClient } from "@/lib/hono/client";
+import { toResult } from "@/lib/hono/converter";
 
 import type { ListSpotsResponse } from "@/features/spot/types/api";
 
