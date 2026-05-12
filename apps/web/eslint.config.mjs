@@ -5,6 +5,7 @@ import { vitestConfig } from "@sanpo/eslint/vitest";
 import storybook from "eslint-plugin-storybook";
 import testingLibrary from "eslint-plugin-testing-library";
 import reactHooks from "eslint-plugin-react-hooks";
+import reactYouMightNotNeedAnEffect from "eslint-plugin-react-you-might-not-need-an-effect";
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
@@ -27,6 +28,7 @@ const eslintConfig = defineConfig([
     "vitest.setup.ts",
   ]),
   reactHooks.configs.flat["recommended-latest"],
+  reactYouMightNotNeedAnEffect.configs.strict,
   ...storybook.configs["flat/recommended"],
   {
     files: ["**/*.test.{ts,tsx}"],
