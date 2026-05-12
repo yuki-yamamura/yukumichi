@@ -206,11 +206,11 @@ importers:
         version: 4.3.6
     devDependencies:
       '@css-modules-kit/codegen':
-        specifier: ^0.10.0
-        version: 0.10.0(typescript@5.9.3)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.9.3)
       '@css-modules-kit/stylelint-plugin':
-        specifier: ^0.10.0
-        version: 0.10.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^1.2.0
+        version: 1.2.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)
       '@faker-js/faker':
         specifier: 'catalog:'
         version: 10.4.0
@@ -783,22 +783,22 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@css-modules-kit/codegen@0.10.0':
-    resolution: {integrity: sha512-46uKcCy3ynrdIFUQWxG1JVBHDyMLZxGxzxnx44bEq8xO0VrnQUj8XE94e0w+NV54/+FHE1wSv8WAYJAwWDpbNQ==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/codegen@1.2.0':
+    resolution: {integrity: sha512-ci9P4ASxbzqc+0fvf/8o+mO1RltsPx3IOQGLyuSKU3HwbuwGkUHGYcT7t29lAepffbvGKOYDg3jgXy2rYAkP1A==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=5.7.3'
 
-  '@css-modules-kit/core@0.10.0':
-    resolution: {integrity: sha512-zbBW07LHR0Nn88I9h0krsQ9EoSFRbd6UvzLUIP5dzXnbRg/34BtVx3l8gDiu2xsqMHm0iYHAbtvfUuu018cCgQ==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/core@1.2.0':
+    resolution: {integrity: sha512-7tHepbNrbb++1MvrjOPh4k5F9a888cZ11fJr+ObgI2ruS2Cr7jgibGPgc8WC3M0wN4OxXrLnGiX/pocOf9InTQ==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=5.7.3'
 
-  '@css-modules-kit/stylelint-plugin@0.10.0':
-    resolution: {integrity: sha512-UeRSKkau+9xpNpiyACI83U7xQlvNyqMOhbZRnEaBGqj9FykIsSSyF+uR7t9sbXYmroUZAZlN8ntGcbr0ce0E6w==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/stylelint-plugin@1.2.0':
+    resolution: {integrity: sha512-QGbzcerKB6WUYivpiPfwEkqGymacmK9wv7cVOswaXnQqdK+V0+OAEU0Wkb3NqkQyB9WzD8kzKuLCsXA/W3TNrQ==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
       stylelint: ^16.0.0 || ^17.0.0
 
@@ -4946,6 +4946,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@3.3.12:
+    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   napi-postinstall@0.3.4:
     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -5233,6 +5238,10 @@ packages:
 
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.5.14:
+    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
     engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.8:
@@ -7206,23 +7215,23 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@css-modules-kit/codegen@0.10.0(typescript@5.9.3)':
+  '@css-modules-kit/codegen@1.2.0(typescript@5.9.3)':
     dependencies:
-      '@css-modules-kit/core': 0.10.0(typescript@5.9.3)
+      '@css-modules-kit/core': 1.2.0(typescript@5.9.3)
       chokidar: 4.0.3
       typescript: 5.9.3
 
-  '@css-modules-kit/core@0.10.0(typescript@5.9.3)':
+  '@css-modules-kit/core@1.2.0(typescript@5.9.3)':
     dependencies:
-      postcss: 8.5.8
-      postcss-safe-parser: 7.0.1(postcss@8.5.8)
+      postcss: 8.5.14
+      postcss-safe-parser: 7.0.1(postcss@8.5.14)
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
       typescript: 5.9.3
 
-  '@css-modules-kit/stylelint-plugin@0.10.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)':
+  '@css-modules-kit/stylelint-plugin@1.2.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@css-modules-kit/core': 0.10.0(typescript@5.9.3)
+      '@css-modules-kit/core': 1.2.0(typescript@5.9.3)
       stylelint: 17.6.0(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
@@ -10015,7 +10024,7 @@ snapshots:
       '@next/eslint-plugin-next': 16.2.4
       eslint: 9.39.3(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0(eslint@9.39.3(jiti@2.6.1)))(eslint@9.39.3(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.39.3(jiti@2.6.1))
       eslint-plugin-import: 2.32.0(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.3(jiti@2.6.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.3(jiti@2.6.1))
       eslint-plugin-react: 7.37.5(eslint@9.39.3(jiti@2.6.1))
@@ -10049,7 +10058,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0(eslint@9.39.3(jiti@2.6.1)))(eslint@9.39.3(jiti@2.6.1)):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.39.3(jiti@2.6.1)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
@@ -10071,7 +10080,7 @@ snapshots:
     optionalDependencies:
       eslint: 9.39.3(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0(eslint@9.39.3(jiti@2.6.1)))(eslint@9.39.3(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.3(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.39.3(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -11183,6 +11192,8 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  nanoid@3.3.12: {}
+
   napi-postinstall@0.3.4: {}
 
   natural-compare@1.4.0: {}
@@ -11471,6 +11482,10 @@ snapshots:
   postcss-resolve-nested-selector@0.1.6:
     optional: true
 
+  postcss-safe-parser@7.0.1(postcss@8.5.14):
+    dependencies:
+      postcss: 8.5.14
+
   postcss-safe-parser@7.0.1(postcss@8.5.8):
     dependencies:
       postcss: 8.5.8
@@ -11480,15 +11495,21 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-sorting@10.0.0(postcss@8.5.8):
+  postcss-sorting@10.0.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.14
 
   postcss-value-parser@4.2.0: {}
 
   postcss@8.4.31:
     dependencies:
       nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  postcss@8.5.14:
+    dependencies:
+      nanoid: 3.3.12
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -12135,8 +12156,8 @@ snapshots:
 
   stylelint-order@8.1.1(stylelint@17.6.0(typescript@5.9.3)):
     dependencies:
-      postcss: 8.5.8
-      postcss-sorting: 10.0.0(postcss@8.5.8)
+      postcss: 8.5.14
+      postcss-sorting: 10.0.0(postcss@8.5.14)
       stylelint: 17.6.0(typescript@5.9.3)
 
   stylelint-scss@7.0.0(stylelint@17.6.0(typescript@5.9.3)):

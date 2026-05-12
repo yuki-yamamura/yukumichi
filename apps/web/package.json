@@ -42,8 +42,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@css-modules-kit/codegen": "^0.10.0",
-    "@css-modules-kit/stylelint-plugin": "^0.10.0",
+    "@css-modules-kit/codegen": "^1.2.0",
+    "@css-modules-kit/stylelint-plugin": "^1.2.0",
     "@faker-js/faker": "catalog:",
     "@opennextjs/cloudflare": "1.19.3",
     "@sanpo/eslint": "workspace:*",
