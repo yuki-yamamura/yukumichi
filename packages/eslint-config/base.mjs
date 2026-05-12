@@ -1,3 +1,4 @@
+import eslintComments from "@eslint-community/eslint-plugin-eslint-comments/configs";
 import { importX } from "eslint-plugin-import-x";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import perfectionist from "eslint-plugin-perfectionist";
@@ -11,6 +12,12 @@ export const typescriptConfig = tseslint.configs.strictTypeChecked;
 export const baseConfig = [
   jseslint.configs.recommended,
   eslintPluginUnicorn.configs.recommended,
+  eslintComments.recommended,
+  {
+    rules: {
+      "@eslint-community/eslint-comments/require-description": ["error", { ignore: [] }],
+    },
+  },
   {
     rules: {
       "unicorn/prevent-abbreviations": "off",

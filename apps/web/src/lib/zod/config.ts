@@ -30,8 +30,7 @@ const errorMap: $ZodErrorMap = (issue) => {
     case "custom": {
       const params = customIssueParamsSchema.safeParse(issue.params);
       if (params.success) {
-        // NOTE: Currently only one custom issue kind exists. The exhaustiveness check via `satisfies never` will fail compilation when a new kind is added.
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Currently only one custom issue kind exists. The exhaustiveness check via `satisfies never` will fail compilation when a new kind is added.
         if (params.data.kind === "invalid_float") {
           return { message: "数値を入力してください" };
         }
