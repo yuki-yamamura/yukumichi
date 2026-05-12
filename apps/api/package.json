@@ -30,6 +30,7 @@
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
     "@hono/zod-validator": "^0.7.6",
+    "@sanpo/shared": "workspace:*",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.1",
     "hono": "catalog:",

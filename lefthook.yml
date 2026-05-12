@@ -39,6 +39,19 @@ pre-commit:
       root: "apps/api/"
       glob: "*.ts"
       run: pnpm run test
+    # shared
+    - name: shared-format
+      root: "packages/shared/"
+      glob: "*.{ts,json,md}"
+      run: pnpm run format
+    - name: shared-lint
+      root: "packages/shared/"
+      glob: "*.ts"
+      run: pnpm run lint
+    - name: shared-check-types
+      root: "packages/shared/"
+      glob: "*.ts"
+      run: pnpm run check-types
     # infrastructure
     - name: infra-format
       root: "infrastructure/"

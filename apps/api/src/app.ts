@@ -1,4 +1,5 @@
 import { swaggerUI } from "@hono/swagger-ui";
+import { errorResponseSchema } from "@sanpo/shared/error";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { openAPIRouteHandler, resolver } from "hono-openapi";
@@ -10,12 +11,11 @@ import { ListSpotsUsecase } from "@/application/usecase/spot/list";
 import { createDatabase } from "@/infrastructure/database/client";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
-import { errorResponseSchema } from "@/presentation/schemas/error";
 
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
 
-import type { ApiError } from "./presentation/types/error";
 import type { Env } from "@/env";
+import type { ApiError } from "@sanpo/shared/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 export function createApp(env: Env) {
@@ -86,5 +86,3 @@ export function createApp(env: Env) {
 }
 
 export type AppType = ReturnType<typeof createApp>;
-
-export type { ApiError, ErrorCode } from "@/presentation/types/error";

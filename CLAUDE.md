@@ -27,9 +27,7 @@ You must acknowledge these information and use it like a map that tell you how t
 │   │   │   │   ├── routes/        # Hono route handlers
 │   │   │   │   ├── schemas/       # Zod request/response schemas
 │   │   │   │   ├── middlewares/   # Hono middlewares
-│   │   │   │   ├── helpers/       # Handler helpers (error mapping, id parsing)
-│   │   │   │   ├── types/         # Presentation-layer types
-│   │   │   │   └── constants/     # Presentation-layer constants
+│   │   │   │   └── helpers/       # Handler helpers (error mapping, id parsing)
 │   │   │   ├── infrastructure/    # DDD Infrastructure Layer: external service implementations
 │   │   │   │   ├── database/      # Drizzle client and schema
 │   │   │   │   └── repositories/  # Repository implementations
@@ -43,7 +41,9 @@ You must acknowledge these information and use it like a map that tell you how t
 │       └── fixtures/              # Playwright fixtures
 │
 ├── packages/
-│   └── eslint-config/             # Shared ESLint / Prettier / Vitest configs
+│   ├── eslint-config/             # Shared ESLint / Prettier / Vitest configs
+│   └── shared/                    # Cross-app wire contracts (Zod schemas, error codes)
+│       └── src/                   # Subpath exports via `@sanpo/shared/<file>` (e.g. `@sanpo/shared/error`)
 │
 ├── infrastructure/                # Terraform IaC for AWS
 │   ├── environments/
@@ -87,6 +87,14 @@ You must acknowledge these information and use it like a map that tell you how t
 | Command                | Description                        |
 | ---------------------- | ---------------------------------- |
 | `pnpm run test`        | Run end-to-end tests (Playwright)  |
+| `pnpm run check-types` | Run TypeScript type checking (tsc) |
+| `pnpm run lint:fix`    | Fix linting issues (ESLint)        |
+| `pnpm run format:fix`  | Format code (Prettier)             |
+
+### Shared (`packages/shared/`)
+
+| Command                | Description                        |
+| ---------------------- | ---------------------------------- |
 | `pnpm run check-types` | Run TypeScript type checking (tsc) |
 | `pnpm run lint:fix`    | Fix linting issues (ESLint)        |
 | `pnpm run format:fix`  | Format code (Prettier)             |
