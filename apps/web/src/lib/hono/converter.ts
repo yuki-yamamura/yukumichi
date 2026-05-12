@@ -16,9 +16,13 @@ export async function toResult<T extends ClientResponse<unknown>>(
     // NOTE: `parseResponse` returns `undefined`, and it causes type mismatch from inferred type. So we need to fallback to `null` here.
     const data = (await parseResponse(promise)) ?? null;
 
+    // NOTE: `parseResponse` returns the body shape but cannot statically narrow it against the typed Hono response union. The assertion bridges the inferred body to the caller's success type.
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return ok(data as Exclude<InferResponseData<T>, ApiError>);
   } catch (error) {
     if (error instanceof DetailedError) {
+      // NOTE: `error.detail` is typed as `any` by Hono's DetailedError. We hand it to Zod for runtime validation.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const parsedError = errorResponseSchema.safeParse(error.detail?.data);
       if (parsedError.success) {
         return err(parsedError.data);

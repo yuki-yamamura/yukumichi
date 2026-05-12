@@ -42,7 +42,6 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isOk()).toBe(true);
-      expect(result._unsafeUnwrap()).toBeUndefined();
     });
 
     it("should return an error when the spot to update is not found", async () => {

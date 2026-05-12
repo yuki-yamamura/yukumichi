@@ -15,7 +15,7 @@ export function SpotRepository(db: Database): SpotRepository {
           .insert(archivedSpots)
           .values({
             archivedAt: archivedSpot.archivedAt,
-            spotId: archivedSpot.id as string,
+            spotId: archivedSpot.id,
           })
           .returning({
             spotId: archivedSpots.spotId,

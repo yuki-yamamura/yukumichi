@@ -17,27 +17,25 @@ const errorMap: $ZodErrorMap = (issue) => {
         return { message: "必ず入力してください" };
       }
       if (issue.origin === "number") {
-        return { message: `${issue.minimum}以上の数値を入力してください` };
+        return { message: `${String(issue.minimum)}以上の数値を入力してください` };
       }
       break;
     }
     case "too_big": {
       if (issue.origin === "number") {
-        return { message: `${issue.maximum}以下の数値を入力してください` };
+        return { message: `${String(issue.maximum)}以下の数値を入力してください` };
       }
       break;
     }
     case "custom": {
       const params = customIssueParamsSchema.safeParse(issue.params);
       if (params.success) {
-        switch (params.data.kind) {
-          case "invalid_float": {
-            return { message: "数値を入力してください" };
-          }
-          default: {
-            params.data.kind satisfies never;
-          }
+        // NOTE: Currently only one custom issue kind exists. The exhaustiveness check via `satisfies never` will fail compilation when a new kind is added.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (params.data.kind === "invalid_float") {
+          return { message: "数値を入力してください" };
         }
+        params.data.kind satisfies never;
       }
       break;
     }

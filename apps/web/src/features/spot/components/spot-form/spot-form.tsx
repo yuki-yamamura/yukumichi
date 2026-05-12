@@ -30,7 +30,14 @@ export function SpotForm({ action, defaultValues, isPending, onSubmit, serverFor
   });
 
   return (
-    <form noValidate action={action} onSubmit={form.handleSubmit} className={styles.base}>
+    <form
+      noValidate
+      action={action}
+      onSubmit={(event) => {
+        void form.handleSubmit(event);
+      }}
+      className={styles.base}
+    >
       <div className={styles.content}>
         <form.AppField name="name">
           {(field) => <field.TextField required label="Name" placeholder="Central Park" />}
@@ -65,7 +72,14 @@ export function SpotForm({ action, defaultValues, isPending, onSubmit, serverFor
         </form.AppField>
       </div>
       <div className={styles.actions}>
-        <Button type="reset" variant="outline" disabled={isPending} onClick={() => form.reset()}>
+        <Button
+          type="reset"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => {
+            form.reset();
+          }}
+        >
           Reset
         </Button>
         <Button type="submit" disabled={isPending}>

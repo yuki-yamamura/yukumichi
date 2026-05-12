@@ -26,7 +26,9 @@ export function TextareaField({ label, placeholder, required = false }: Props) {
         value={field.state.value}
         aria-invalid={isInvalid}
         placeholder={placeholder}
-        onChange={(e) => field.handleChange(e.target.value)}
+        onChange={(e) => {
+          field.handleChange(e.target.value);
+        }}
       />
       {isInvalid && <FieldError errors={errors} />}
     </Field>

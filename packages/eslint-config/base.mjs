@@ -6,7 +6,7 @@ import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
 import jseslint from "@eslint/js";
 
-export const typescriptConfig = tseslint.configs.recommended;
+export const typescriptConfig = tseslint.configs.strictTypeChecked;
 
 export const baseConfig = [
   jseslint.configs.recommended,
@@ -27,6 +27,11 @@ export const baseConfig = [
   },
   {
     files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
     plugins: {
       "import-x": importX,
       perfectionist,
@@ -81,6 +86,18 @@ export const baseConfig = [
           fixStyle: "separate-type-imports",
         },
       ],
+      "@typescript-eslint/consistent-type-assertions": [
+        "error",
+        { assertionStyle: "never" },
+      ],
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-ignore": true,
+          "ts-expect-error": "allow-with-description",
+        },
+      ],
+      "no-console": ["error", { allow: ["warn", "error"] }],
       "unused-imports/no-unused-imports": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",

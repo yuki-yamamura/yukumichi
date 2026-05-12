@@ -22,7 +22,9 @@ type Props = {
 export function UpdateSpotModal({ spot }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const closeModal = () => setIsOpen(false);
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

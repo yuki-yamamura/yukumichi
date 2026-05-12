@@ -1,4 +1,4 @@
-import { baseConfig } from "@sanpo/eslint/base";
+import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
 import { prettierConfig } from "@sanpo/eslint/prettier";
 import { vitestConfig } from "@sanpo/eslint/vitest";
 
@@ -11,6 +11,7 @@ import nextTypescript from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
   ...baseConfig,
+  ...typescriptConfig,
   ...nextCoreWebVitals,
   ...nextTypescript,
   globalIgnores([
@@ -18,6 +19,7 @@ const eslintConfig = defineConfig([
     ".open-next/**",
     "out/**",
     "build/**",
+    ".storybook/**",
     "next-env.d.ts",
     "generated/**",
     "storybook-static/**",

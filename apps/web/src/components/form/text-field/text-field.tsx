@@ -31,7 +31,9 @@ export function TextField({ inputMode, label, placeholder, required = false }: P
         value={field.state.value}
         aria-invalid={isInvalid}
         placeholder={placeholder}
-        onChange={(e) => field.handleChange(e.target.value)}
+        onChange={(e) => {
+          field.handleChange(e.target.value);
+        }}
       />
       {isInvalid && <FieldError errors={errors} />}
     </Field>

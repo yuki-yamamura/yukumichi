@@ -6,6 +6,6 @@ import { env } from "@/env";
 const app = createApp(env);
 
 serve({
-  ...app,
+  fetch: app.fetch,
   port: 3010,
 });
