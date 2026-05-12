@@ -18,10 +18,6 @@ export type UpdateSpotRequest = InferRequestType<
   (typeof fetchClient)["spots"][":spotId"]["$patch"]
 >;
 
-export type UpdateSpotResponse = InferResponseType<
-  (typeof fetchClient)["spots"][":spotId"]["$patch"]
->;
-
 export type ListSpotsResponse = Extract<
   InferResponseType<(typeof fetchClient)["spots"]["$get"]>,
   { spots: unknown[] }

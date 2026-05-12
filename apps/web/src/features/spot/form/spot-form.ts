@@ -34,6 +34,4 @@ export function createSpotFormOptions({
   });
 }
 
-export type SpotForm = z.infer<typeof spotFormSchema>;
-
 export type SpotFormInput = z.input<typeof spotFormSchema>;
