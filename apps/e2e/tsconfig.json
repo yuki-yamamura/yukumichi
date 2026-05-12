@@ -4,6 +4,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
+    "erasableSyntaxOnly": true,
+    "noUncheckedSideEffectImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
