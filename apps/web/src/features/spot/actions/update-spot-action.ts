@@ -8,12 +8,13 @@ import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot
 import { mustBeSuccess } from "@/utils/must-be-success";
 
 import type { SpotId } from "@/features/spot/types/api";
+import type { ServerFormState } from "@tanstack/react-form-nextjs";
 
 export async function updateSpotAction(
   spotId: SpotId,
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<ServerFormState<unknown, undefined> | undefined> {
   try {
     const validatedData = await serverValidate(formData);
     const formValues = spotFormSchema.parse(validatedData);

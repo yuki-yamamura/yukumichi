@@ -31,7 +31,7 @@ export function UpdateSpotForm({ onSubmit, spot }: Props) {
       defaultValues={defaultValues}
       isPending={isPending}
       action={action}
-      serverFormState={state}
+      formState={state}
       onSubmit={onSubmit}
     />
   );

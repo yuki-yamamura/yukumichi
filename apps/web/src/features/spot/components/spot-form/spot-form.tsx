@@ -15,17 +15,17 @@ import styles from "./spot-form.module.css";
 type Props = {
   isPending: boolean;
   defaultValues?: SpotFormInput;
-  serverFormState?: ServerFormState<unknown, undefined>;
+  formState?: ServerFormState<unknown, undefined>;
   action: (formData: FormData) => void;
   onSubmit?: () => void;
 };
 
-export function SpotForm({ action, defaultValues, isPending, onSubmit, serverFormState }: Props) {
+export function SpotForm({ action, defaultValues, formState, isPending, onSubmit }: Props) {
   const form = useAppForm({
     ...createSpotFormOptions({ defaultValues, onSubmit }),
     transform: useTransform(
-      (baseForm) => (serverFormState ? mergeForm(baseForm, serverFormState) : baseForm),
-      [serverFormState],
+      (baseForm) => (formState ? mergeForm(baseForm, formState) : baseForm),
+      [formState],
     ),
   });
 
