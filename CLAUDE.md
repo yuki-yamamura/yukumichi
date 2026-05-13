@@ -62,7 +62,7 @@ You must acknowledge these information and use it like a map that tell you how t
 | Command                | Description                                             |
 | ---------------------- | ------------------------------------------------------- |
 | `pnpm run dev`         | Start development server (Next.js)                      |
-| `pnpm run codegen:cmk` | Generate CSS Modules type definitions (css-modules-kit) |
+| `pnpm run codegen`     | Run all codegen (CSS Modules + Next.js route types)     |
 | `pnpm run check-types` | Run TypeScript type checking (tsc)                      |
 | `pnpm run lint:fix`    | Fix linting issues (ESLint, Stylelint)                  |
 | `pnpm run format:fix`  | Format code (Prettier)                                  |
