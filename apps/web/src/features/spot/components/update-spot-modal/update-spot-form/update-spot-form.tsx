@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function UpdateSpotForm({ onSubmit, spot }: Props) {
-  const [state, action, isPending] = useActionState(
+  const [formState, action, isPending] = useActionState(
     updateSpotAction.bind(null, spot.id),
     undefined,
   );
@@ -31,7 +31,7 @@ export function UpdateSpotForm({ onSubmit, spot }: Props) {
       defaultValues={defaultValues}
       isPending={isPending}
       action={action}
-      formState={state}
+      formState={formState}
       onSubmit={onSubmit}
     />
   );

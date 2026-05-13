@@ -8,14 +8,13 @@ import { SpotForm } from "./spot-form";
 import type { UserEvent } from "@testing-library/user-event";
 
 describe("SpotForm", () => {
-  let user: UserEvent;
+  const user: UserEvent = userEvent.setup();
   const actionSpy = vi.fn();
   const onSubmitSpy = vi.fn();
 
   beforeEach(() => {
     actionSpy.mockClear();
     onSubmitSpy.mockClear();
-    user = userEvent.setup();
   });
 
   it("can submit form with correct values", async () => {
@@ -76,6 +75,7 @@ describe("SpotForm", () => {
 
       // Then
       expect(onSubmitSpy).not.toHaveBeenCalledOnce();
+
       const errorMessage = await screen.findByRole("alert");
       expect(errorMessage).toHaveTextContent("必ず入力してください");
       expect(screen.getByLabelText("Name")).toBeInvalid();
@@ -94,6 +94,7 @@ describe("SpotForm", () => {
 
       // Then
       expect(onSubmitSpy).not.toHaveBeenCalledOnce();
+
       const errorMessage = await screen.findByRole("alert");
       expect(errorMessage).toHaveTextContent("必ず入力してください");
       expect(screen.getByLabelText("Latitude")).toBeInvalid();
@@ -112,6 +113,7 @@ describe("SpotForm", () => {
 
       // Then
       expect(onSubmitSpy).not.toHaveBeenCalledOnce();
+
       const errorMessage = await screen.findByRole("alert");
       expect(errorMessage).toHaveTextContent("必ず入力してください");
       expect(screen.getByLabelText("Longitude")).toBeInvalid();
