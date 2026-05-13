@@ -1,3 +1,5 @@
+@import url("@unocss/reset/tailwind-v4.css");
+
 :root {
   --background: oklch(100% 0 0deg);
   --foreground: oklch(25.54% 0.0212 66.6369deg);
@@ -57,7 +59,7 @@
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
-  --z-index-modal: 50;
+  --z-index-overlay: 50;
 
   @media (prefers-color-scheme: dark) {
     --background: oklch(16.07% 0.0054 67.432deg);
@@ -103,30 +105,10 @@
   }
 }
 
-html,
-body {
-  max-inline-size: 100vw;
-  overflow-x: hidden;
-}
-
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   color: var(--foreground);
   background: var(--background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  border-color: var(--border);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 @media (prefers-color-scheme: dark) {

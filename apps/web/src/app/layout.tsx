@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Provider } from "./provider";
 
 import type { Metadata } from "next";
+import type { PropsWithChildren } from "react";
 
 import "./globals.css";
 
@@ -21,13 +22,11 @@ export const metadata: Metadata = {
   title: "Create Next App",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type Props = PropsWithChildren;
+
+export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>{children}</Provider>
       </body>

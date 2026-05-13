@@ -1,16 +1,18 @@
-import { baseConfig } from "@sanpo/eslint/base";
+import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
 import { prettierConfig } from "@sanpo/eslint/prettier";
 import { vitestConfig } from "@sanpo/eslint/vitest";
 
 import storybook from "eslint-plugin-storybook";
 import testingLibrary from "eslint-plugin-testing-library";
 import reactHooks from "eslint-plugin-react-hooks";
+import reactYouMightNotNeedAnEffect from "eslint-plugin-react-you-might-not-need-an-effect";
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
   ...baseConfig,
+  ...typescriptConfig,
   ...nextCoreWebVitals,
   ...nextTypescript,
   globalIgnores([
@@ -18,11 +20,15 @@ const eslintConfig = defineConfig([
     ".open-next/**",
     "out/**",
     "build/**",
+    ".storybook/**",
     "next-env.d.ts",
     "generated/**",
     "storybook-static/**",
+    "vitest.d.ts",
+    "vitest.setup.ts",
   ]),
   reactHooks.configs.flat["recommended-latest"],
+  reactYouMightNotNeedAnEffect.configs.strict,
   ...storybook.configs["flat/recommended"],
   {
     files: ["**/*.test.{ts,tsx}"],

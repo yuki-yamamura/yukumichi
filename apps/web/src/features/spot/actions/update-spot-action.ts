@@ -5,20 +5,22 @@ import { revalidatePath } from "next/cache";
 
 import { updateSpot } from "@/features/spot/api/update-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
+import { mustBeSuccess } from "@/utils/must-be-success";
 
-import type { SpotForm } from "@/features/spot/form/spot-form";
-import type { SpotItem } from "@/features/spot/types/api";
+import type { SpotId } from "@/features/spot/types/api";
+import type { ServerFormState } from "@tanstack/react-form-nextjs";
 
 export async function updateSpotAction(
-  spotId: SpotItem["id"],
+  spotId: SpotId,
   _previousState: unknown,
   formData: FormData,
-) {
-  let values: SpotForm;
-
+): Promise<ServerFormState<unknown, undefined> | undefined> {
   try {
     const validatedData = await serverValidate(formData);
-    values = spotFormSchema.parse(validatedData);
+    const formValues = spotFormSchema.parse(validatedData);
+
+    mustBeSuccess(await updateSpot({ json: formValues, param: { spotId } }));
+    revalidatePath("/");
   } catch (error) {
     if (error instanceof ServerValidateError) {
       return error.formState;
@@ -26,9 +28,6 @@ export async function updateSpotAction(
 
     throw error;
   }
-
-  await updateSpot({ json: values, param: { spotId } });
-  revalidatePath("/");
 }
 
 const serverValidate = createServerValidate({

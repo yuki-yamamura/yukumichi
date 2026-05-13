@@ -1,13 +1,10 @@
-import { fetchClient } from "@/libs/hono";
+import { fetchClient } from "@/lib/hono/client";
+import { toResult } from "@/lib/hono/converter";
 
-import type { ListSpotsResponse } from "@/features/spot/types/api";
+import type { ListSpotsResponseData } from "@/features/spot/types/api";
+import type { Result } from "@/utils/result";
+import type { ApiError } from "@sanpo/shared/error";
 
-export async function listSpots(): Promise<ListSpotsResponse> {
-  const result = await fetchClient.spots.$get();
-  const data = await result.json();
-  if ("code" in data) {
-    throw new Error("Failed to fetch spots");
-  }
-
-  return data;
+export function listSpots(): Promise<Result<ListSpotsResponseData, ApiError>> {
+  return toResult(fetchClient.spots.$get());
 }

@@ -9,12 +9,24 @@ catalogs:
     '@faker-js/faker':
       specifier: ^10.4.0
       version: 10.4.0
+    '@types/node':
+      specifier: 24.11.0
+      version: 24.11.0
+    '@vitest/browser':
+      specifier: ^4.1.2
+      version: 4.1.2
+    '@vitest/browser-playwright':
+      specifier: ^4.1.2
+      version: 4.1.2
     '@vitest/eslint-plugin':
       specifier: ^1.6.13
       version: 1.6.13
     eslint:
       specifier: 9.39.3
       version: 9.39.3
+    hono:
+      specifier: ^4.12.5
+      version: 4.12.5
     knip:
       specifier: ^6.0.6
       version: 6.1.0
@@ -53,6 +65,9 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.7.6
         version: 0.7.6(hono@4.12.5)(zod@4.3.6)
+      '@sanpo/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -60,7 +75,7 @@ importers:
         specifier: ^0.45.1
         version: 0.45.1(@types/pg@8.18.0)(postgres@3.4.8)
       hono:
-        specifier: ^4.12.5
+        specifier: 'catalog:'
         version: 4.12.5
       hono-openapi:
         specifier: ^1.3.0
@@ -88,7 +103,7 @@ importers:
         specifier: ^11.13.0
         version: 11.13.0
       '@types/node':
-        specifier: 24.11.0
+        specifier: 'catalog:'
         version: 24.11.0
       '@types/pg':
         specifier: ^8.18.0
@@ -130,7 +145,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/eslint-config
       '@types/node':
-        specifier: 24.11.0
+        specifier: 'catalog:'
         version: 24.11.0
       eslint:
         specifier: 'catalog:'
@@ -156,6 +171,9 @@ importers:
       '@sanpo/api':
         specifier: workspace:*
         version: link:../api
+      '@sanpo/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@tanstack/react-form':
         specifier: ^1.29.1
         version: 1.29.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -169,7 +187,7 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       hono:
-        specifier: ^4.12.5
+        specifier: 'catalog:'
         version: 4.12.5
       lucide-react:
         specifier: ^1.7.0
@@ -188,11 +206,11 @@ importers:
         version: 4.3.6
     devDependencies:
       '@css-modules-kit/codegen':
-        specifier: ^0.10.0
-        version: 0.10.0(typescript@5.9.3)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.9.3)
       '@css-modules-kit/stylelint-plugin':
-        specifier: ^0.10.0
-        version: 0.10.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^1.2.0
+        version: 1.2.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)
       '@faker-js/faker':
         specifier: 'catalog:'
         version: 10.4.0
@@ -218,7 +236,7 @@ importers:
         specifier: ^14.6.1
         version: 14.6.1(@testing-library/dom@10.4.1)
       '@types/node':
-        specifier: 24.11.0
+        specifier: 'catalog:'
         version: 24.11.0
       '@types/react':
         specifier: 19.2.14
@@ -226,11 +244,14 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      '@unocss/reset':
+        specifier: ^66.6.8
+        version: 66.6.8
       '@vitest/browser':
-        specifier: ^4.1.2
+        specifier: 'catalog:'
         version: 4.1.2(vite@8.0.3(@types/node@24.11.0)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.1.2)
       '@vitest/browser-playwright':
-        specifier: ^4.1.2
+        specifier: 'catalog:'
         version: 4.1.2(playwright@1.59.1)(vite@8.0.3(@types/node@24.11.0)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.1.2)
       babel-plugin-react-compiler:
         specifier: 1.0.0
@@ -247,6 +268,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^7.0.1
         version: 7.0.1(eslint@9.39.3(jiti@2.6.1))
+      eslint-plugin-react-you-might-not-need-an-effect:
+        specifier: ^0.10.1
+        version: 0.10.1(eslint@9.39.3(jiti@2.6.1))
       eslint-plugin-storybook:
         specifier: ^10.3.5
         version: 10.3.5(eslint@9.39.3(jiti@2.6.1))(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)
@@ -301,6 +325,9 @@ importers:
 
   packages/eslint-config:
     dependencies:
+      '@eslint-community/eslint-plugin-eslint-comments':
+        specifier: ^4.7.1
+        version: 4.7.1(eslint@9.39.3(jiti@2.6.1))
       '@vitest/eslint-plugin':
         specifier: 'catalog:'
         version: 1.6.13(@typescript-eslint/eslint-plugin@8.57.2(@typescript-eslint/parser@8.57.2(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3)(vitest@4.1.2)
@@ -329,6 +356,25 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@9.39.3(jiti@2.6.1))
+
+  packages/shared:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 4.3.6
+    devDependencies:
+      '@sanpo/eslint':
+        specifier: workspace:*
+        version: link:../eslint-config
+      eslint:
+        specifier: 'catalog:'
+        version: 9.39.3(jiti@2.6.1)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
 
 packages:
 
@@ -743,22 +789,22 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@css-modules-kit/codegen@0.10.0':
-    resolution: {integrity: sha512-46uKcCy3ynrdIFUQWxG1JVBHDyMLZxGxzxnx44bEq8xO0VrnQUj8XE94e0w+NV54/+FHE1wSv8WAYJAwWDpbNQ==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/codegen@1.2.0':
+    resolution: {integrity: sha512-ci9P4ASxbzqc+0fvf/8o+mO1RltsPx3IOQGLyuSKU3HwbuwGkUHGYcT7t29lAepffbvGKOYDg3jgXy2rYAkP1A==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=5.7.3'
 
-  '@css-modules-kit/core@0.10.0':
-    resolution: {integrity: sha512-zbBW07LHR0Nn88I9h0krsQ9EoSFRbd6UvzLUIP5dzXnbRg/34BtVx3l8gDiu2xsqMHm0iYHAbtvfUuu018cCgQ==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/core@1.2.0':
+    resolution: {integrity: sha512-7tHepbNrbb++1MvrjOPh4k5F9a888cZ11fJr+ObgI2ruS2Cr7jgibGPgc8WC3M0wN4OxXrLnGiX/pocOf9InTQ==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
-      typescript: ^5.7.3
+      typescript: '>=5.7.3'
 
-  '@css-modules-kit/stylelint-plugin@0.10.0':
-    resolution: {integrity: sha512-UeRSKkau+9xpNpiyACI83U7xQlvNyqMOhbZRnEaBGqj9FykIsSSyF+uR7t9sbXYmroUZAZlN8ntGcbr0ce0E6w==}
-    engines: {node: '>=20.19.0'}
+  '@css-modules-kit/stylelint-plugin@1.2.0':
+    resolution: {integrity: sha512-QGbzcerKB6WUYivpiPfwEkqGymacmK9wv7cVOswaXnQqdK+V0+OAEU0Wkb3NqkQyB9WzD8kzKuLCsXA/W3TNrQ==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
       stylelint: ^16.0.0 || ^17.0.0
 
@@ -1273,6 +1319,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@eslint-community/eslint-plugin-eslint-comments@4.7.1':
+    resolution: {integrity: sha512-Ql2nJFwA8wUGpILYGOQaT1glPsmvEwE0d+a+l7AALLzQvInqdbXJdx7aSu0DpUX9dB1wMVBMhm99/++S3MdEtQ==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
   '@eslint-community/eslint-utils@4.9.1':
     resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
@@ -2780,6 +2832,9 @@ packages:
     resolution: {integrity: sha512-zhahknjobV2FiD6Ee9iLbS7OV9zi10rG26odsQdfBO/hjSzUQbkIYgda+iNKK1zNiW2ey+Lf8MU5btN17V3dUw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@unocss/reset@66.6.8':
+    resolution: {integrity: sha512-H+YP3ltizUiPO9FzFgFhv8WGsefO7fTgT1If1/9ritPDqZlvzTqMmjelhcq8D8MGoQ1RQBUvtkZ5HJoKVY0Tgw==}
+
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
     resolution: {integrity: sha512-ppLRUgHVaGRWUx0R0Ut06Mjo9gBaBkg3v/8AxusGLhsIotbBLuRk51rAzqLC8gq6NyyAojEXglNjzf6R948DNw==}
     cpu: [arm]
@@ -3896,6 +3951,12 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
+  eslint-plugin-react-you-might-not-need-an-effect@0.10.1:
+    resolution: {integrity: sha512-IK0s/+ShN0bkur5moKCu/lfx2D/9uIeozje8Wv2/XnYdmswa17pDg02aUuytEPb8Gf0eueiQFf/QsvOHHcvujg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      eslint: '>=8.40.0'
+
   eslint-plugin-react@7.37.5:
     resolution: {integrity: sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==}
     engines: {node: '>=4'}
@@ -4903,6 +4964,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@3.3.12:
+    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   napi-postinstall@0.3.4:
     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -5190,6 +5256,10 @@ packages:
 
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.5.14:
+    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
     engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.8:
@@ -7163,23 +7233,23 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@css-modules-kit/codegen@0.10.0(typescript@5.9.3)':
+  '@css-modules-kit/codegen@1.2.0(typescript@5.9.3)':
     dependencies:
-      '@css-modules-kit/core': 0.10.0(typescript@5.9.3)
+      '@css-modules-kit/core': 1.2.0(typescript@5.9.3)
       chokidar: 4.0.3
       typescript: 5.9.3
 
-  '@css-modules-kit/core@0.10.0(typescript@5.9.3)':
+  '@css-modules-kit/core@1.2.0(typescript@5.9.3)':
     dependencies:
-      postcss: 8.5.8
-      postcss-safe-parser: 7.0.1(postcss@8.5.8)
+      postcss: 8.5.14
+      postcss-safe-parser: 7.0.1(postcss@8.5.14)
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
       typescript: 5.9.3
 
-  '@css-modules-kit/stylelint-plugin@0.10.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)':
+  '@css-modules-kit/stylelint-plugin@1.2.0(stylelint@17.6.0(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@css-modules-kit/core': 0.10.0(typescript@5.9.3)
+      '@css-modules-kit/core': 1.2.0(typescript@5.9.3)
       stylelint: 17.6.0(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
@@ -7474,6 +7544,12 @@ snapshots:
 
   '@esbuild/win32-x64@0.27.3':
     optional: true
+
+  '@eslint-community/eslint-plugin-eslint-comments@4.7.1(eslint@9.39.3(jiti@2.6.1))':
+    dependencies:
+      escape-string-regexp: 4.0.0
+      eslint: 9.39.3(jiti@2.6.1)
+      ignore: 7.0.5
 
   '@eslint-community/eslint-utils@4.9.1(eslint@9.39.3(jiti@2.6.1))':
     dependencies:
@@ -8934,6 +9010,8 @@ snapshots:
       '@typescript-eslint/types': 8.57.2
       eslint-visitor-keys: 5.0.1
 
+  '@unocss/reset@66.6.8': {}
+
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
     optional: true
 
@@ -10126,6 +10204,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-plugin-react-you-might-not-need-an-effect@0.10.1(eslint@9.39.3(jiti@2.6.1)):
+    dependencies:
+      eslint: 9.39.3(jiti@2.6.1)
+      globals: 16.4.0
+
   eslint-plugin-react@7.37.5(eslint@9.39.3(jiti@2.6.1)):
     dependencies:
       array-includes: 3.1.9
@@ -11138,6 +11221,8 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  nanoid@3.3.12: {}
+
   napi-postinstall@0.3.4: {}
 
   natural-compare@1.4.0: {}
@@ -11426,6 +11511,10 @@ snapshots:
   postcss-resolve-nested-selector@0.1.6:
     optional: true
 
+  postcss-safe-parser@7.0.1(postcss@8.5.14):
+    dependencies:
+      postcss: 8.5.14
+
   postcss-safe-parser@7.0.1(postcss@8.5.8):
     dependencies:
       postcss: 8.5.8
@@ -11435,15 +11524,21 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-sorting@10.0.0(postcss@8.5.8):
+  postcss-sorting@10.0.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.14
 
   postcss-value-parser@4.2.0: {}
 
   postcss@8.4.31:
     dependencies:
       nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  postcss@8.5.14:
+    dependencies:
+      nanoid: 3.3.12
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -12090,8 +12185,8 @@ snapshots:
 
   stylelint-order@8.1.1(stylelint@17.6.0(typescript@5.9.3)):
     dependencies:
-      postcss: 8.5.8
-      postcss-sorting: 10.0.0(postcss@8.5.8)
+      postcss: 8.5.14
+      postcss-sorting: 10.0.0(postcss@8.5.14)
       stylelint: 17.6.0(typescript@5.9.3)
 
   stylelint-scss@7.0.0(stylelint@17.6.0(typescript@5.9.3)):

@@ -1,9 +1,9 @@
+import { errorResponseSchema } from "@sanpo/shared/error";
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
 import { toApiError, toHttpStatusCode } from "@/presentation/helpers/error";
 import { zValidator } from "@/presentation/middlewares/zod-validator";
-import { errorResponseSchema } from "@/presentation/schemas/error";
 import {
   createSpotRequestBodySchema,
   getSpotResponseSchema,

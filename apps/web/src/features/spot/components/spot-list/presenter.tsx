@@ -5,12 +5,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UpdateSpotModal } from "@/features/spot/components/update-spot-modal";
 
-import type { SpotItem } from "@/features/spot/types/api";
+import type { ListSpotsItem } from "@/features/spot/types/api";
 
 import styles from "./presenter.module.css";
 
 type Props = {
-  spots: SpotItem[];
+  spots: ListSpotsItem[];
 };
 
 export function SpotListPresenter({ spots }: Props) {

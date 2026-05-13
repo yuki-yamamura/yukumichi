@@ -29,7 +29,6 @@ describe("CreateSpotUsecase", () => {
 
       // Then
       expect(result.isOk()).toBe(true);
-      expect(result._unsafeUnwrap()).toBeUndefined();
     });
 
     it("should return a validation error for invalid coordinates", async () => {

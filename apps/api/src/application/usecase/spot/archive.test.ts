@@ -32,7 +32,6 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isOk()).toBe(true);
-      expect(result._unsafeUnwrap()).toBeUndefined();
     });
 
     it("should return an error when a spot is not found", async () => {

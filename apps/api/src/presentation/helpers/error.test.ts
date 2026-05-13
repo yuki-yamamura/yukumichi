@@ -1,6 +1,7 @@
 import { toApiError, toHttpStatusCode } from "./error";
 
-import type { ApiError, ErrorCode, ErrorKind } from "@/presentation/types/error";
+import type { ErrorKind } from "./error";
+import type { ApiError, ErrorCode } from "@sanpo/shared/error";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 describe("toApiError", () => {

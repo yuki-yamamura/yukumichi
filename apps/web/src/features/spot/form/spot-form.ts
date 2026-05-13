@@ -1,7 +1,7 @@
 import { formOptions } from "@tanstack/react-form";
 import { z } from "zod";
 
-import { createFloatSchema } from "@/libs/zod/schema";
+import { createFloatSchema } from "@/lib/zod/schema";
 
 export const spotFormSchema = z.object({
   description: z
@@ -33,7 +33,5 @@ export function createSpotFormOptions({
     },
   });
 }
-
-export type SpotForm = z.infer<typeof spotFormSchema>;
 
 export type SpotFormInput = z.input<typeof spotFormSchema>;

@@ -9,6 +9,8 @@ export const vitestConfig = {
   },
   rules: {
     ...vitest.configs.recommended.rules,
+    // NOTE: `expect.any(...)` and `await response.json()` return `any` by library design (vitest matchers, fetch). Tests routinely place these inside `toEqual` matchers, which would otherwise fire `no-unsafe-assignment` despite being safe placeholder use.
+    "@typescript-eslint/no-unsafe-assignment": "off",
     "vitest/consistent-test-it": ["error", { fn: "it" }],
     "vitest/consistent-each-for": [
       "error",

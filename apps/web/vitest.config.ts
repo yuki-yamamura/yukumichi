@@ -15,6 +15,7 @@ export default defineConfig({
       headless: true,
       instances: [{ browser: "chromium" }],
       provider: playwright(),
+      screenshotFailures: false,
     },
     globals: true,
     setupFiles: ["./vitest.setup.ts"],

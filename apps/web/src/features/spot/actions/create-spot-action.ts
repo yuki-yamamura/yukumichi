@@ -5,15 +5,20 @@ import { redirect } from "next/navigation";
 
 import { createSpot } from "@/features/spot/api/create-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
+import { mustBeSuccess } from "@/utils/must-be-success";
 
-import type { SpotForm } from "@/features/spot/form/spot-form";
+import type { ServerFormState } from "@tanstack/react-form-nextjs";
 
-export async function createSpotAction(_previousState: unknown, formData: FormData) {
-  let values: SpotForm;
-
+export async function createSpotAction(
+  _previousState: unknown,
+  formData: FormData,
+): Promise<ServerFormState<unknown, undefined>> {
   try {
     const validatedData = await serverValidate(formData);
-    values = spotFormSchema.parse(validatedData);
+    const formValues = spotFormSchema.parse(validatedData);
+
+    mustBeSuccess(await createSpot({ json: formValues }));
+    redirect("/spots");
   } catch (error) {
     if (error instanceof ServerValidateError) {
       return error.formState;
@@ -21,9 +26,6 @@ export async function createSpotAction(_previousState: unknown, formData: FormDa
 
     throw error;
   }
-
-  await createSpot({ json: values });
-  redirect("/spots");
 }
 
 const serverValidate = createServerValidate({

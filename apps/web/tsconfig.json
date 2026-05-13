@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "erasableSyntaxOnly": true,
+    "noUncheckedSideEffectImports": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -30,8 +32,10 @@
   },
   "include": [
     "next-env.d.ts",
+    "vitest.setup.ts",
     "vitest.d.ts",
     "src",
+    ".storybook",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

@@ -1,11 +1,10 @@
-import { fetchClient } from "@/libs/hono";
+import { fetchClient } from "@/lib/hono/client";
+import { toResult } from "@/lib/hono/converter";
 
 import type { CreateSpotRequest } from "@/features/spot/types/api";
+import type { Result } from "@/utils/result";
+import type { ApiError } from "@sanpo/shared/error";
 
-export async function createSpot(request: CreateSpotRequest): Promise<void> {
-  const res = await fetchClient.spots.$post(request);
-
-  if (!res.ok) {
-    throw new Error("Failed to create spot");
-  }
+export function createSpot(request: CreateSpotRequest): Promise<Result<null, ApiError>> {
+  return toResult(fetchClient.spots.$post(request));
 }

@@ -6,7 +6,8 @@
       "entry": ["src/server.ts", "src/lambda.ts"]
     },
     "apps/web": {
-      "entry": ["src/app/**/*.{ts,tsx}", "open-next.config.ts", "!src/app/**/*.test.*"]
+      "entry": ["src/app/**/*.{ts,tsx}", "open-next.config.ts", "!src/app/**/*.test.*"],
+      "ignoreDependencies": ["@unocss/reset"]
     }
   }
 }

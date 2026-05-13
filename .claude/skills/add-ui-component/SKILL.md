@@ -15,7 +15,7 @@ Before creating any component, read and follow the frontend guidelines:
 
 - `wiki/guideline/frontend/css.md` — CSS Modules conventions
 - `wiki/guideline/frontend/react.md` — React component structure and patterns
-- `wiki/guideline/frontend/typescript.md` — TypeScript naming and style rules
+- `wiki/guideline/typescript.md` — TypeScript naming and style rules
 
 ## Output Directory
 

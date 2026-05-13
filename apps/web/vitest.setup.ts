@@ -4,7 +4,7 @@ import type { FormValidateAsyncFn, ServerFormState } from "@tanstack/react-form"
 import type { MockedFunction } from "vitest";
 import type z from "zod";
 
-import "@/libs/zod";
+import "@/lib/zod/config";
 
 expect.extend({
   toHaveBeenCalledWithFormData<
@@ -12,7 +12,6 @@ expect.extend({
     Value extends z.infer<Schema>,
   >(
     action: MockedFunction<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (formData: FormData) => Promise<ServerFormState<Value, FormValidateAsyncFn<any>> | undefined>
     >,
     schema: Schema,
