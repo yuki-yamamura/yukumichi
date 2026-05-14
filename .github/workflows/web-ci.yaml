@@ -40,6 +40,7 @@ jobs:
       - run: pnpm --filter @sanpo/api run check-types
       - run: pnpm --filter @sanpo/web run check-types
       - run: pnpm --filter @sanpo/web run knip
+      - run: pnpm --filter @sanpo/e2e run knip
 
   test:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false

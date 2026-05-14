@@ -153,6 +153,9 @@ importers:
       eslint-plugin-playwright:
         specifier: ^2.10.1
         version: 2.10.1(eslint@9.39.3(jiti@2.6.1))
+      knip:
+        specifier: 'catalog:'
+        version: 6.1.0
       prettier:
         specifier: 'catalog:'
         version: 3.8.1

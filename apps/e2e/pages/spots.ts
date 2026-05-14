@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 
-export class SpotPage {
+export class SpotsPage {
   readonly #page: Page;
 
   constructor(page: Page) {
