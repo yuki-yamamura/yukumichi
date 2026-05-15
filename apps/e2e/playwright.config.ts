@@ -23,13 +23,13 @@ export default defineConfig({
     : [
         {
           command: "pnpm --filter api run dev",
-          url: "http://localhost:3010",
+          port: 3010,
           reuseExistingServer: true,
           timeout: 120_000,
         },
         {
           command: "pnpm --filter web run dev",
-          url: "http://localhost:3000",
+          port: 3000,
           reuseExistingServer: true,
           timeout: 120_000,
         },

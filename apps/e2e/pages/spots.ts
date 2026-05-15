@@ -1,3 +1,4 @@
+import type { SpotInput } from "@/pages/new-spot";
 import type { Locator, Page } from "@playwright/test";
 
 export class SpotsPage {
@@ -7,34 +8,39 @@ export class SpotsPage {
     this.#page = page;
   }
 
-  get nameInput(): Locator {
-    return this.#page.getByLabel("Name");
+  get heading(): Locator {
+    return this.#page.getByRole("heading", { name: "Spots" });
   }
 
-  get latitudeInput(): Locator {
-    return this.#page.getByLabel("Latitude");
+  spotListItem(name: string): Locator {
+    return this.#page
+      .getByRole("listitem")
+      .filter({ has: this.#page.getByRole("button", { exact: true, name }) });
   }
 
-  get longitudeInput(): Locator {
-    return this.#page.getByLabel("Longitude");
-  }
-
-  get submitButton(): Locator {
-    return this.#page.getByRole("button", { name: "Submit" });
+  editButton(name: string): Locator {
+    return this.spotListItem(name).getByRole("button", { name: "Edit" });
   }
 
   async goto(): Promise<void> {
     await this.#page.goto("/spots");
   }
 
-  async createSpot(name: string, latitude: number, longitude: number): Promise<void> {
-    await this.nameInput.fill(name);
-    await this.latitudeInput.fill(String(latitude));
-    await this.longitudeInput.fill(String(longitude));
-    await this.submitButton.click();
-  }
-
-  spotListItem(name: string): Locator {
-    return this.#page.getByRole("listitem").filter({ hasText: name });
+  async updateSpot(currentName: string, input: Partial<SpotInput>): Promise<void> {
+    await this.editButton(currentName).click();
+    const dialog = this.#page.getByRole("dialog");
+    if (input.name !== undefined) {
+      await dialog.getByRole("textbox", { name: "Name" }).fill(input.name);
+    }
+    if (input.latitude !== undefined) {
+      await dialog.getByRole("textbox", { name: "Latitude" }).fill(String(input.latitude));
+    }
+    if (input.longitude !== undefined) {
+      await dialog.getByRole("textbox", { name: "Longitude" }).fill(String(input.longitude));
+    }
+    if (input.description !== undefined) {
+      await dialog.getByRole("textbox", { name: "Description" }).fill(input.description);
+    }
+    await dialog.getByRole("button", { name: "Submit" }).click();
   }
 }
