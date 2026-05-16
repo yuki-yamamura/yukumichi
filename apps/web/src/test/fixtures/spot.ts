@@ -1,5 +1,7 @@
 import { faker, fakerJA } from "@faker-js/faker";
 
+import { createPublicId } from "@/test/fixtures/id";
+
 import type { Coordinate, Spot } from "@/features/spot/types/api";
 
 function createCoordinate(overrides?: Partial<Coordinate>): Coordinate {
@@ -18,7 +20,7 @@ export function createSpot(overrides?: Partial<Spot>): Spot {
   const spot: Spot = {
     coordinate: createCoordinate(),
     description: faker.lorem.sentence(),
-    id: faker.string.uuid({ version: 7 }),
+    id: createPublicId(),
     name: fakerJA.lorem.words(2),
   };
 

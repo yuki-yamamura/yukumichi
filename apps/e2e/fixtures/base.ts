@@ -1,13 +1,18 @@
 import { test as base } from "@playwright/test";
 
-import { SpotPage } from "@/pages/spot";
+import { NewSpotPage } from "@/pages/new-spot";
+import { SpotsPage } from "@/pages/spots";
 
 export { expect } from "@playwright/test";
 
 export const test = base.extend<{
-  spotPage: SpotPage;
+  newSpotPage: NewSpotPage;
+  spotsPage: SpotsPage;
 }>({
-  spotPage: async ({ page }, use) => {
-    await use(new SpotPage(page));
+  newSpotPage: async ({ page }, use) => {
+    await use(new NewSpotPage(page));
+  },
+  spotsPage: async ({ page }, use) => {
+    await use(new SpotsPage(page));
   },
 });

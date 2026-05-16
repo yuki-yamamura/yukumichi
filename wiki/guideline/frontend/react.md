@@ -177,6 +177,11 @@ export { ComponentName } from "./component-name";
 
 ### Container/Presenter Pattern Structure
 
+In this project the Container / Presenter pattern is reserved exclusively for separating a network boundary.
+That means the Container performs the data fetch (typically on the server via React Server Components) and the Presenter renders the result.
+
+Reference: <https://zenn.dev/akfm/books/nextjs-basic-principle/viewer/part_2_container_presentational_pattern>
+
 You must follow these naming conventions:
 
 - Use `{ComponentName}Container` for the container component in `container.tsx`

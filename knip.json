@@ -5,6 +5,9 @@
     "apps/api": {
       "entry": ["src/server.ts", "src/lambda.ts"]
     },
+    "apps/e2e": {
+      "entry": ["playwright.config.ts", "usecase/**/*.spec.ts"]
+    },
     "apps/web": {
       "entry": ["src/app/**/*.{ts,tsx}", "open-next.config.ts", "!src/app/**/*.test.*"],
       "ignoreDependencies": ["@unocss/reset"]

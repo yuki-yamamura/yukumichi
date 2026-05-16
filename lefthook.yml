@@ -75,6 +75,11 @@ pre-push:
       root: "apps/api/"
       glob: "*.ts"
       run: pnpm run knip
+    # e2e
+    - name: e2e-knip
+      root: "apps/e2e/"
+      glob: "*.ts"
+      run: pnpm run knip
     - name: web-storybook
       root: "apps/web/"
       glob: "*.{ts,tsx,css}"

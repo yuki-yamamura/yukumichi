@@ -123,7 +123,3 @@ When components must layer above others (modals, headers, tooltips, etc.):
   z-index: var(--z-index-overlay);
 }
 ```
-
-### Reference
-
-- [【CSS】z-indexは絶対数値で管理すると不幸になる](https://zenn.dev/catnose99/articles/2f1be29dd203c10dff01)
