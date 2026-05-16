@@ -24,3 +24,4 @@ catalog:
   "@types/node": 24.11.0
   zod: "^4.3.6"
   hono: ^4.12.5
+  msw: ^2.14.6
