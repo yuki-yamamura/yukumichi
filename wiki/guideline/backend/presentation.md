@@ -17,3 +17,7 @@ Developer-written `message` strings (those constructed in `apps/api`, not forwar
 - Sentence case (capitalize first letter, plain prose otherwise).
 - No trailing period.
 - Prefer noun phrases for the condition; append context after a colon when an identifier helps.
+
+## Imports from `domain`
+
+`presentation` may import values from `domain` only when the value is a Zod schema or branded constructor needed at the wire boundary (e.g. `latitudeSchema`, `spotIdSchema`). For anything else, import the type and keep behavior in the domain layer. `eslint-plugin-boundaries` allows value imports here but the convention is type-first.
