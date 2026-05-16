@@ -2,8 +2,8 @@ locals {
   environment = "production"
   app_env     = "production"
   region      = "ap-northeast-1"
-  db_name     = "sanpo"
-  db_username = "sanpo"
+  db_name     = "yukumichi"
+  db_username = "yukumichi"
 }
 
 # -----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ locals {
 # -----------------------------------------------------------------------------
 
 data "aws_ssm_parameter" "db_password" {
-  name = "/sanpo/production/db/password"
+  name = "/yukumichi/production/db/password"
 }
 
 # -----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ module "rds" {
   vpc_id             = module.vpc.id
   private_subnet_ids = module.vpc.private_subnet_ids
 
-  identifier     = "sanpo-db"
+  identifier     = "yukumichi-db"
   engine_version = "18.3"
   instance_class = "db.t4g.micro"
 
@@ -103,7 +103,7 @@ module "ci" {
   source = "../../modules/aws/ci"
 
   environment         = local.environment
-  github_repository   = "yuki-yamamura/sanpo"
+  github_repository   = "yuki-yamamura/yukumichi"
   ecr_repository_arn  = module.ecr.arn
   lambda_function_arn = module.lambda.arn
 }

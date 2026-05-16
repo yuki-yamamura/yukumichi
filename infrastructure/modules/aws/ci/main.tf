@@ -93,8 +93,8 @@ resource "aws_iam_role_policy" "this" {
           "s3:DeleteObject",
         ]
         Resource = [
-          "arn:aws:s3:::sanpo-terraform-state",
-          "arn:aws:s3:::sanpo-terraform-state/*",
+          "arn:aws:s3:::yukumichi-terraform-state",
+          "arn:aws:s3:::yukumichi-terraform-state/*",
         ]
       },
     ]
