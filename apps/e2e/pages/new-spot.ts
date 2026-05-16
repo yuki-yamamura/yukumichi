@@ -1,12 +1,5 @@
 import type { Locator, Page } from "@playwright/test";
 
-export type SpotInput = {
-  latitude: number;
-  longitude: number;
-  name: string;
-  description?: string;
-};
-
 export class NewSpotPage {
   readonly #page: Page;
 
