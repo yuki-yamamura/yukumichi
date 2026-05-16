@@ -2,6 +2,7 @@ import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
 import { prettierConfig } from "@sanpo/eslint/prettier";
 import { vitestConfig } from "@sanpo/eslint/vitest";
 
+import boundaries from "eslint-plugin-boundaries";
 import storybook from "eslint-plugin-storybook";
 import testingLibrary from "eslint-plugin-testing-library";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -46,6 +47,72 @@ const eslintConfig = defineConfig([
         "error",
         {
           patterns: [{ group: ["@base-ui/react"] }],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: {
+      boundaries,
+    },
+    settings: {
+      "boundaries/elements": [
+        { capture: ["featureName"], mode: "folder", pattern: "src/features/*", type: "feature" },
+        { capture: ["family"], mode: "folder", pattern: "src/components/*", type: "components" },
+        { capture: ["name"], mode: "folder", pattern: "src/shared/*", type: "shared" },
+        { capture: ["fileName"], mode: "file", pattern: "src/utils/**/*", type: "utils" },
+        { capture: ["name"], mode: "folder", pattern: "src/lib/*", type: "lib" },
+      ],
+      "boundaries/flag-as-external": {
+        customSourcePatterns: ["@sanpo/**"],
+      },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json",
+        },
+      },
+    },
+    rules: {
+      "boundaries/dependencies": [
+        "error",
+        {
+          default: "allow",
+          rules: [
+            {
+              disallow: {
+                to: {
+                  captured: { featureName: "!{{from.captured.featureName}}" },
+                  type: "feature",
+                },
+              },
+              from: { type: "feature" },
+              message:
+                "Features must not import from other features. Promote the shared code to `components/`, `lib/`, `utils/`, or `shared/`.",
+            },
+            {
+              disallow: { to: { type: ["feature", "shared"] } },
+              from: { type: "components" },
+              message: "`components/` cannot depend on `features/` or `shared/`.",
+            },
+            {
+              disallow: { to: { type: "feature" } },
+              from: { type: "shared" },
+              message: "`shared/` cannot depend on `features/`.",
+            },
+            {
+              disallow: { to: { type: ["feature", "shared", "components"] } },
+              from: { type: "utils" },
+              message:
+                "`utils/` must stay pure — no `features/`, `shared/`, or `components/` imports.",
+            },
+            {
+              disallow: { to: { type: ["feature", "shared"] } },
+              from: { type: "lib" },
+              message: "`lib/` cannot depend on `features/` or `shared/`.",
+            },
+          ],
         },
       ],
     },
