@@ -25,12 +25,12 @@ export default defineConfig([
     },
     settings: {
       "boundaries/elements": [
-        { capture: ["fileName"], mode: "file", pattern: "src/test/**/*", type: "test" },
-        { capture: ["fileName"], mode: "file", pattern: "src/domain/**/*", type: "domain" },
-        { capture: ["fileName"], mode: "file", pattern: "src/application/**/*", type: "application" },
-        { capture: ["fileName"], mode: "file", pattern: "src/infrastructure/**/*", type: "infrastructure" },
-        { capture: ["fileName"], mode: "file", pattern: "src/presentation/**/*", type: "presentation" },
-        { capture: ["fileName"], mode: "file", pattern: "src/*.ts", type: "root" },
+        { type: "test", pattern: "src/test/**/*", mode: "file" },
+        { type: "domain", pattern: "src/domain/**/*", mode: "file" },
+        { type: "application", pattern: "src/application/**/*", mode: "file" },
+        { type: "infrastructure", pattern: "src/infrastructure/**/*", mode: "file" },
+        { type: "presentation", pattern: "src/presentation/**/*", mode: "file" },
+        { type: "root", pattern: "src/*.ts", mode: "file" },
       ],
       "boundaries/flag-as-external": {
         customSourcePatterns: ["@sanpo/**"],
@@ -48,21 +48,30 @@ export default defineConfig([
         {
           default: "disallow",
           rules: [
-            { allow: { to: { type: ["domain", "test"] } }, from: { type: "domain" } },
             {
-              allow: { to: { type: ["application", "domain", "test"] } },
+              from: { type: "domain" },
+              allow: { to: { type: ["domain", "test"] } },
+            },
+            {
               from: { type: "application" },
+              allow: { to: { type: ["application", "domain", "test"] } },
             },
             {
-              allow: { to: { type: ["infrastructure", "domain", "test"] } },
               from: { type: "infrastructure" },
+              allow: { to: { type: ["infrastructure", "domain", "test"] } },
             },
             {
-              allow: { to: { type: ["presentation", "application", "domain", "test"] } },
               from: { type: "presentation" },
+              allow: { to: { type: ["presentation", "application", "domain", "test"] } },
             },
-            { allow: { to: { type: "*" } }, from: { type: "test" } },
-            { allow: { to: { type: "*" } }, from: { type: "root" } },
+            {
+              from: { type: "test" },
+              allow: { to: { type: "*" } },
+            },
+            {
+              from: { type: "root" },
+              allow: { to: { type: "*" } },
+            },
           ],
         },
       ],

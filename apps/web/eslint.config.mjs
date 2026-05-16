@@ -58,11 +58,11 @@ const eslintConfig = defineConfig([
     },
     settings: {
       "boundaries/elements": [
-        { capture: ["featureName"], mode: "folder", pattern: "src/features/*", type: "feature" },
-        { capture: ["family"], mode: "folder", pattern: "src/components/*", type: "components" },
-        { capture: ["name"], mode: "folder", pattern: "src/shared/*", type: "shared" },
-        { capture: ["fileName"], mode: "file", pattern: "src/utils/**/*", type: "utils" },
-        { capture: ["name"], mode: "folder", pattern: "src/lib/*", type: "lib" },
+        { type: "feature", pattern: "src/features/*", mode: "folder", capture: ["featureName"] },
+        { type: "components", pattern: "src/components/*", mode: "folder" },
+        { type: "shared", pattern: "src/shared/*", mode: "folder" },
+        { type: "utils", pattern: "src/utils/**/*", mode: "file" },
+        { type: "lib", pattern: "src/lib/*", mode: "folder" },
       ],
       "boundaries/flag-as-external": {
         customSourcePatterns: ["@sanpo/**"],
@@ -81,36 +81,29 @@ const eslintConfig = defineConfig([
           default: "allow",
           rules: [
             {
+              from: { type: "feature" },
               disallow: {
                 to: {
                   captured: { featureName: "!{{from.captured.featureName}}" },
                   type: "feature",
                 },
               },
-              from: { type: "feature" },
-              message:
-                "Features must not import from other features. Promote the shared code to `components/`, `lib/`, `utils/`, or `shared/`.",
             },
             {
-              disallow: { to: { type: ["feature", "shared"] } },
-              from: { type: "components" },
-              message: "`components/` cannot depend on `features/` or `shared/`.",
-            },
-            {
-              disallow: { to: { type: "feature" } },
               from: { type: "shared" },
-              message: "`shared/` cannot depend on `features/`.",
+              disallow: { to: { type: "feature" } },
             },
             {
-              disallow: { to: { type: ["feature", "shared", "components"] } },
-              from: { type: "utils" },
-              message:
-                "`utils/` must stay pure — no `features/`, `shared/`, or `components/` imports.",
-            },
-            {
+              from: { type: "components" },
               disallow: { to: { type: ["feature", "shared"] } },
+            },
+            {
+              from: { type: "utils" },
+              disallow: { to: { type: ["feature", "shared", "components", "lib"] } },
+            },
+            {
               from: { type: "lib" },
-              message: "`lib/` cannot depend on `features/` or `shared/`.",
+              disallow: { to: { type: ["feature", "shared"] } },
             },
           ],
         },
