@@ -13,7 +13,7 @@ declare module "vitest" {
 }
 
 export default async function setup({ provide }: TestProject): Promise<() => Promise<void>> {
-  const container = await new PostgreSqlContainer("postgres:17-alpine").start();
+  const container = await new PostgreSqlContainer("postgres:18-alpine").start();
   const url = container.getConnectionUri();
 
   const client = postgres(url, { max: 1 });
