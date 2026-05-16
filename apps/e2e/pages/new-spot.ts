@@ -41,14 +41,4 @@ export class NewSpotPage {
   async goto(): Promise<void> {
     await this.#page.goto("/spots/new");
   }
-
-  async createSpot(input: SpotInput): Promise<void> {
-    await this.nameInput.fill(input.name);
-    await this.latitudeInput.fill(String(input.latitude));
-    await this.longitudeInput.fill(String(input.longitude));
-    if (input.description !== undefined) {
-      await this.descriptionInput.fill(input.description);
-    }
-    await this.submitButton.click();
-  }
 }
