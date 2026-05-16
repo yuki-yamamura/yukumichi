@@ -14,9 +14,10 @@ You must acknowledge these information and use it like a map that tell you how t
 │   │   │   │   ├── form/          # Form field wrappers (TanStack Form bindings)
 │   │   │   │   ├── icons/         # Icon components
 │   │   │   │   └── ui/            # Primitive UI components (buttons, inputs, etc.)
-│   │   │   ├── features/          # Feature-specific modules (actions, api, components, form, types)
-│   │   │   ├── libs/              # Third-party library wrappers and configurations
 │   │   │   ├── env/               # Environment variable parsing
+│   │   │   ├── features/          # Feature-specific modules (actions, api, components, form, types)
+│   │   │   ├── lib/               # Third-party library wrappers and configurations
+│   │   │   ├── mock/              # MSW handlers and server (loaded only when MOCK_API_ENABLED)
 │   │   │   └── test/              # Test helpers and fixtures
 │   ├── api/                       # Hono API server (deployed to AWS Lambda)
 │   │   ├── src/

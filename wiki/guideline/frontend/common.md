@@ -22,6 +22,7 @@ The frontend lives under `apps/web/`. This document captures the high-level stac
 | Lucide React, Phosphor Icons    | Icon libraries                                         |
 | Vitest browser mode             | Unit and integration tests                             |
 | Playwright                      | E2E                                                    |
+| MSW (Node mode)                 | API mocking for E2E                                    |
 | Storybook + Chromatic           | Visual regression                                      |
 
 Versions live in `apps/web/package.json` and the workspace `pnpm-workspace.yaml` catalog. This table is intentionally version-free so it does not drift.
@@ -38,9 +39,7 @@ apps/web/src/
 ├── env/             # Environment variable parsers
 ├── features/        # Feature-scoped modules (see below)
 ├── lib/             # Third-party library setup and helpers
-│   ├── hono/        # Hono RPC client setup
-│   ├── tanstack-form/  # Form context and helpers
-│   └── zod/         # Zod configuration and helpers
+├── mock/            # MSW handlers and server, loaded only when MOCK_API_ENABLED is true
 ├── shared/          # Cross-feature modules (see "Inter-feature Isolation" below)
 ├── test/            # Test fixtures shared across features
 └── utils/           # Domain-agnostic utilities; publishable as an external package at any time

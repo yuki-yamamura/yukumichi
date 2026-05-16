@@ -14,6 +14,8 @@ A test must verify the system's contract — the behavior it offers callers — 
 
 ## Test Fixtures
 
+Provide a factory function for every domain object. Tests never construct domain objects inline; they always go through the paired factory.
+
 Fixture functions provide arbitrary-but-valid sample data. Tests pass overrides for the fields they care about and assert only on those overrides or on values the system under test is contractually obligated to produce.
 
 A test must not fail when a fixture's internal data generator changes (e.g., faker version bump). When such a change does break a test, the test was asserting incidental fixture state instead of the system under test's behavior.
