@@ -5,7 +5,7 @@ import * as schema from "./schema";
 
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-export type DatabaseConfig = {
+type DatabaseConfig = {
   appEnv: "development" | "production" | "test";
   url: string;
 };
