@@ -2,6 +2,7 @@ import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
 import { prettierConfig } from "@sanpo/eslint/prettier";
 import { vitestConfig } from "@sanpo/eslint/vitest";
 
+import boundaries from "eslint-plugin-boundaries";
 import storybook from "eslint-plugin-storybook";
 import testingLibrary from "eslint-plugin-testing-library";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -46,6 +47,65 @@ const eslintConfig = defineConfig([
         "error",
         {
           patterns: [{ group: ["@base-ui/react"] }],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: {
+      boundaries,
+    },
+    settings: {
+      "boundaries/elements": [
+        { type: "feature", pattern: "src/features/*", mode: "folder", capture: ["featureName"] },
+        { type: "components", pattern: "src/components/*", mode: "folder" },
+        { type: "shared", pattern: "src/shared/*", mode: "folder" },
+        { type: "utils", pattern: "src/utils/**/*", mode: "file" },
+        { type: "lib", pattern: "src/lib/*", mode: "folder" },
+      ],
+      "boundaries/flag-as-external": {
+        customSourcePatterns: ["@sanpo/**"],
+      },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json",
+        },
+      },
+    },
+    rules: {
+      "boundaries/dependencies": [
+        "error",
+        {
+          default: "allow",
+          rules: [
+            {
+              from: { type: "feature" },
+              disallow: {
+                to: {
+                  captured: { featureName: "!{{from.captured.featureName}}" },
+                  type: "feature",
+                },
+              },
+            },
+            {
+              from: { type: "shared" },
+              disallow: { to: { type: "feature" } },
+            },
+            {
+              from: { type: "components" },
+              disallow: { to: { type: ["feature", "shared"] } },
+            },
+            {
+              from: { type: "utils" },
+              disallow: { to: { type: ["feature", "shared", "components", "lib"] } },
+            },
+            {
+              from: { type: "lib" },
+              disallow: { to: { type: ["feature", "shared"] } },
+            },
+          ],
         },
       ],
     },

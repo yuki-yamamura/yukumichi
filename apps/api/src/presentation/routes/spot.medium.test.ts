@@ -2,10 +2,10 @@ import { desc, eq } from "drizzle-orm";
 import { testClient } from "hono/testing";
 import { inject } from "vitest";
 
-import { createApp } from "@/app";
-import { archivedSpots, spots } from "@/infrastructure/database/schema";
 import { base62Encode } from "@/presentation/helpers/id";
 import { getSpotResponseSchema, listSpotsResponseSchema } from "@/presentation/schemas/spot";
+import { createApp } from "@/test/app/create-test-app";
+import { archivedSpots, spots } from "@/test/database/schema";
 import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
 import { createSpot } from "@/test/fixtures/spot";
 

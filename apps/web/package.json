@@ -64,6 +64,8 @@
     "chromatic": "^16.0.0",
     "eslint": "catalog:",
     "eslint-config-next": "16.2.4",
+    "eslint-import-resolver-typescript": "catalog:",
+    "eslint-plugin-boundaries": "catalog:",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-you-might-not-need-an-effect": "^0.10.1",
     "eslint-plugin-storybook": "^10.3.5",

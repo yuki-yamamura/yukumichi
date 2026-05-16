@@ -19,7 +19,7 @@ import type { ApiError } from "@sanpo/shared/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 export function createApp(env: Env) {
-  const db = createDatabase(env);
+  const db = createDatabase({ appEnv: env.APP_ENV, url: env.DATABASE_URL });
   const spotRepository = SpotRepository(db);
 
   const _app = new Hono();
