@@ -3,12 +3,16 @@ import postgres from "postgres";
 
 import * as schema from "./schema";
 
-import type { Env } from "@/env";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-export function createDatabase(env: Env): PostgresJsDatabase<typeof schema> {
-  const isSsl = env.APP_ENV === "production";
-  const sqlClient = postgres(env.DATABASE_URL, {
+export type DatabaseConfig = {
+  appEnv: "development" | "production" | "test";
+  url: string;
+};
+
+export function createDatabase(config: DatabaseConfig): PostgresJsDatabase<typeof schema> {
+  const isSsl = config.appEnv === "production";
+  const sqlClient = postgres(config.url, {
     ssl: isSsl ? { rejectUnauthorized: false } : false,
   });
 
