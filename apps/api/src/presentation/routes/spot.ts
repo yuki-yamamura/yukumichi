@@ -1,4 +1,4 @@
-import { errorResponseSchema } from "@sanpo/shared/error";
+import { errorResponseSchema } from "@yukumichi/shared/error";
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 

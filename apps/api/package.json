@@ -1,5 +1,5 @@
 {
-  "name": "@sanpo/api",
+  "name": "@yukumichi/api",
   "exports": {
     ".": {
       "types": "./dist/src/app.d.ts",
@@ -21,7 +21,7 @@
     "format:fix": "prettier --write \"./src/**/*.{ts,json,md}\"",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "knip": "knip --directory ../.. --workspace @sanpo/api",
+    "knip": "knip --directory ../.. --workspace @yukumichi/api",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
@@ -30,7 +30,7 @@
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
     "@hono/zod-validator": "^0.7.6",
-    "@sanpo/shared": "workspace:*",
+    "@yukumichi/shared": "workspace:*",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.1",
     "hono": "catalog:",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "catalog:",
-    "@sanpo/eslint": "workspace:*",
+    "@yukumichi/eslint": "workspace:*",
     "@testcontainers/postgresql": "^11.13.0",
     "@types/node": "catalog:",
     "@types/pg": "^8.18.0",

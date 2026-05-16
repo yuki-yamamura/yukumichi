@@ -1,5 +1,5 @@
 {
-  "name": "@sanpo/shared",
+  "name": "@yukumichi/shared",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -20,7 +20,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@sanpo/eslint": "workspace:*",
+    "@yukumichi/eslint": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

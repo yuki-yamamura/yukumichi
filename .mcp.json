@@ -23,7 +23,7 @@
       "command": "uvx",
       "args": ["postgres-mcp", "--access-mode=unrestricted"],
       "env": {
-        "DATABASE_URI": "postgresql://sanpo:sanpo@localhost:5432/sanpo"
+        "DATABASE_URI": "postgresql://yukumichi:yukumichi@localhost:5432/yukumichi"
       }
     },
     "terraform": {

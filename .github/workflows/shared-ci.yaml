@@ -29,6 +29,6 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @sanpo/shared run format
-      - run: pnpm --filter @sanpo/shared run lint
-      - run: pnpm --filter @sanpo/shared run check-types
+      - run: pnpm --filter @yukumichi/shared run format
+      - run: pnpm --filter @yukumichi/shared run lint
+      - run: pnpm --filter @yukumichi/shared run check-types

@@ -1,8 +1,8 @@
 import playwright from "eslint-plugin-playwright";
 import { defineConfig } from "eslint/config";
 
-import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
-import { prettierConfig } from "@sanpo/eslint/prettier";
+import { baseConfig, typescriptConfig } from "@yukumichi/eslint/base";
+import { prettierConfig } from "@yukumichi/eslint/prettier";
 
 const eslintConfig = defineConfig([
   ...baseConfig,

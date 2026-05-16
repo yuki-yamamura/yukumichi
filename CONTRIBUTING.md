@@ -41,6 +41,6 @@ TODOs that reach `main` branch must track a real issue so concerns are never los
 ```typescript
 /**
  * @todo Replace with structured logging
- * @see https://github.com/yuki-yamamura/sanpo/issues/35
+ * @see https://github.com/yuki-yamamura/yukumichi/issues/35
  */
 ```

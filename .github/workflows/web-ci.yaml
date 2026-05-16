@@ -35,12 +35,12 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @sanpo/web run format
-      - run: pnpm --filter @sanpo/web run lint
-      - run: pnpm --filter @sanpo/api run check-types
-      - run: pnpm --filter @sanpo/web run check-types
-      - run: pnpm --filter @sanpo/web run knip
-      - run: pnpm --filter @sanpo/e2e run knip
+      - run: pnpm --filter @yukumichi/web run format
+      - run: pnpm --filter @yukumichi/web run lint
+      - run: pnpm --filter @yukumichi/api run check-types
+      - run: pnpm --filter @yukumichi/web run check-types
+      - run: pnpm --filter @yukumichi/web run knip
+      - run: pnpm --filter @yukumichi/e2e run knip
 
   test:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
@@ -57,8 +57,8 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @sanpo/web exec playwright install chromium
-      - run: pnpm --filter @sanpo/web run test
+      - run: pnpm --filter @yukumichi/web exec playwright install chromium
+      - run: pnpm --filter @yukumichi/web run test
 
   chromatic:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
