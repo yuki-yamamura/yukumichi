@@ -1,10 +1,10 @@
-import { errorResponseSchema } from "@sanpo/shared/error";
+import { errorResponseSchema } from "@yukumichi/shared/error";
 import { DetailedError, parseResponse } from "hono/client";
 
 import { err, ok } from "@/utils/result";
 
 import type { Result } from "@/utils/result";
-import type { ApiError } from "@sanpo/shared/error";
+import type { ApiError } from "@yukumichi/shared/error";
 import type { ClientResponse } from "hono/client";
 
 type InferResponseData<T> = T extends ClientResponse<infer ResponseData> ? ResponseData : never;

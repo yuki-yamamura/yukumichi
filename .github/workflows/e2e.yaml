@@ -13,9 +13,9 @@ jobs:
       postgres:
         image: postgres:18
         env:
-          POSTGRES_DB: sanpo
-          POSTGRES_USER: sanpo
-          POSTGRES_PASSWORD: sanpo
+          POSTGRES_DB: yukumichi
+          POSTGRES_USER: yukumichi
+          POSTGRES_PASSWORD: yukumichi
         ports:
           - 5432:5432
         options: >-
@@ -25,7 +25,7 @@ jobs:
           --health-retries 5
     env:
       APP_ENV: test
-      DATABASE_URL: postgres://sanpo:sanpo@localhost:5432/sanpo
+      DATABASE_URL: postgres://yukumichi:yukumichi@localhost:5432/yukumichi
       API_BASE_URL: http://localhost:3010
     steps:
       - uses: actions/checkout@v6

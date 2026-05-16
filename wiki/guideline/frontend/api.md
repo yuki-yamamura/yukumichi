@@ -56,7 +56,7 @@ import { toResult } from "@/lib/hono/converter";
 
 import type { CreateResourceRequest } from "@/features/{feature}/types/api";
 import type { Result } from "@/utils/result";
-import type { ApiError } from "@sanpo/shared/error";
+import type { ApiError } from "@yukumichi/shared/error";
 
 export function createResource(request: CreateResourceRequest): Promise<Result<null, ApiError>> {
   return toResult(fetchClient.resources.$post(request));

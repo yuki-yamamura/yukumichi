@@ -26,9 +26,9 @@ jobs:
           key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @sanpo/api run check-types
+      - run: pnpm --filter @yukumichi/api run check-types
       - name: Build and deploy
-        run: pnpm --filter @sanpo/web run deploy
+        run: pnpm --filter @yukumichi/web run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

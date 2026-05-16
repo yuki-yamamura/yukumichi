@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <main>
-      <h1>Sanpo v0.2.0</h1>
+      <h1>Yukumichi v0.2.0</h1>
       <ul>
         {spots.map((spot) => (
           <li key={spot.id}>{spot.name}</li>

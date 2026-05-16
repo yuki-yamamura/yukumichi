@@ -44,7 +44,7 @@ You must acknowledge these information and use it like a map that tell you how t
 ├── packages/
 │   ├── eslint-config/             # Shared ESLint / Prettier / Vitest configs
 │   └── shared/                    # Cross-app wire contracts (Zod schemas, error codes)
-│       └── src/                   # Subpath exports via `@sanpo/shared/<file>` (e.g. `@sanpo/shared/error`)
+│       └── src/                   # Subpath exports via `@yukumichi/shared/<file>` (e.g. `@yukumichi/shared/error`)
 │
 ├── infrastructure/                # Terraform IaC for AWS
 │   ├── environments/

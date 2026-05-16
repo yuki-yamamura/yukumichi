@@ -1,5 +1,5 @@
 {
-  "name": "@sanpo/e2e",
+  "name": "@yukumichi/e2e",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,13 +8,13 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "check-types": "tsc --noEmit",
-    "knip": "knip --directory ../.. --workspace @sanpo/e2e",
+    "knip": "knip --directory ../.. --workspace @yukumichi/e2e",
     "format": "prettier --check \"./**/*.{ts,json,md}\"",
     "format:fix": "prettier --write \"./**/*.{ts,json,md}\""
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@sanpo/eslint": "workspace:*",
+    "@yukumichi/eslint": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-playwright": "^2.10.1",

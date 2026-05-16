@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:18-alpine
     environment:
-      POSTGRES_DB: "sanpo"
-      POSTGRES_USER: "sanpo"
-      POSTGRES_PASSWORD: "sanpo"
+      POSTGRES_DB: "yukumichi"
+      POSTGRES_USER: "yukumichi"
+      POSTGRES_PASSWORD: "yukumichi"
       TZ: UTC
     command:
       - "postgres"
@@ -15,7 +15,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - sanpo_postgres_data:/var/lib/postgresql/data
+      - yukumichi_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  sanpo_postgres_data:
+  yukumichi_postgres_data:

@@ -1,5 +1,5 @@
 import { swaggerUI } from "@hono/swagger-ui";
-import { errorResponseSchema } from "@sanpo/shared/error";
+import { errorResponseSchema } from "@yukumichi/shared/error";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { openAPIRouteHandler, resolver } from "hono-openapi";
@@ -15,7 +15,7 @@ import { createSpotRoute } from "@/presentation/routes/spot";
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
 
 import type { Env } from "@/env";
-import type { ApiError } from "@sanpo/shared/error";
+import type { ApiError } from "@yukumichi/shared/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 export function createApp(env: Env) {
@@ -28,7 +28,7 @@ export function createApp(env: Env) {
   _app.onError((error, context) => {
     /**
      * @todo Replace with structured logging
-     * @see https://github.com/yuki-yamamura/sanpo/issues/35
+     * @see https://github.com/yuki-yamamura/yukumichi/issues/35
      */
     console.error(error);
 
@@ -74,7 +74,7 @@ export function createApp(env: Env) {
       },
       documentation: {
         info: {
-          title: "Sanpo API",
+          title: "Yukumichi API",
           version: "0.2.0",
         },
       },

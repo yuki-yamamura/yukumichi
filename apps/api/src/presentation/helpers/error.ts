@@ -1,4 +1,4 @@
-import type { ApiError, ErrorCode } from "@sanpo/shared/error";
+import type { ApiError, ErrorCode } from "@yukumichi/shared/error";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 export const errorCodeMap = {

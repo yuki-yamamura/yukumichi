@@ -11,7 +11,7 @@ RUN pnpm install
 # Build stage
 FROM base AS builder
 COPY . .
-RUN pnpm --filter @sanpo/api build
+RUN pnpm --filter @yukumichi/api build
 
 # Production stage for AWS Lambda
 FROM public.ecr.aws/lambda/nodejs:24 AS production

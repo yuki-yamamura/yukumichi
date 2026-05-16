@@ -1,4 +1,4 @@
-# Sanpo
+# Yukumichi
 
 ## Prerequisites
 
@@ -19,8 +19,8 @@ cp apps/web/.env.example apps/web/.env         # Web env
 
 ```sh
 docker compose up -d postgres                  # start Postgres in the background
-pnpm --filter @sanpo/api db:migrate            # apply schema migrations
-pnpm --filter @sanpo/api dev                   # start the API on http://localhost:3010
+pnpm --filter @yukumichi/api db:migrate            # apply schema migrations
+pnpm --filter @yukumichi/api dev                   # start the API on http://localhost:3010
 ```
 
 Swagger UI: <http://localhost:3010/ui>
@@ -28,8 +28,8 @@ Swagger UI: <http://localhost:3010/ui>
 ## Run the Web
 
 ```sh
-pnpm --filter @sanpo/web dev                   # start Next.js on http://localhost:3000
-pnpm --filter @sanpo/web storybook             # start Storybook on http://localhost:6006
+pnpm --filter @yukumichi/web dev                   # start Next.js on http://localhost:3000
+pnpm --filter @yukumichi/web storybook             # start Storybook on http://localhost:6006
 ```
 
 The web app talks to the API at `NEXT_PUBLIC_API_BASE_URL`, so make sure the API is running first.

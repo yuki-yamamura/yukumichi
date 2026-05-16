@@ -1,6 +1,6 @@
-import { baseConfig, typescriptConfig } from "@sanpo/eslint/base";
-import { prettierConfig } from "@sanpo/eslint/prettier";
-import { vitestConfig } from "@sanpo/eslint/vitest";
+import { baseConfig, typescriptConfig } from "@yukumichi/eslint/base";
+import { prettierConfig } from "@yukumichi/eslint/prettier";
+import { vitestConfig } from "@yukumichi/eslint/vitest";
 
 import boundaries from "eslint-plugin-boundaries";
 import storybook from "eslint-plugin-storybook";
@@ -65,7 +65,7 @@ const eslintConfig = defineConfig([
         { type: "lib", pattern: "src/lib/*", mode: "folder" },
       ],
       "boundaries/flag-as-external": {
-        customSourcePatterns: ["@sanpo/**"],
+        customSourcePatterns: ["@yukumichi/**"],
       },
       "import/resolver": {
         typescript: {
