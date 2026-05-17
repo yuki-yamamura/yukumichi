@@ -2,12 +2,27 @@ name: E2E
 
 on:
   workflow_dispatch:
-  merge_group:
+  pull_request:
     types:
-      - checks_requested
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "apps/api/**"
+      - "apps/web/**"
+      - "apps/e2e/**"
+      - "packages/**"
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   e2e:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     services:
       postgres:
