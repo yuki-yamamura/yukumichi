@@ -3,11 +3,18 @@
     "context7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
     },
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "--autoConnect", "chrome-devtools-mcp@latest"]
+      "args": [
+        "-y",
+        "--autoConnect",
+        "chrome-devtools-mcp@latest"
+      ]
     },
     "playwright": {
       "command": "npx",
@@ -21,23 +28,39 @@
     },
     "postgres": {
       "command": "uvx",
-      "args": ["postgres-mcp", "--access-mode=unrestricted"],
+      "args": [
+        "postgres-mcp",
+        "--access-mode=unrestricted"
+      ],
       "env": {
         "DATABASE_URI": "postgresql://yukumichi:yukumichi@localhost:5432/yukumichi"
       }
     },
     "terraform": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "hashicorp/terraform-mcp-server"]
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server"
+      ]
     },
     "aws-documentation-mcp-server": {
       "command": "uvx",
-      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "disabled": false,
-      "autoApprove": []
+      }
+    },
+    "drawio": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@drawio/mcp"
+      ],
+      "env": {}
     }
   }
 }
