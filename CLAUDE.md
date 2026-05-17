@@ -17,7 +17,7 @@ You must acknowledge these information and use it like a map that tell you how t
 │   │   │   ├── env/               # Environment variable parsing
 │   │   │   ├── features/          # Feature-specific modules (actions, api, components, form, types)
 │   │   │   ├── lib/               # Third-party library wrappers and configurations
-│   │   │   ├── mock/              # MSW handlers and server (loaded only when MOCK_API_ENABLED)
+│   │   │   ├── mock/              # MSW handlers and server
 │   │   │   └── test/              # Test helpers and fixtures
 │   ├── api/                       # Hono API server (deployed to AWS Lambda)
 │   │   ├── src/
@@ -44,31 +44,33 @@ You must acknowledge these information and use it like a map that tell you how t
 ├── packages/
 │   ├── eslint-config/             # Shared ESLint / Prettier / Vitest configs
 │   └── shared/                    # Cross-app wire contracts (Zod schemas, error codes)
-│       └── src/                   # Subpath exports via `@yukumichi/shared/<file>` (e.g. `@yukumichi/shared/error`)
 │
 ├── infrastructure/                # Terraform IaC for AWS
 │   ├── environments/
 │   │   └── production/            # Production environment configuration
 │   └── modules/
-│       └── aws/                   # Reusable AWS modules (ci, ecr, lambda, rds, ssm, vpc)
+│       └── aws/                   # Reusable AWS modules
 │
 └── wiki/                          # Project documentation
-    └── guideline/                 # Development guidelines (backend per layer, frontend per concern, plus cross-cutting)
+│   ├── domain/                    # Domain knowledge base
+│   │   └── workflows/             # Domain workflows (drawio diagrams)
+│   ├── guideline/                 # Development guidelines
+    └── user-manual/               # Operational manuals for humans — LLMs do not need to read this
 ```
 
 ## Development Commands
 
 ### Web (`apps/web/`)
 
-| Command                | Description                                             |
-| ---------------------- | ------------------------------------------------------- |
-| `pnpm run dev`         | Start development server (Next.js)                      |
-| `pnpm run codegen`     | Run all codegen (CSS Modules + Next.js route types)     |
-| `pnpm run check-types` | Run TypeScript type checking (tsc)                      |
-| `pnpm run lint:fix`    | Fix linting issues (ESLint, Stylelint)                  |
-| `pnpm run format:fix`  | Format code (Prettier)                                  |
-| `pnpm run test`        | Run unit tests (Vitest, browser mode via Playwright)    |
-| `pnpm run storybook`   | Start Storybook dev server                              |
+| Command                | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| `pnpm run dev`         | Start development server (Next.js)                   |
+| `pnpm run codegen`     | Run all codegen (CSS Modules + Next.js route types)  |
+| `pnpm run check-types` | Run TypeScript type checking (tsc)                   |
+| `pnpm run lint:fix`    | Fix linting issues (ESLint, Stylelint)               |
+| `pnpm run format:fix`  | Format code (Prettier)                               |
+| `pnpm run test`        | Run unit tests (Vitest, browser mode via Playwright) |
+| `pnpm run storybook`   | Start Storybook dev server                           |
 
 ### API (`apps/api/`)
 
