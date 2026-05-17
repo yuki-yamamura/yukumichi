@@ -2,17 +2,12 @@ name: Web CI
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/web/**"
-      - "packages/**"
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
+      - ready_for_review
     paths:
       - "apps/web/**"
       - "packages/**"
@@ -59,30 +54,3 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @yukumichi/web exec playwright install chromium
       - run: pnpm --filter @yukumichi/web run test
-
-  chromatic:
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: jdx/mise-action@v4
-      - name: Get pnpm store path
-        id: pnpm-store
-        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-store.outputs.path }}
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: pnpm-
-      - run: pnpm install --frozen-lockfile
-      - name: Publish to Chromatic
-        uses: chromaui/action@latest
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: apps/web
-          buildScriptName: storybook:build
-          exitZeroOnChanges: true
-          autoAcceptChanges: "main"
-          onlyChanged: true
