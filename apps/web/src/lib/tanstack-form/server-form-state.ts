@@ -1,6 +1,6 @@
 import type { DeepKeys, ServerFormState } from "@tanstack/react-form";
 
-export function createServerValidateState<T>(
+export function createServerFormState<T>(
   values: T,
   fields: Partial<Record<DeepKeys<T>, { message: string }[]>>,
 ): ServerFormState<T, undefined> {
