@@ -17,3 +17,6 @@ storybook-static
 *.tfplan
 tfplan
 *.auto.tfvars
+
+# Playwright
+.playwright-mcp/
