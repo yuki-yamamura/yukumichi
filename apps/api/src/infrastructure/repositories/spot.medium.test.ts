@@ -127,7 +127,7 @@ describe("SpotRepository", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: expect.any(String) });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "NOT_FOUND", message: expect.any(String) });
     });
 
     it("should return not_found when the spot is archived", async () => {
@@ -147,7 +147,7 @@ describe("SpotRepository", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message: expect.any(String) });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "NOT_FOUND", message: expect.any(String) });
     });
   });
 
@@ -204,7 +204,7 @@ describe("SpotRepository", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "not_found",
+        kind: "NOT_FOUND",
         message: expect.any(String),
       });
     });
@@ -232,7 +232,7 @@ describe("SpotRepository", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "not_found",
+        kind: "NOT_FOUND",
         message: expect.any(String),
       });
     });

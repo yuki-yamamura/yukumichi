@@ -3,10 +3,10 @@ import { errAsync, okAsync } from "neverthrow";
 import { archiveSpot, SpotId } from "@/domain/spot/models/spot";
 
 import type {
-  ConflictError,
   DatabaseError,
   DataIntegrityError,
   NotFoundError,
+  SpotDuplicatedError,
   ValidationError,
 } from "@/domain/error";
 import type { SpotRepository } from "@/domain/spot/repository";
@@ -25,7 +25,7 @@ export type ArchiveSpotUsecase = {
     input: ArchiveSpotUsecaseInput,
   ) => ResultAsync<
     void,
-    ConflictError | DatabaseError | DataIntegrityError | NotFoundError | ValidationError
+    DatabaseError | DataIntegrityError | NotFoundError | SpotDuplicatedError | ValidationError
   >;
 };
 
@@ -37,12 +37,12 @@ export function ArchiveSpotUsecase({ spotRepository }: ArchiveSpotUsecaseDeps): 
           .findArchivedSpotById(spotId)
           .andThen((archivedSpot) =>
             errAsync({
-              kind: "conflict" as const,
+              kind: "SPOT_DUPLICATED" as const,
               message: `Spot is already archived: ${archivedSpot.id}`,
             }),
           )
           .orElse((error) =>
-            error.kind === "not_found" ? spotRepository.findById(spotId) : errAsync(error),
+            error.kind === "NOT_FOUND" ? spotRepository.findById(spotId) : errAsync(error),
           )
           .andThen((spot) => spotRepository.archive(archiveSpot(spot)))
           .andThen(() => okAsync()),

@@ -1,40 +1,51 @@
-import { errorResponseSchema } from "@yukumichi/shared/error";
-import { DetailedError, parseResponse } from "hono/client";
+import { ErrorCodeEnum, errorResponseSchema } from "@yukumichi/shared/error";
 
 import { err, ok } from "@/utils/result";
 
 import type { Result } from "@/utils/result";
 import type { ApiError } from "@yukumichi/shared/error";
 import type { ClientResponse } from "hono/client";
+import type { SuccessStatusCode } from "hono/utils/http-status";
 
-type InferResponseData<T> = T extends ClientResponse<infer ResponseData> ? ResponseData : never;
+type InferSuccessResponseData<T> =
+  T extends ClientResponse<infer Data, infer StatusCode>
+    ? StatusCode extends SuccessStatusCode
+      ? Exclude<Data, ApiError>
+      : never
+    : never;
+
+type InferErrorResponseData<T> =
+  T extends ClientResponse<infer Data, infer StatusCode>
+    ? StatusCode extends SuccessStatusCode
+      ? never
+      : Extract<Data, ApiError>
+    : never;
+
+const contentlessStatusCodes = new Set([201, 101, 204, 205, 304]);
 
 export async function toResult<T extends ClientResponse<unknown>>(
   promise: Promise<T>,
-): Promise<Result<Exclude<InferResponseData<T>, ApiError>, ApiError>> {
+): Promise<Result<InferSuccessResponseData<T>, InferErrorResponseData<T>>> {
+  let response: T;
+
   try {
-    // NOTE: `parseResponse` returns `undefined`, and it causes type mismatch from inferred type. So we need to fallback to `null` here.
-    const data = (await parseResponse(promise)) ?? null;
-
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- `parseResponse` returns the body shape but cannot statically narrow it against the typed Hono response union. The assertion bridges the inferred body to the caller's success type.
-    return ok(data as Exclude<InferResponseData<T>, ApiError>);
+    response = await promise;
   } catch (error) {
-    if (error instanceof DetailedError) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- `error.detail` is typed as `any` by Hono's DetailedError. We hand it to Zod for runtime validation.
-      const parsedError = errorResponseSchema.safeParse(error.detail?.data);
-      if (parsedError.success) {
-        return err(parsedError.data);
-      }
-
-      return err({
-        code: "UNKNOWN_ERROR",
-        message: error.message,
-      });
-    }
-
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- It's safe to assert this type because the error is a part of InferErrorResponseData<T> in runtime.
     return err({
-      code: "UNKNOWN_ERROR",
+      code: ErrorCodeEnum.UNKNOWN,
       message: error instanceof Error ? error.message : String(error),
-    });
+    } as InferErrorResponseData<T>);
   }
+
+  const data = contentlessStatusCodes.has(response.status) ? null : await response.json();
+
+  const errorResponseResult = errorResponseSchema.safeParse(data);
+  if (errorResponseResult.success) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Allow type assertion only for helper functions.
+    return err(errorResponseResult.data) as InferErrorResponseData<T>;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Allow type assertion only for helper functions.
+  return ok(data as InferSuccessResponseData<T>);
 }

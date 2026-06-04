@@ -18,7 +18,7 @@ describe("ArchiveSpotUsecase", () => {
         archive: vi.fn().mockReturnValue(okAsync(spot.id)),
         findArchivedSpotById: vi
           .fn()
-          .mockReturnValue(errAsync({ kind: "not_found", message: faker.lorem.sentence() })),
+          .mockReturnValue(errAsync({ kind: "NOT_FOUND", message: faker.lorem.sentence() })),
         findById: vi.fn().mockReturnValue(okAsync(spot)),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({
@@ -42,8 +42,8 @@ describe("ArchiveSpotUsecase", () => {
       const spotRepository = createSpotRepository({
         findArchivedSpotById: vi
           .fn()
-          .mockReturnValue(errAsync({ kind: "not_found", message: faker.lorem.sentence() })),
-        findById: vi.fn().mockReturnValue(errAsync({ kind: "not_found", message })),
+          .mockReturnValue(errAsync({ kind: "NOT_FOUND", message: faker.lorem.sentence() })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "NOT_FOUND", message })),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({
         spotRepository,
@@ -56,7 +56,7 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "NOT_FOUND", message });
     });
 
     it("should return an error when a spot is already archived", async () => {
@@ -80,7 +80,7 @@ describe("ArchiveSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "conflict",
+        kind: "SPOT_DUPLICATED",
         message: expect.any(String),
       });
     });
@@ -96,7 +96,7 @@ describe("ArchiveSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "validation",
+        kind: "VALIDATION",
         message: expect.any(String),
       });
     });
@@ -105,7 +105,7 @@ describe("ArchiveSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findArchivedSpotById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+        findArchivedSpotById: vi.fn().mockReturnValue(errAsync({ kind: "DATABASE", message })),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({ spotRepository });
 
@@ -114,7 +114,7 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATABASE", message });
     });
 
     it("should return a data integrity error when the repository data is corrupted", async () => {
@@ -123,7 +123,7 @@ describe("ArchiveSpotUsecase", () => {
       const spotRepository = createSpotRepository({
         findArchivedSpotById: vi
           .fn()
-          .mockReturnValue(errAsync({ kind: "data_integrity", message })),
+          .mockReturnValue(errAsync({ kind: "DATA_INTEGRITY", message })),
       });
       const archiveSpotUsecase = ArchiveSpotUsecase({ spotRepository });
 
@@ -132,7 +132,7 @@ describe("ArchiveSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATA_INTEGRITY", message });
     });
   });
 });

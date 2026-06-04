@@ -1,13 +1,17 @@
-import { errorResponseSchema } from "@yukumichi/shared/error";
 import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
 import { toApiError, toHttpStatusCode } from "@/presentation/helpers/error";
 import { zValidator } from "@/presentation/middlewares/zod-validator";
 import {
+  badRequestErrorResponseSchema,
+  notFoundErrorResponseSchema,
+} from "@/presentation/schemas/error";
+import {
   createSpotRequestBodySchema,
   getSpotResponseSchema,
   listSpotsResponseSchema,
+  spotDuplicatedErrorResponseSchema,
   spotParamSchema,
   updateSpotRequestBodySchema,
 } from "@/presentation/schemas/spot";
@@ -45,7 +49,7 @@ export function createSpotRoute({
           400: {
             content: {
               "application/json": {
-                schema: resolver(errorResponseSchema),
+                schema: resolver(badRequestErrorResponseSchema),
               },
             },
             description: "Validation error",
@@ -112,7 +116,7 @@ export function createSpotRoute({
           },
           404: {
             content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
+              "application/json": { schema: resolver(notFoundErrorResponseSchema) },
             },
             description: "Spot not found",
           },
@@ -144,13 +148,13 @@ export function createSpotRoute({
           },
           400: {
             content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
+              "application/json": { schema: resolver(badRequestErrorResponseSchema) },
             },
             description: "Validation error",
           },
           404: {
             content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
+              "application/json": { schema: resolver(notFoundErrorResponseSchema) },
             },
             description: "Spot not found",
           },
@@ -183,13 +187,13 @@ export function createSpotRoute({
           204: { description: "Spot archived successfully" },
           404: {
             content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
+              "application/json": { schema: resolver(notFoundErrorResponseSchema) },
             },
             description: "Spot not found",
           },
           409: {
             content: {
-              "application/json": { schema: resolver(errorResponseSchema) },
+              "application/json": { schema: resolver(spotDuplicatedErrorResponseSchema) },
             },
             description: "Already archived",
           },

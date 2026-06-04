@@ -57,7 +57,7 @@ describe("UpdateSpotUsecase", () => {
       const spotRepository = createSpotRepository({
         findById: vi
           .fn()
-          .mockReturnValue(errAsync({ kind: "not_found", message: "Spot not found" })),
+          .mockReturnValue(errAsync({ kind: "NOT_FOUND", message: "Spot not found" })),
       });
       const updateSpotUsecase = UpdateSpotUsecase({
         spotRepository,
@@ -69,7 +69,7 @@ describe("UpdateSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "not_found",
+        kind: "NOT_FOUND",
         message: expect.any(String),
       });
     });
@@ -98,7 +98,7 @@ describe("UpdateSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "validation",
+        kind: "VALIDATION",
         message: expect.any(String),
       });
     });
@@ -107,7 +107,7 @@ describe("UpdateSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "DATABASE", message })),
       });
       const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
 
@@ -119,14 +119,14 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATABASE", message });
     });
 
     it("should return a data integrity error when the repository data is corrupted", async () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockReturnValue(errAsync({ kind: "data_integrity", message })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "DATA_INTEGRITY", message })),
       });
       const updateSpotUsecase = UpdateSpotUsecase({ spotRepository });
 
@@ -138,7 +138,7 @@ describe("UpdateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATA_INTEGRITY", message });
     });
   });
 });

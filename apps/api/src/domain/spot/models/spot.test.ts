@@ -48,7 +48,7 @@ describe("Spot", () => {
 
     // Then
     expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toEqual({ kind: "validation", message: expect.any(String) });
+    expect(result._unsafeUnwrapErr()).toEqual({ kind: "VALIDATION", message: expect.any(String) });
   });
 });
 
@@ -72,7 +72,7 @@ describe("SpotId", () => {
     // Then
     expect(result.isErr()).toBe(true);
     expect(result._unsafeUnwrapErr()).toEqual({
-      kind: "validation",
+      kind: "VALIDATION",
       message: expect.any(String),
     });
   });

@@ -22,12 +22,12 @@ export function Coordinate({
 }): Result<Coordinate, ValidationError> {
   const latitudeResult = latitudeSchema.safeParse(latitude);
   if (!latitudeResult.success) {
-    return err({ kind: "validation", message: latitudeResult.error.message });
+    return err({ kind: "VALIDATION", message: latitudeResult.error.message });
   }
 
   const longitudeResult = longitudeSchema.safeParse(longitude);
   if (!longitudeResult.success) {
-    return err({ kind: "validation", message: longitudeResult.error.message });
+    return err({ kind: "VALIDATION", message: longitudeResult.error.message });
   }
 
   return ok({ latitude: latitudeResult.data, longitude: longitudeResult.data });

@@ -57,7 +57,7 @@ describe("Coordinate", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "validation",
+        kind: "VALIDATION",
         message: expect.any(String),
       });
     });

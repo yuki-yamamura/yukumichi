@@ -1,5 +1,4 @@
 import { swaggerUI } from "@hono/swagger-ui";
-import { errorResponseSchema } from "@yukumichi/shared/error";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { openAPIRouteHandler, resolver } from "hono-openapi";
@@ -13,9 +12,10 @@ import { SpotRepository } from "@/infrastructure/repositories/spot";
 import { createSpotRoute } from "@/presentation/routes/spot";
 
 import { UpdateSpotUsecase } from "./application/usecase/spot/update";
+import { toApiError } from "./presentation/helpers/error";
+import { unknownErrorResponseSchema } from "./presentation/schemas/error";
 
 import type { Env } from "@/env";
-import type { ApiError } from "@yukumichi/shared/error";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 export function createApp(env: Env) {
@@ -32,11 +32,11 @@ export function createApp(env: Env) {
      */
     console.error(error);
 
-    return context.json<ApiError>(
-      {
-        code: "UNKNOWN_ERROR",
+    return context.json(
+      toApiError({
+        kind: "UNKNOWN",
         message: "Internal server error",
-      },
+      }),
       500,
     );
   });
@@ -56,7 +56,7 @@ export function createApp(env: Env) {
     responses: {
       500: {
         content: {
-          "application/json": { schema: resolver(errorResponseSchema) },
+          "application/json": { schema: resolver(unknownErrorResponseSchema) },
         },
         description: "Internal server error",
       },

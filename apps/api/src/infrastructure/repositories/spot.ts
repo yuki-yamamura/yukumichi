@@ -22,8 +22,8 @@ export function SpotRepository(db: Database): SpotRepository {
           }),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) },
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
       ).andThen((rows) => ok(spotIdSchema.parse(rows[0].spotId))),
 
     create({ coordinate: { latitude, longitude }, description, id, name }) {
@@ -40,9 +40,9 @@ export function SpotRepository(db: Database): SpotRepository {
           .returning({ id: spots.id }),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
+            ? { kind: "DATABASE" as const, message: error.message }
             : {
-                kind: "database" as const,
+                kind: "DATABASE" as const,
                 message: String(error),
               },
       ).andThen((rows) => ok(spotIdSchema.parse(rows[0].id)));
@@ -57,21 +57,21 @@ export function SpotRepository(db: Database): SpotRepository {
           .where(eq(spots.id, id)),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) },
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
       )
         .andThen((rows) =>
           rows.length === 0
-            ? err({ kind: "not_found" as const, message: `Archived spot not found: ${id}` })
+            ? err({ kind: "NOT_FOUND" as const, message: `Archived spot not found: ${id}` })
             : ok(rows[0]),
         )
         .andThen(({ archived_spots: archivedSpot, spots: spot }) =>
           SpotId(spot.id)
-            .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }))
+            .mapErr((error) => ({ kind: "DATA_INTEGRITY" as const, message: error.message }))
             .andThen((id) =>
               Spot({ ...spot, id })
                 .mapErr((error) => ({
-                  kind: "data_integrity" as const,
+                  kind: "DATA_INTEGRITY" as const,
                   message: error.message,
                 }))
                 .map((spot) => ({ ...spot, archivedAt: archivedSpot.archivedAt })),
@@ -91,20 +91,20 @@ export function SpotRepository(db: Database): SpotRepository {
           ),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) },
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
       )
         .andThen((rows) =>
           rows.length === 0
-            ? err({ kind: "not_found" as const, message: `Spot not found: ${id}` })
+            ? err({ kind: "NOT_FOUND" as const, message: `Spot not found: ${id}` })
             : ok(rows[0]),
         )
         .andThen((row) =>
           SpotId(row.id)
-            .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }))
+            .mapErr((error) => ({ kind: "DATA_INTEGRITY" as const, message: error.message }))
             .andThen((id) =>
               Spot({ ...row, id }).mapErr((error) => ({
-                kind: "data_integrity" as const,
+                kind: "DATA_INTEGRITY" as const,
                 message: error.message,
               })),
             ),
@@ -121,16 +121,16 @@ export function SpotRepository(db: Database): SpotRepository {
           .orderBy(desc(spots.createdAt)),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) },
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
       ).andThen((rows) =>
         Result.combine(
           rows.map((row) =>
             SpotId(row.id)
-              .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }))
+              .mapErr((error) => ({ kind: "DATA_INTEGRITY" as const, message: error.message }))
               .andThen((id) =>
                 Spot({ ...row, id }).mapErr((error) => ({
-                  kind: "data_integrity" as const,
+                  kind: "DATA_INTEGRITY" as const,
                   message: error.message,
                 })),
               ),
@@ -157,20 +157,20 @@ export function SpotRepository(db: Database): SpotRepository {
           .returning(),
         (error) =>
           error instanceof Error
-            ? { kind: "database" as const, message: error.message }
-            : { kind: "database" as const, message: String(error) },
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
       )
         .andThen((rows) =>
           rows.length === 0
-            ? err({ kind: "not_found" as const, message: `Spot not found: ${spot.id}` })
+            ? err({ kind: "NOT_FOUND" as const, message: `Spot not found: ${spot.id}` })
             : ok(rows[0]),
         )
         .andThen((row) =>
           SpotId(row.id)
-            .mapErr((error) => ({ kind: "data_integrity" as const, message: error.message }))
+            .mapErr((error) => ({ kind: "DATA_INTEGRITY" as const, message: error.message }))
             .andThen((id) =>
               Spot({ ...row, id }).mapErr((error) => ({
-                kind: "data_integrity" as const,
+                kind: "DATA_INTEGRITY" as const,
                 message: error.message,
               })),
             ),

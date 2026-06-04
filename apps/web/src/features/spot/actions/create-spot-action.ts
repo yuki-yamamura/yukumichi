@@ -1,24 +1,42 @@
 "use server";
 
 import { createServerValidate, ServerValidateError } from "@tanstack/react-form-nextjs";
-import { redirect } from "next/navigation";
 
 import { createSpot } from "@/features/spot/api/create-spot";
 import { createSpotFormOptions, spotFormSchema } from "@/features/spot/form/spot-form";
-import { mustBeSuccess } from "@/utils/must-be-success";
 
+import type { SpotFormInput } from "@/features/spot/form/spot-form";
 import type { ServerFormState } from "@tanstack/react-form-nextjs";
+
+const serverValidate = createServerValidate({
+  ...createSpotFormOptions(),
+  onServerValidate: spotFormSchema,
+});
 
 export async function createSpotAction(
   _previousState: unknown,
   formData: FormData,
-): Promise<ServerFormState<unknown, undefined>> {
+): Promise<ServerFormState<SpotFormInput, undefined> | undefined> {
   try {
-    const validatedData = await serverValidate(formData);
-    const formValues = spotFormSchema.parse(validatedData);
+    const parsedFormData = await serverValidate(formData);
+    const payload = spotFormSchema.parse(parsedFormData);
+    const result = await createSpot({
+      json: payload,
+    });
 
-    mustBeSuccess(await createSpot({ json: formValues }));
-    redirect("/spots");
+    if (result.isErr) {
+      switch (result.error.code) {
+        case "VALIDATION_ERROR":
+        case "BAD_REQUEST_ERROR":
+        case "DATABASE_ERROR":
+        case "UNKNOWN_ERROR": {
+          throw new Error(result.error.message);
+        }
+        default: {
+          result.error satisfies never;
+        }
+      }
+    }
   } catch (error) {
     if (error instanceof ServerValidateError) {
       return error.formState;
@@ -27,8 +45,3 @@ export async function createSpotAction(
     throw error;
   }
 }
-
-const serverValidate = createServerValidate({
-  ...createSpotFormOptions(),
-  onServerValidate: spotFormSchema,
-});
