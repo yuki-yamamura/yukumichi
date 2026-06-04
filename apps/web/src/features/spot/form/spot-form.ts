@@ -6,11 +6,12 @@ import { createFloatSchema } from "@/lib/zod/schema";
 export const spotFormSchema = z.object({
   description: z
     .string()
+    .trim()
     .optional()
     .transform((value) => (value === "" ? undefined : value)),
   latitude: createFloatSchema(z.number().min(-90).max(90)),
   longitude: createFloatSchema(z.number().min(-180).max(180)),
-  name: z.string().min(1),
+  name: z.string().trim().min(1),
 });
 
 export function createSpotFormOptions({
