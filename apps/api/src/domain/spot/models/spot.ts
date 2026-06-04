@@ -16,7 +16,7 @@ export function SpotId(value: string): Result<SpotId, ValidationError> {
 
   return result.success
     ? ok(result.data)
-    : err({ kind: "validation", message: result.error.message });
+    : err({ kind: "VALIDATION", message: result.error.message });
 }
 
 export function generateSpotId(): SpotId {

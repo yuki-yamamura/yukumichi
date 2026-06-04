@@ -48,7 +48,7 @@ describe("CreateSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "validation",
+        kind: "VALIDATION",
         message: expect.any(String),
       });
     });
@@ -57,7 +57,7 @@ describe("CreateSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        create: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+        create: vi.fn().mockReturnValue(errAsync({ kind: "DATABASE", message })),
       });
       const createSpotUsecase = CreateSpotUsecase({ spotRepository });
 
@@ -72,7 +72,7 @@ describe("CreateSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATABASE", message });
     });
   });
 });

@@ -30,7 +30,7 @@ describe("ListSpotsUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findMany: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+        findMany: vi.fn().mockReturnValue(errAsync({ kind: "DATABASE", message })),
       });
       const listSpotsUsecase = ListSpotsUsecase({ spotRepository });
 
@@ -39,14 +39,14 @@ describe("ListSpotsUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATABASE", message });
     });
 
     it("should return a data integrity error when the repository data is corrupted", async () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findMany: vi.fn().mockReturnValue(errAsync({ kind: "data_integrity", message })),
+        findMany: vi.fn().mockReturnValue(errAsync({ kind: "DATA_INTEGRITY", message })),
       });
       const listSpotsUsecase = ListSpotsUsecase({ spotRepository });
 
@@ -55,7 +55,7 @@ describe("ListSpotsUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATA_INTEGRITY", message });
     });
   });
 });

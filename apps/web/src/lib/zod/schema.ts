@@ -13,6 +13,7 @@ function toCustomIssueParams<const T extends CustomIssueParams>(params: T): T {
 export function createFloatSchema(inner: z.ZodNumber) {
   return z
     .string()
+    .trim()
     .min(1)
     .refine((value) => !Number.isNaN(Number.parseFloat(value)), {
       params: toCustomIssueParams({ kind: "invalid_float" }),

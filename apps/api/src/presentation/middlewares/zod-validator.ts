@@ -14,7 +14,7 @@ export function zValidator<Target extends keyof ValidationTargets, Schema extend
     if (!result.success) {
       return context.json(
         toApiError({
-          kind: "validation",
+          kind: "BAD_REQUEST",
           message: z.prettifyError(result.error),
         }),
         400,

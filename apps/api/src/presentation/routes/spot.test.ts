@@ -69,7 +69,7 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(400);
       expect(await response.json()).toEqual({
-        code: "VALIDATION_ERROR",
+        code: "BAD_REQUEST_ERROR",
         message: expect.any(String),
       });
     });
@@ -129,7 +129,7 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(400);
       expect(await response.json()).toEqual({
-        code: "VALIDATION_ERROR",
+        code: "BAD_REQUEST_ERROR",
         message: expect.any(String),
       });
     });
@@ -141,7 +141,7 @@ describe("createSpotRoute", () => {
           getSpotUsecase: {
             execute: vi.fn().mockResolvedValue(
               err({
-                kind: "not_found",
+                kind: "NOT_FOUND",
                 message: faker.lorem.sentence(),
               }),
             ),
@@ -204,7 +204,7 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(400);
       expect(await response.json()).toEqual({
-        code: "VALIDATION_ERROR",
+        code: "BAD_REQUEST_ERROR",
         message: expect.any(String),
       });
     });
@@ -225,7 +225,7 @@ describe("createSpotRoute", () => {
         // Then
         expect(response.status).toBe(400);
         expect(await response.json()).toEqual({
-          code: "VALIDATION_ERROR",
+          code: "BAD_REQUEST_ERROR",
           message: expect.any(String),
         });
       },
@@ -238,7 +238,7 @@ describe("createSpotRoute", () => {
           updateSpotUsecase: {
             execute: vi
               .fn()
-              .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
+              .mockResolvedValue(err({ kind: "NOT_FOUND", message: faker.lorem.sentence() })),
           },
         }),
       );
@@ -294,7 +294,7 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(400);
       expect(await response.json()).toEqual({
-        code: "VALIDATION_ERROR",
+        code: "BAD_REQUEST_ERROR",
         message: expect.any(String),
       });
     });
@@ -306,7 +306,7 @@ describe("createSpotRoute", () => {
           archiveSpotUsecase: {
             execute: vi
               .fn()
-              .mockResolvedValue(err({ kind: "not_found", message: faker.lorem.sentence() })),
+              .mockResolvedValue(err({ kind: "NOT_FOUND", message: faker.lorem.sentence() })),
           },
         }),
       );
@@ -332,7 +332,9 @@ describe("createSpotRoute", () => {
           archiveSpotUsecase: {
             execute: vi
               .fn()
-              .mockResolvedValue(err({ kind: "conflict", message: base62Encode(createSpotId()) })),
+              .mockResolvedValue(
+                err({ kind: "SPOT_DUPLICATED", message: base62Encode(createSpotId()) }),
+              ),
           },
         }),
       );
@@ -346,7 +348,7 @@ describe("createSpotRoute", () => {
       // Then
       expect(response.status).toBe(409);
       expect(await response.json()).toEqual({
-        code: "CONFLICT_ERROR",
+        code: "SPOT_DUPLICATED_ERROR",
         message: expect.any(String),
       });
     });

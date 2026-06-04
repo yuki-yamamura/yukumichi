@@ -10,6 +10,7 @@
     },
     "apps/web": {
       "entry": ["src/app/**/*.{ts,tsx}", "open-next.config.ts", "!src/app/**/*.test.*"],
+      "ignore": ["src/lib/tanstack-form/server-form-state.ts", "src/utils/must-find.ts"],
       "ignoreDependencies": ["@unocss/reset"]
     }
   }

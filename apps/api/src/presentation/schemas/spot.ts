@@ -1,3 +1,4 @@
+import { ErrorCodeEnum } from "@yukumichi/shared/error";
 import z from "zod";
 
 import { latitudeSchema, longitudeSchema } from "@/domain/spot/models/coordinate";
@@ -42,4 +43,9 @@ export const listSpotsResponseSchema = z.object({
 
 export const getSpotResponseSchema = z.object({
   spot: spotSchema,
+});
+
+export const spotDuplicatedErrorResponseSchema = z.object({
+  code: z.literal(ErrorCodeEnum.SPOT_DUPLICATED),
+  message: z.string(),
 });

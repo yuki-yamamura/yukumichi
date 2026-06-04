@@ -35,7 +35,7 @@ describe("GetSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockReturnValue(err({ kind: "not_found", message })),
+        findById: vi.fn().mockReturnValue(err({ kind: "NOT_FOUND", message })),
       });
       const getSpotUsecase = GetSpotUsecase({
         spotRepository,
@@ -49,7 +49,7 @@ describe("GetSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "not_found", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "NOT_FOUND", message });
     });
 
     it("should return a validation error when the spot id is invalid", async () => {
@@ -63,7 +63,7 @@ describe("GetSpotUsecase", () => {
       // Then
       expect(result.isErr()).toBe(true);
       expect(result._unsafeUnwrapErr()).toEqual({
-        kind: "validation",
+        kind: "VALIDATION",
         message: expect.any(String),
       });
     });
@@ -72,7 +72,7 @@ describe("GetSpotUsecase", () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockReturnValue(errAsync({ kind: "database", message })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "DATABASE", message })),
       });
       const getSpotUsecase = GetSpotUsecase({ spotRepository });
 
@@ -81,14 +81,14 @@ describe("GetSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "database", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATABASE", message });
     });
 
     it("should return a data integrity error when the repository data is corrupted", async () => {
       // Given
       const message = faker.lorem.sentence();
       const spotRepository = createSpotRepository({
-        findById: vi.fn().mockReturnValue(errAsync({ kind: "data_integrity", message })),
+        findById: vi.fn().mockReturnValue(errAsync({ kind: "DATA_INTEGRITY", message })),
       });
       const getSpotUsecase = GetSpotUsecase({ spotRepository });
 
@@ -97,7 +97,7 @@ describe("GetSpotUsecase", () => {
 
       // Then
       expect(result.isErr()).toBe(true);
-      expect(result._unsafeUnwrapErr()).toEqual({ kind: "data_integrity", message });
+      expect(result._unsafeUnwrapErr()).toEqual({ kind: "DATA_INTEGRITY", message });
     });
   });
 });
