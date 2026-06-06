@@ -1,7 +1,11 @@
 packages:
   - "apps/*"
   - "packages/*"
-verifyDepsBeforeRun: false
+verifyDepsBeforeRun: install
+# Allow to install packages only after 7 days (10080 minutes) from their release.
+minimumReleaseAge: 10080
+# List of packages to exclude from minimumReleaseAge check with description of why they are excluded.
+minimumReleaseAgeExclude: []
 allowBuilds:
   cpu-features: true
   esbuild: true

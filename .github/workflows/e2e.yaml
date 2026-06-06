@@ -57,7 +57,7 @@ jobs:
       - run: pnpm --filter api db:migrate
       - run: pnpm --filter api check-types
       - run: pnpm --filter web build
-      - run: pnpm dlx playwright install --with-deps chromium
+      - run: pnpm --filter @yukumichi/e2e exec playwright install --with-deps chromium
       - name: Start servers
         run: |
           nohup pnpm --filter api exec tsx src/server.ts > /tmp/api.log 2>&1 &
