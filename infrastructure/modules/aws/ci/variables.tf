@@ -3,9 +3,9 @@ variable "environment" {
   description = "Environment name (e.g., production, staging)"
 }
 
-variable "ecr_repository_arn" {
-  type        = string
-  description = "ARN of the ECR repository for deploy permissions"
+variable "ecr_repository_arns" {
+  type        = list(string)
+  description = "ARNs of the ECR repositories for deploy permissions"
 }
 
 variable "github_repository" {
@@ -13,7 +13,7 @@ variable "github_repository" {
   description = "GitHub repository in owner/repo format"
 }
 
-variable "lambda_function_arn" {
-  type        = string
-  description = "ARN of the Lambda function for deploy permissions"
+variable "lambda_function_arns" {
+  type        = list(string)
+  description = "ARNs of the Lambda functions for deploy permissions"
 }

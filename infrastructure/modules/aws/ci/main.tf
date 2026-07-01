@@ -72,7 +72,7 @@ resource "aws_iam_role_policy" "this" {
           "ecr:PutImage",
           "ecr:BatchGetImage",
         ]
-        Resource = var.ecr_repository_arn
+        Resource = var.ecr_repository_arns
       },
       {
         Sid    = "LambdaDeploy"
@@ -81,7 +81,7 @@ resource "aws_iam_role_policy" "this" {
           "lambda:UpdateFunctionCode",
           "lambda:GetFunction",
         ]
-        Resource = var.lambda_function_arn
+        Resource = var.lambda_function_arns
       },
       {
         Sid    = "TerraformState"
