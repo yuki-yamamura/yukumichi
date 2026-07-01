@@ -15,6 +15,13 @@
       "when": 1775339215538,
       "tag": "0001_lean_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782902594349,
+      "tag": "0002_regular_enchantress",
+      "breakpoints": true
     }
   ]
 }

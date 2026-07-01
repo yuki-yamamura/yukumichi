@@ -8,7 +8,7 @@ import type { Env } from "@/env";
 import type { Database } from "@/infrastructure/database/client";
 
 const tableNames = Object.values(schema)
-  .filter(isTable)
+  .filter((value) => isTable(value))
   .map((table) => getTableName(table));
 
 type TestDatabaseHelper = {
