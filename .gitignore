@@ -20,3 +20,7 @@ tfplan
 
 # Playwright
 .playwright-mcp/
+
+# Go
+# `go build` in apps/functions/<name>/ produces a binary named after the module (= directory name)
+apps/functions/cognito-custom-message/cognito-custom-message
