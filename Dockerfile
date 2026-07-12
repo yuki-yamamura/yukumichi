@@ -6,6 +6,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json apps/api/
 COPY apps/web/package.json apps/web/
 COPY packages/eslint-config/package.json packages/eslint-config/
+COPY packages/shared/package.json packages/shared/
 RUN pnpm install
 
 # Build stage
