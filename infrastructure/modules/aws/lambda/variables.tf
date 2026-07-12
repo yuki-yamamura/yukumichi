@@ -14,6 +14,16 @@ variable "app_env" {
   description = "Application environment (e.g., development, production, test)"
 }
 
+variable "cognito_client_id" {
+  type        = string
+  description = "Cognito User Pool app client ID"
+}
+
+variable "cognito_user_pool_id" {
+  type        = string
+  description = "Cognito User Pool ID"
+}
+
 variable "image_uri" {
   type        = string
   description = "ECR image URI for the Lambda function"

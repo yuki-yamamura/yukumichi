@@ -40,6 +40,9 @@ jobs:
           --health-retries 5
     env:
       APP_ENV: test
+      AWS_REGION: ap-northeast-1
+      COGNITO_CLIENT_ID: dummy-client-id
+      COGNITO_USER_POOL_ID: dummy-user-pool-id
       DATABASE_URL: postgres://yukumichi:yukumichi@localhost:5432/yukumichi
       API_BASE_URL: http://localhost:3010
     steps:

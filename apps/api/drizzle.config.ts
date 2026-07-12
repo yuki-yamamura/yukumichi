@@ -1,11 +1,11 @@
 import { defineConfig } from "drizzle-kit";
 
-import { env } from "./src/env";
+import { dbEnv } from "./src/env/db";
 
 export default defineConfig({
   casing: "snake_case",
   dbCredentials: {
-    url: env.DATABASE_URL,
+    url: dbEnv.DATABASE_URL,
   },
   dialect: "postgresql",
   out: "./drizzle",

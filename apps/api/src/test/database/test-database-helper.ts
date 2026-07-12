@@ -4,7 +4,7 @@ import postgres from "postgres";
 
 import * as schema from "@/infrastructure/database/schema";
 
-import type { Env } from "@/env";
+import type { Env } from "@/env/server";
 import type { Database } from "@/infrastructure/database/client";
 
 const tableNames = Object.values(schema)
