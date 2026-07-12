@@ -7,9 +7,8 @@ import { createCoordinate, createSpot, createSpotId } from "@/test/fixtures/spot
 
 import { SpotRepository } from "./spot";
 
-const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabaseHelper({ APP_ENV: appEnv, DATABASE_URL: databaseUrl });
+const testDb = createTestDatabaseHelper({ DATABASE_URL: databaseUrl });
 const repository = SpotRepository(testDb.db);
 
 describe("SpotRepository", () => {

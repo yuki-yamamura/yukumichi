@@ -17,7 +17,7 @@ type TestDatabaseHelper = {
   truncateTables: () => Promise<void>;
 };
 
-export function createTestDatabaseHelper(env: Env): TestDatabaseHelper {
+export function createTestDatabaseHelper(env: Pick<Env, "DATABASE_URL">): TestDatabaseHelper {
   const sqlClient = postgres(env.DATABASE_URL);
   const db = drizzle(sqlClient, { casing: "snake_case", schema });
 

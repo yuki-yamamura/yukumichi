@@ -12,9 +12,8 @@ import {
 
 import { AccountRepository } from "./account";
 
-const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const testDb = createTestDatabaseHelper({ APP_ENV: appEnv, DATABASE_URL: databaseUrl });
+const testDb = createTestDatabaseHelper({ DATABASE_URL: databaseUrl });
 const repository = AccountRepository(testDb.db);
 
 describe("AccountRepository", () => {

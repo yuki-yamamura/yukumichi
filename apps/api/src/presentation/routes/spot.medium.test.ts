@@ -11,7 +11,13 @@ import { createSpot } from "@/test/fixtures/spot";
 
 const appEnv = inject("appEnv");
 const databaseUrl = inject("databaseUrl");
-const env = { APP_ENV: appEnv, DATABASE_URL: databaseUrl };
+const env = {
+  APP_ENV: appEnv,
+  AWS_REGION: "ap-northeast-1",
+  COGNITO_CLIENT_ID: "test-client-id",
+  COGNITO_USER_POOL_ID: "test-user-pool-id",
+  DATABASE_URL: databaseUrl,
+};
 const testDb = createTestDatabaseHelper(env);
 const app = createApp(env);
 const client = testClient(app);
