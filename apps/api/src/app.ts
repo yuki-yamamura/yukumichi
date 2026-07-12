@@ -21,7 +21,7 @@ import { UpdateSpotUsecase } from "./application/usecase/spot/update";
 import { toApiError } from "./presentation/helpers/error";
 import { unknownErrorResponseSchema } from "./presentation/schemas/error";
 
-import type { Env } from "@/env";
+import type { Env } from "@/env/server";
 import type { DescribeRouteOptions } from "hono-openapi";
 
 export function createApp(env: Env) {
