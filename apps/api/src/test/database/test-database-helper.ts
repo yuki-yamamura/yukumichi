@@ -8,7 +8,7 @@ import type { Env } from "@/env";
 import type { Database } from "@/infrastructure/database/client";
 
 const tableNames = Object.values(schema)
-  .filter(isTable)
+  .filter((value) => isTable(value))
   .map((table) => getTableName(table));
 
 type TestDatabaseHelper = {
@@ -17,7 +17,7 @@ type TestDatabaseHelper = {
   truncateTables: () => Promise<void>;
 };
 
-export function createTestDatabaseHelper(env: Env): TestDatabaseHelper {
+export function createTestDatabaseHelper(env: Pick<Env, "DATABASE_URL">): TestDatabaseHelper {
   const sqlClient = postgres(env.DATABASE_URL);
   const db = drizzle(sqlClient, { casing: "snake_case", schema });
 

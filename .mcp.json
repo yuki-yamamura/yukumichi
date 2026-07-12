@@ -19,8 +19,12 @@
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest"
-      ]
+        "@playwright/mcp@latest",
+        "--extension"
+      ],
+      "env": {
+        "PLAYWRIGHT_MCP_EXTENSION_TOKEN": "DHuCmthyqIkvcdOq1Z7wFgD5DpGJsxawAIex3MbXfvg"
+      }
     },
     "storybook": {
       "type": "http",

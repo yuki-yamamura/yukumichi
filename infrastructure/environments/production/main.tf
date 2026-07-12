@@ -66,6 +66,13 @@ module "ecr" {
   environment = local.environment
 }
 
+module "ecr_cognito_custom_message" {
+  source = "../../modules/aws/ecr"
+
+  name        = "cognito-custom-message"
+  environment = local.environment
+}
+
 # -----------------------------------------------------------------------------
 # Lambda
 # -----------------------------------------------------------------------------
@@ -96,14 +103,25 @@ module "ssm" {
 }
 
 # -----------------------------------------------------------------------------
+# Cognito
+# -----------------------------------------------------------------------------
+
+module "cognito" {
+  source = "../../modules/aws/cognito"
+
+  environment = local.environment
+  image_uri   = "${module.ecr_cognito_custom_message.repository_url}:latest"
+}
+
+# -----------------------------------------------------------------------------
 # CI (GitHub Actions)
 # -----------------------------------------------------------------------------
 
 module "ci" {
   source = "../../modules/aws/ci"
 
-  environment         = local.environment
-  github_repository   = "yuki-yamamura/yukumichi"
-  ecr_repository_arn  = module.ecr.arn
-  lambda_function_arn = module.lambda.arn
+  environment          = local.environment
+  github_repository    = "yuki-yamamura/yukumichi"
+  ecr_repository_arns  = [module.ecr.arn, module.ecr_cognito_custom_message.arn]
+  lambda_function_arns = [module.lambda.arn, module.cognito.lambda_function_arn]
 }

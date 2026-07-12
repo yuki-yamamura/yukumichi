@@ -52,9 +52,9 @@ You must acknowledge these information and use it like a map that tell you how t
 │       └── aws/                   # Reusable AWS modules
 │
 └── wiki/                          # Project documentation
-│   ├── domain/                    # Domain knowledge base
-│   │   └── workflows/             # Domain workflows (drawio diagrams)
-│   ├── guideline/                 # Development guidelines
+    ├── domain/                    # Domain knowledge base
+    │   └── workflows/             # Domain workflows (drawio diagrams)
+    ├── guideline/                 # Development guidelines
     └── user-manual/               # Operational manuals for humans — LLMs do not need to read this
 ```
 

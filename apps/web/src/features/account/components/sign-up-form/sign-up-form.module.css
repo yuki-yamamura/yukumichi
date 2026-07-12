@@ -1,0 +1,14 @@
+.base {
+  display: grid;
+  row-gap: 1.5rem;
+}
+
+.content {
+  display: grid;
+  row-gap: 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
