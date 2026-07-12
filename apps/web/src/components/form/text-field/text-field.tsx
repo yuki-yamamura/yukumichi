@@ -8,12 +8,20 @@ import styles from "./text-field.module.css";
 
 type Props = PropsWithChildren<{
   label: string;
-  placeholder: string;
+  placeholder?: string;
   required?: boolean;
 }> &
-  Pick<ComponentProps<"input">, "inputMode">;
+  Pick<ComponentProps<"input">, "autoComplete" | "inputMode" | "maxLength" | "type">;
 
-export function TextField({ inputMode, label, placeholder, required = false }: Props) {
+export function TextField({
+  autoComplete,
+  inputMode,
+  label,
+  maxLength,
+  placeholder,
+  required = false,
+  type = "text",
+}: Props) {
   const field = useFieldContext<string>();
   const { errors, isDirty, isValid } = field.state.meta;
   const hasSubmitted = field.form.state.submissionAttempts > 0;
@@ -24,8 +32,10 @@ export function TextField({ inputMode, label, placeholder, required = false }: P
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
       <Input
         id={field.name}
-        type="text"
+        type={type}
         inputMode={inputMode}
+        autoComplete={autoComplete}
+        maxLength={maxLength}
         required={required}
         name={field.name}
         value={field.state.value}
