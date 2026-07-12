@@ -71,19 +71,51 @@ export function AccountRepository(db: Database): AccountRepository {
           if (idResult.isErr()) return err(idResult.error);
           if (emailResult.isErr()) return err(emailResult.error);
 
-          const base = {
+          const account: Account = {
             cognitoSub: row.cognitoSub,
             email: emailResult.value,
             id: idResult.value,
+            status: row.status,
           };
 
-          if (row.status === AccountStatusEnum.PENDING) {
-            const account: Account = { ...base, status: AccountStatusEnum.PENDING };
+          return ok(account);
+        }),
 
-            return ok(account);
-          }
+    findByEmail: (email: Email) =>
+      ResultAsync.fromPromise(
+        db.select().from(accounts).where(eq(accounts.email, email)),
+        (error) =>
+          error instanceof Error
+            ? { kind: "DATABASE" as const, message: error.message }
+            : { kind: "DATABASE" as const, message: String(error) },
+      )
+        .andThen((rows) =>
+          rows.length === 0
+            ? err({
+                kind: "NOT_FOUND" as const,
+                message: `Account not found for email: ${email}`,
+              })
+            : ok(rows[0]),
+        )
+        .andThen((row) => {
+          const idResult = AccountId(row.id).mapErr((error) => ({
+            kind: "DATA_INTEGRITY" as const,
+            message: error.message,
+          }));
+          const emailResult = Email(row.email).mapErr((error) => ({
+            kind: "DATA_INTEGRITY" as const,
+            message: error.message,
+          }));
 
-          const account: Account = { ...base, status: AccountStatusEnum.REGISTERED };
+          if (idResult.isErr()) return err(idResult.error);
+          if (emailResult.isErr()) return err(emailResult.error);
+
+          const account: Account = {
+            cognitoSub: row.cognitoSub,
+            email: emailResult.value,
+            id: idResult.value,
+            status: row.status,
+          };
 
           return ok(account);
         }),

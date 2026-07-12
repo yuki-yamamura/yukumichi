@@ -152,6 +152,7 @@ function createAccountRepository(overwrites: Partial<AccountRepository> = {}): A
     create: vi.fn(),
     deleteByCognitoSub: vi.fn(),
     findByCognitoSub: vi.fn(),
+    findByEmail: vi.fn(),
     register: vi.fn(),
   };
 

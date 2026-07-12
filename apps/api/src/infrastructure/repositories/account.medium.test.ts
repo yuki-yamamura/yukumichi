@@ -4,7 +4,11 @@ import { inject } from "vitest";
 import { AccountStatusEnum, registerAccount } from "@/domain/account/models/account";
 import { accounts } from "@/infrastructure/database/schema";
 import { createTestDatabaseHelper } from "@/test/database/test-database-helper";
-import { createPendingAccount, createRegisteredAccount } from "@/test/fixtures/account";
+import {
+  createEmail,
+  createPendingAccount,
+  createRegisteredAccount,
+} from "@/test/fixtures/account";
 
 import { AccountRepository } from "./account";
 
@@ -94,6 +98,59 @@ describe("AccountRepository", () => {
 
       // When
       const result = await repository.findByCognitoSub(cognitoSub);
+
+      // Then
+      expect(result.isErr()).toBe(true);
+      expect(result._unsafeUnwrapErr()).toEqual({
+        kind: "NOT_FOUND",
+        message: expect.any(String),
+      });
+    });
+  });
+
+  describe("findByEmail", () => {
+    it("should return a pending account by email", async () => {
+      // Given
+      const pendingAccount = createPendingAccount();
+      await testDb.db.insert(accounts).values({
+        cognitoSub: pendingAccount.cognitoSub,
+        email: pendingAccount.email,
+        id: pendingAccount.id,
+        status: pendingAccount.status,
+      });
+
+      // When
+      const result = await repository.findByEmail(pendingAccount.email);
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual(pendingAccount);
+    });
+
+    it("should return a registered account by email", async () => {
+      // Given
+      const registeredAccount = createRegisteredAccount();
+      await testDb.db.insert(accounts).values({
+        cognitoSub: registeredAccount.cognitoSub,
+        email: registeredAccount.email,
+        id: registeredAccount.id,
+        status: registeredAccount.status,
+      });
+
+      // When
+      const result = await repository.findByEmail(registeredAccount.email);
+
+      // Then
+      expect(result.isOk()).toBe(true);
+      expect(result._unsafeUnwrap()).toEqual(registeredAccount);
+    });
+
+    it("should return not_found when the account does not exist", async () => {
+      // Given
+      const email = createEmail();
+
+      // When
+      const result = await repository.findByEmail(email);
 
       // Then
       expect(result.isErr()).toBe(true);
