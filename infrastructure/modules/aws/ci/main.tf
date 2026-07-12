@@ -41,6 +41,7 @@ resource "aws_iam_role_policy" "this" {
         Sid    = "TerraformProvisioning"
         Effect = "Allow"
         Action = [
+          "cognito-idp:*",
           "ec2:*",
           "rds:*",
           "lambda:*",
