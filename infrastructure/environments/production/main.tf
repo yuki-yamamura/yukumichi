@@ -4,7 +4,6 @@ locals {
   region      = "ap-northeast-1"
   db_name     = "yukumichi"
   db_username = "yukumichi"
-  web_origin  = "http://localhost:3000"
 }
 
 # -----------------------------------------------------------------------------
@@ -112,7 +111,6 @@ module "cognito" {
 
   environment = local.environment
   image_uri   = "${module.ecr_cognito_custom_message.repository_url}:latest"
-  web_origin  = local.web_origin
 }
 
 # -----------------------------------------------------------------------------

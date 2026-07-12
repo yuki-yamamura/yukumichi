@@ -45,12 +45,6 @@ resource "aws_lambda_function" "custom_message" {
   memory_size   = 128
   timeout       = 3
 
-  environment {
-    variables = {
-      WEB_ORIGIN = var.web_origin
-    }
-  }
-
   logging_config {
     log_format = "Text"
     log_group  = aws_cloudwatch_log_group.custom_message.name
