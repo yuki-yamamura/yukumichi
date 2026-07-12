@@ -87,6 +87,8 @@ module "lambda" {
   image_uri             = "${module.ecr.repository_url}:latest"
   database_url          = "postgresql://${local.db_username}:${urlencode(data.aws_ssm_parameter.db_password.value)}@${module.rds.endpoint}/${local.db_name}"
   app_env               = local.app_env
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_client_id     = module.cognito.app_client_id
 }
 
 # -----------------------------------------------------------------------------

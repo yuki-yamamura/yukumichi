@@ -85,8 +85,10 @@ resource "aws_lambda_function" "this" {
 
   environment {
     variables = {
-      DATABASE_URL = var.database_url
-      APP_ENV      = var.app_env
+      APP_ENV              = var.app_env
+      COGNITO_CLIENT_ID    = var.cognito_client_id
+      COGNITO_USER_POOL_ID = var.cognito_user_pool_id
+      DATABASE_URL         = var.database_url
     }
   }
 
