@@ -2,6 +2,7 @@ import { err, ok } from "neverthrow";
 import { uuidv7 } from "uuidv7";
 import { z } from "zod";
 
+import type { Email } from "@/domain/email";
 import type { ValidationError } from "@/domain/error";
 import type { Result } from "neverthrow";
 
@@ -15,18 +16,6 @@ export function generateAccountId(): AccountId {
 
 export function AccountId(value: string): Result<AccountId, ValidationError> {
   const result = accountIdSchema.safeParse(value);
-
-  return result.success
-    ? ok(result.data)
-    : err({ kind: "VALIDATION", message: result.error.message });
-}
-
-export const emailSchema = z.email();
-
-export type Email = z.infer<typeof emailSchema>;
-
-export function Email(value: string): Result<Email, ValidationError> {
-  const result = emailSchema.safeParse(value);
 
   return result.success
     ? ok(result.data)
@@ -71,20 +60,15 @@ export function PendingAccount({
   id,
 }: {
   cognitoSub: string;
-  email: string;
+  email: Email;
   id: AccountId;
-}): Result<PendingAccount, ValidationError> {
-  const emailResult = Email(email);
-  if (emailResult.isErr()) {
-    return err(emailResult.error);
-  }
-
-  return ok({
+}): PendingAccount {
+  return {
     cognitoSub,
-    email: emailResult.value,
+    email,
     id,
     status: AccountStatusEnum.PENDING,
-  });
+  };
 }
 
 export function registerAccount(pendingAccount: PendingAccount): RegisteredAccount {

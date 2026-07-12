@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import { err, ok, ResultAsync } from "neverthrow";
 
-import { AccountId, AccountStatusEnum, Email } from "@/domain/account/models/account";
+import { AccountId, AccountStatusEnum } from "@/domain/account/models/account";
+import { Email } from "@/domain/email";
 import { accounts } from "@/infrastructure/database/schema";
 
 import type { Account, PendingAccount, RegisteredAccount } from "@/domain/account/models/account";

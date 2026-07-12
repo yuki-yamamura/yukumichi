@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import z from "zod";
 
+import { Email } from "@/domain/email";
 import {
   createAccountId,
   createCognitoSub,
@@ -11,7 +12,6 @@ import {
 import {
   AccountId,
   AccountStatusEnum,
-  Email,
   generateAccountId,
   PendingAccount,
   registerAccount,
@@ -85,38 +85,21 @@ describe("Email", () => {
 });
 
 describe("PendingAccount", () => {
-  it("should create a pending account with a valid email", () => {
+  it("should build a pending account preserving the base fields", () => {
     // Given
     const id = createAccountId();
     const cognitoSub = createCognitoSub();
-    const email = faker.internet.email().toLowerCase();
+    const email = createEmail();
 
     // When
-    const result = PendingAccount({ cognitoSub, email, id });
+    const account = PendingAccount({ cognitoSub, email, id });
 
     // Then
-    expect(result.isOk()).toBe(true);
-    expect(result._unsafeUnwrap()).toEqual({
+    expect(account).toEqual({
       cognitoSub,
       email,
       id,
       status: AccountStatusEnum.PENDING,
-    });
-  });
-
-  it("should return a validation error when the email is invalid", () => {
-    // Given
-    const id = createAccountId();
-    const cognitoSub = createCognitoSub();
-
-    // When
-    const result = PendingAccount({ cognitoSub, email: "not-an-email", id });
-
-    // Then
-    expect(result.isErr()).toBe(true);
-    expect(result._unsafeUnwrapErr()).toEqual({
-      kind: "VALIDATION",
-      message: expect.any(String),
     });
   });
 });

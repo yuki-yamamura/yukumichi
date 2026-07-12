@@ -1,13 +1,10 @@
 import { faker } from "@faker-js/faker";
 
-import { accountIdSchema, AccountStatusEnum, emailSchema } from "@/domain/account/models/account";
+import { accountIdSchema, AccountStatusEnum } from "@/domain/account/models/account";
+import { emailSchema } from "@/domain/email";
 
-import type {
-  AccountId,
-  Email,
-  PendingAccount,
-  RegisteredAccount,
-} from "@/domain/account/models/account";
+import type { AccountId, PendingAccount, RegisteredAccount } from "@/domain/account/models/account";
+import type { Email } from "@/domain/email";
 
 export function createAccountId(): AccountId {
   return accountIdSchema.parse(faker.string.uuid({ version: 7 }));
