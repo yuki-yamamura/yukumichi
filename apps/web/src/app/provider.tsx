@@ -2,6 +2,7 @@
 
 import type { PropsWithChildren } from "react";
 
+import "@/lib/amplify/client";
 import "@/lib/zod/config";
 
 type Props = PropsWithChildren;

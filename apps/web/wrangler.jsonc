@@ -13,6 +13,9 @@
       "vars": {
         "ENVIRONMENT": "production",
         "NEXT_PUBLIC_API_BASE_URL": "https://yjm6bp4rijy76266jphlcoshlm0tqjku.lambda-url.ap-northeast-1.on.aws",
+        "NEXT_PUBLIC_AWS_REGION": "ap-northeast-1",
+        "NEXT_PUBLIC_COGNITO_CLIENT_ID": "2tcimlfgtvseri5p7tg76qh88d",
+        "NEXT_PUBLIC_COGNITO_USER_POOL_ID": "ap-northeast-1_W4GRQjQOp",
       },
     },
   },

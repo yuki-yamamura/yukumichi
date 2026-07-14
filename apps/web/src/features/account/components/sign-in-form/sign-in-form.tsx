@@ -2,23 +2,23 @@
 
 import { SpinnerIcon } from "@/components/icons/spinner-icon";
 import { Button } from "@/components/ui/button";
-import { createSignUpFormOptions } from "@/features/account/form/sign-up-form";
+import { createSignInFormOptions } from "@/features/account/form/sign-in-form";
 import { useAppForm } from "@/lib/tanstack-form/app-form";
 
-import type { SignUpFormInput } from "@/features/account/form/sign-up-form";
+import type { SignInFormInput } from "@/features/account/form/sign-in-form";
 
-import styles from "./sign-up-form.module.css";
+import styles from "./sign-in-form.module.css";
 
 type Props = {
-  defaultValues?: SignUpFormInput;
+  defaultValues?: SignInFormInput;
   isPending?: boolean;
   submitError?: string;
-  onSubmit: (values: SignUpFormInput) => Promise<void> | void;
+  onSubmit: (values: SignInFormInput) => Promise<void> | void;
 };
 
-export function SignUpForm({ defaultValues, isPending = false, onSubmit, submitError }: Props) {
+export function SignInForm({ defaultValues, isPending = false, onSubmit, submitError }: Props) {
   const form = useAppForm({
-    ...createSignUpFormOptions({ defaultValues }),
+    ...createSignInFormOptions({ defaultValues }),
     onSubmit: async ({ value }) => {
       await onSubmit(value);
     },
@@ -52,7 +52,7 @@ export function SignUpForm({ defaultValues, isPending = false, onSubmit, submitE
               required
               label="Password"
               type="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
             />
           )}
         </form.AppField>
@@ -65,7 +65,7 @@ export function SignUpForm({ defaultValues, isPending = false, onSubmit, submitE
       <div className={styles.actions}>
         <Button type="submit" disabled={isPending}>
           {isPending && <SpinnerIcon />}
-          Sign up
+          Sign in
         </Button>
       </div>
     </form>

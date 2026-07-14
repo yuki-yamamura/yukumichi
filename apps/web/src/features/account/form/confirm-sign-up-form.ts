@@ -14,14 +14,11 @@ export function createConfirmSignUpFormOptions({
     code: "",
     email: "",
   },
-  onSubmit,
 }: {
   defaultValues?: ConfirmSignUpFormInput;
-  onSubmit?: () => void;
 } = {}) {
   return formOptions({
     defaultValues,
-    onSubmit,
     validators: {
       onChange: confirmSignUpFormSchema,
     },

@@ -20,5 +20,3 @@ export function createCognitoJwtVerifier({ clientId, userPoolId }: CognitoJwtVer
 
   return verifier;
 }
-
-export type CognitoIdTokenVerifier = ReturnType<typeof createCognitoJwtVerifier>;
