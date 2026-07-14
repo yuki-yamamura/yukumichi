@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
 
-import { accountIdSchema, AccountStatusEnum } from "@/domain/account/models/account";
+import { accountIdSchema } from "@/domain/account/models/account";
 import { emailSchema } from "@/domain/email";
 
-import type { AccountId, PendingAccount, RegisteredAccount } from "@/domain/account/models/account";
+import type { Account, AccountId } from "@/domain/account/models/account";
 import type { Email } from "@/domain/email";
 
 export function createAccountId(): AccountId {
@@ -18,30 +18,11 @@ export function createCognitoSub(): string {
   return faker.string.uuid();
 }
 
-export function createPendingAccount(overrides?: Partial<PendingAccount>): PendingAccount {
-  const account: PendingAccount = {
+export function createAccount(overrides?: Partial<Account>): Account {
+  return {
     cognitoSub: createCognitoSub(),
     email: createEmail(),
     id: createAccountId(),
-    status: AccountStatusEnum.PENDING,
-  };
-
-  return {
-    ...account,
-    ...overrides,
-  };
-}
-
-export function createRegisteredAccount(overrides?: Partial<RegisteredAccount>): RegisteredAccount {
-  const account: RegisteredAccount = {
-    cognitoSub: createCognitoSub(),
-    email: createEmail(),
-    id: createAccountId(),
-    status: AccountStatusEnum.REGISTERED,
-  };
-
-  return {
-    ...account,
     ...overrides,
   };
 }

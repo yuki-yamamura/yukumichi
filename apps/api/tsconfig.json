@@ -4,6 +4,7 @@
     "lib": ["ES2022"],
     "module": "ES2022",
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "strict": true,
     "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
@@ -19,6 +20,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "drizzle.config.ts", "vitest.config.ts", "vitest.setup.medium.ts"],
+  "include": [
+    "src/**/*.ts",
+    "scripts/**/*.ts",
+    "drizzle.config.ts",
+    "vitest.config.ts",
+    "vitest.setup.medium.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

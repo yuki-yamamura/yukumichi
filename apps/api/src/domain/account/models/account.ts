@@ -22,58 +22,8 @@ export function AccountId(value: string): Result<AccountId, ValidationError> {
     : err({ kind: "VALIDATION", message: result.error.message });
 }
 
-export const AccountStatusEnum = {
-  PENDING: "pending",
-  REGISTERED: "registered",
-} as const;
-
-export type AccountStatus = (typeof AccountStatusEnum)[keyof typeof AccountStatusEnum];
-
-export type AccountAlreadyRegisteredError = {
-  kind: "ACCOUNT_ALREADY_REGISTERED";
-  message: string;
-};
-
-export type BaseAccount = {
+export type Account = Readonly<{
   cognitoSub: string;
   email: Email;
   id: AccountId;
-};
-
-export type PendingAccount = Readonly<
-  BaseAccount & {
-    status: typeof AccountStatusEnum.PENDING;
-  }
->;
-
-export type RegisteredAccount = Readonly<
-  BaseAccount & {
-    status: typeof AccountStatusEnum.REGISTERED;
-  }
->;
-
-export type Account = PendingAccount | RegisteredAccount;
-
-export function PendingAccount({
-  cognitoSub,
-  email,
-  id,
-}: {
-  cognitoSub: string;
-  email: Email;
-  id: AccountId;
-}): PendingAccount {
-  return {
-    cognitoSub,
-    email,
-    id,
-    status: AccountStatusEnum.PENDING,
-  };
-}
-
-export function registerAccount(pendingAccount: PendingAccount): RegisteredAccount {
-  return {
-    ...pendingAccount,
-    status: AccountStatusEnum.REGISTERED,
-  };
-}
+}>;

@@ -1,18 +1,15 @@
-import type { Account, AccountId, PendingAccount, RegisteredAccount } from "./models/account";
+import type { Account, AccountId } from "./models/account";
 import type { Email } from "@/domain/email";
-import type { DatabaseError, DataIntegrityError, NotFoundError } from "@/domain/error";
+import type { DatabaseError, DataIntegrityError } from "@/domain/error";
 import type { ResultAsync } from "neverthrow";
 
 export type AccountRepository = {
-  create: (pendingAccount: PendingAccount) => ResultAsync<AccountId, DatabaseError>;
-  deleteByCognitoSub: (cognitoSub: string) => ResultAsync<void, DatabaseError>;
   findByCognitoSub: (
     cognitoSub: string,
-  ) => ResultAsync<Account, DatabaseError | DataIntegrityError | NotFoundError>;
-  findByEmail: (
-    email: Email,
-  ) => ResultAsync<Account, DatabaseError | DataIntegrityError | NotFoundError>;
-  register: (
-    registeredAccount: RegisteredAccount,
-  ) => ResultAsync<RegisteredAccount, DatabaseError | DataIntegrityError | NotFoundError>;
+  ) => ResultAsync<Account | undefined, DatabaseError | DataIntegrityError>;
+  upsertByCognitoSub: (params: {
+    cognitoSub: string;
+    email: Email;
+    id: AccountId;
+  }) => ResultAsync<Account, DatabaseError | DataIntegrityError>;
 };

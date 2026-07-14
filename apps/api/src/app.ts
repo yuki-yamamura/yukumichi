@@ -1,19 +1,18 @@
-import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { openAPIRouteHandler, resolver } from "hono-openapi";
 
-import { ConfirmSignUpUsecase } from "@/application/usecase/account/confirm-sign-up";
-import { SignUpUsecase } from "@/application/usecase/account/sign-up";
+import { GetOrCreateAccountUsecase } from "@/application/usecase/account/get-or-create-account";
 import { ArchiveSpotUsecase } from "@/application/usecase/spot/archive";
 import { CreateSpotUsecase } from "@/application/usecase/spot/create";
 import { GetSpotUsecase } from "@/application/usecase/spot/get";
 import { ListSpotsUsecase } from "@/application/usecase/spot/list";
+import { createCognitoJwtVerifier } from "@/infrastructure/auth/cognito-jwt-verifier";
 import { createDatabase } from "@/infrastructure/database/client";
-import { CognitoAuthGateway } from "@/infrastructure/gateways/cognito-auth-gateway";
 import { AccountRepository } from "@/infrastructure/repositories/account";
 import { SpotRepository } from "@/infrastructure/repositories/spot";
+import { jwtVerifier } from "@/presentation/middlewares/jwt-verifier";
 import { createAccountRoute } from "@/presentation/routes/account";
 import { createSpotRoute } from "@/presentation/routes/spot";
 
@@ -29,12 +28,11 @@ export function createApp(env: Env) {
   const accountRepository = AccountRepository(db);
   const spotRepository = SpotRepository(db);
 
-  const cognitoClient = new CognitoIdentityProviderClient({ region: env.AWS_REGION });
-  const authGateway = CognitoAuthGateway({
-    client: cognitoClient,
+  const cognitoJwtVerifier = createCognitoJwtVerifier({
     clientId: env.COGNITO_CLIENT_ID,
     userPoolId: env.COGNITO_USER_POOL_ID,
   });
+  const jwtMiddleware = jwtVerifier(cognitoJwtVerifier);
 
   const _app = new Hono();
   _app.use(cors());
@@ -59,8 +57,8 @@ export function createApp(env: Env) {
     .route(
       "/accounts",
       createAccountRoute({
-        confirmSignUpUsecase: ConfirmSignUpUsecase({ accountRepository, authGateway }),
-        signUpUsecase: SignUpUsecase({ accountRepository, authGateway }),
+        getOrCreateAccountUsecase: GetOrCreateAccountUsecase({ accountRepository }),
+        jwtVerifier: jwtMiddleware,
       }),
     )
     .route(
