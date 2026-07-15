@@ -1,12 +1,38 @@
 "use client";
 
-import { useActionState } from "react";
+import { signUp } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
-import { signUpAction } from "@/features/account/actions/sign-up-action";
 import { SignUpForm } from "@/features/account/components/sign-up-form";
 
-export function SignUpFormContainer() {
-  const [formState, action, isPending] = useActionState(signUpAction, undefined);
+import type { SignUpFormInput } from "@/features/account/form/sign-up-form";
 
-  return <SignUpForm isPending={isPending} action={action} formState={formState} />;
+export function SignUpFormContainer() {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [submitError, setSubmitError] = useState<string | undefined>();
+
+  const handleSubmit = (values: SignUpFormInput) => {
+    setSubmitError(undefined);
+
+    return new Promise<void>((resolve) => {
+      startTransition(async () => {
+        try {
+          await signUp({
+            options: { userAttributes: { email: values.email } },
+            password: values.password,
+            username: values.email,
+          });
+          router.push(`/sign-up/confirm?email=${encodeURIComponent(values.email)}`);
+        } catch (error) {
+          setSubmitError(error instanceof Error ? error.message : "Sign up failed");
+        } finally {
+          resolve();
+        }
+      });
+    });
+  };
+
+  return <SignUpForm isPending={isPending} submitError={submitError} onSubmit={handleSubmit} />;
 }

@@ -15,7 +15,7 @@ const env = {
   APP_ENV: appEnv,
   AWS_REGION: "ap-northeast-1",
   COGNITO_CLIENT_ID: "test-client-id",
-  COGNITO_USER_POOL_ID: "test-user-pool-id",
+  COGNITO_USER_POOL_ID: "ap-northeast-1_testpool",
   DATABASE_URL: databaseUrl,
 };
 const testDb = createTestDatabaseHelper(env);

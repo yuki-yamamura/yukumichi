@@ -2,119 +2,59 @@ import { Hono } from "hono";
 import { describeRoute, resolver } from "hono-openapi";
 
 import { toApiError, toHttpStatusCode } from "@/presentation/helpers/error";
-import { zValidator } from "@/presentation/middlewares/zod-validator";
-import {
-  confirmSignUpRequestBodySchema,
-  signUpRequestBodySchema,
-} from "@/presentation/schemas/account";
-import {
-  accountAlreadyRegisteredErrorResponseSchema,
-  authGatewayErrorResponseSchema,
-  badRequestErrorResponseSchema,
-  codeInvalidErrorResponseSchema,
-  notFoundErrorResponseSchema,
-} from "@/presentation/schemas/error";
+import { accountResponseSchema } from "@/presentation/schemas/account";
+import { unauthorizedErrorResponseSchema } from "@/presentation/schemas/error";
 
-import type { ConfirmSignUpUsecase } from "@/application/usecase/account/confirm-sign-up";
-import type { SignUpUsecase } from "@/application/usecase/account/sign-up";
+import type { GetOrCreateAccountUsecase } from "@/application/usecase/account/get-or-create-account";
+import type { JwtVerifierMiddleware } from "@/presentation/middlewares/jwt-verifier";
 
 type AccountRouteDeps = {
-  confirmSignUpUsecase: ConfirmSignUpUsecase;
-  signUpUsecase: SignUpUsecase;
+  getOrCreateAccountUsecase: GetOrCreateAccountUsecase;
+  jwtVerifier: JwtVerifierMiddleware;
 };
 
-export function createAccountRoute({ confirmSignUpUsecase, signUpUsecase }: AccountRouteDeps) {
-  return new Hono()
-    .post(
-      "/sign-up",
-      describeRoute({
-        description: "Start a sign-up flow with email and password",
-        responses: {
-          201: {
-            description: "Sign-up accepted; verification email sent",
+export function createAccountRoute({ getOrCreateAccountUsecase, jwtVerifier }: AccountRouteDeps) {
+  return new Hono().get(
+    "/me",
+    describeRoute({
+      description: "Return the current account, creating it on first authenticated access (JIT)",
+      responses: {
+        200: {
+          content: {
+            "application/json": { schema: resolver(accountResponseSchema) },
           },
-          400: {
-            content: {
-              "application/json": { schema: resolver(badRequestErrorResponseSchema) },
-            },
-            description: "Validation error",
-          },
-          409: {
-            content: {
-              "application/json": {
-                schema: resolver(accountAlreadyRegisteredErrorResponseSchema),
-              },
-            },
-            description: "The email is already registered",
-          },
-          502: {
-            content: {
-              "application/json": { schema: resolver(authGatewayErrorResponseSchema) },
-            },
-            description: "The auth provider is unavailable",
-          },
+          description: "The account for the authenticated user",
         },
-        tags: ["accounts"],
-      }),
-      zValidator("json", signUpRequestBodySchema),
-      async (context) => {
-        const json = context.req.valid("json");
-        const result = await signUpUsecase.execute(json);
-
-        return result.match(
-          () => context.body(null, 201),
-          (error) => {
-            const apiError = toApiError(error);
-
-            return context.json(apiError, toHttpStatusCode(apiError.code));
+        401: {
+          content: {
+            "application/json": { schema: resolver(unauthorizedErrorResponseSchema) },
           },
-        );
-      },
-    )
-    .post(
-      "/sign-up/confirm",
-      describeRoute({
-        description: "Confirm sign-up with the verification code sent to the email",
-        responses: {
-          204: {
-            description: "The account is now confirmed",
-          },
-          400: {
-            content: {
-              "application/json": {
-                schema: resolver(badRequestErrorResponseSchema.or(codeInvalidErrorResponseSchema)),
-              },
-            },
-            description: "Validation error or the verification code was invalid",
-          },
-          404: {
-            content: {
-              "application/json": { schema: resolver(notFoundErrorResponseSchema) },
-            },
-            description: "No account exists for the given email",
-          },
-          502: {
-            content: {
-              "application/json": { schema: resolver(authGatewayErrorResponseSchema) },
-            },
-            description: "The auth provider is unavailable",
-          },
+          description: "Missing or invalid bearer token",
         },
-        tags: ["accounts"],
-      }),
-      zValidator("json", confirmSignUpRequestBodySchema),
-      async (context) => {
-        const json = context.req.valid("json");
-        const result = await confirmSignUpUsecase.execute(json);
-
-        return result.match(
-          () => context.body(null, 204),
-          (error) => {
-            const apiError = toApiError(error);
-
-            return context.json(apiError, toHttpStatusCode(apiError.code));
-          },
-        );
       },
-    );
+      tags: ["accounts"],
+    }),
+    jwtVerifier,
+    async (context) => {
+      const idToken = context.var.idToken;
+      const result = await getOrCreateAccountUsecase.execute({
+        cognitoSub: idToken.sub,
+        email: typeof idToken.email === "string" ? idToken.email : "",
+      });
+
+      return result.match(
+        (account) =>
+          context.json(
+            accountResponseSchema.parse({
+              account: { email: account.email, id: account.id },
+            }),
+          ),
+        (error) => {
+          const apiError = toApiError(error);
+
+          return context.json(apiError, toHttpStatusCode(apiError.code));
+        },
+      );
+    },
+  );
 }

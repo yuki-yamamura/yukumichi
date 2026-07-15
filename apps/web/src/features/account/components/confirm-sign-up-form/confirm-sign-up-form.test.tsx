@@ -1,28 +1,22 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { confirmSignUpFormSchema } from "@/features/account/form/confirm-sign-up-form";
-
 import { ConfirmSignUpForm } from "./confirm-sign-up-form";
 
 import type { UserEvent } from "@testing-library/user-event";
 
 describe("ConfirmSignUpForm", () => {
   const user: UserEvent = userEvent.setup();
-  const actionSpy = vi.fn();
   const onSubmitSpy = vi.fn();
 
   beforeEach(() => {
-    actionSpy.mockClear();
     onSubmitSpy.mockClear();
   });
 
-  it("can submit form with the injected email and typed code", async () => {
+  it("passes the injected email and typed code to onSubmit", async () => {
     // Given
     render(
       <ConfirmSignUpForm
-        action={actionSpy}
-        isPending={false}
         defaultValues={{ code: "", email: "you@example.com" }}
         onSubmit={onSubmitSpy}
       />,
@@ -34,11 +28,24 @@ describe("ConfirmSignUpForm", () => {
     await user.click(screen.getByRole("button", { name: "Verify" }));
 
     // Then
-    expect(actionSpy).toHaveBeenCalledWithFormData(confirmSignUpFormSchema, {
+    expect(onSubmitSpy).toHaveBeenCalledExactlyOnceWith({
       code: "123456",
       email: "you@example.com",
     });
-    expect(onSubmitSpy).toHaveBeenCalledOnce();
+  });
+
+  it("shows the submitError when provided", () => {
+    // When
+    render(
+      <ConfirmSignUpForm
+        defaultValues={{ code: "", email: "you@example.com" }}
+        submitError="Wrong code"
+        onSubmit={onSubmitSpy}
+      />,
+    );
+
+    // Then
+    expect(screen.getByRole("alert")).toHaveTextContent("Wrong code");
   });
 
   describe("cannot submit form with invalid code", () => {
@@ -46,8 +53,6 @@ describe("ConfirmSignUpForm", () => {
       // Given
       render(
         <ConfirmSignUpForm
-          action={actionSpy}
-          isPending={false}
           defaultValues={{ code: "", email: "you@example.com" }}
           onSubmit={onSubmitSpy}
         />,
@@ -67,8 +72,6 @@ describe("ConfirmSignUpForm", () => {
       // Given
       render(
         <ConfirmSignUpForm
-          action={actionSpy}
-          isPending={false}
           defaultValues={{ code: "", email: "you@example.com" }}
           onSubmit={onSubmitSpy}
         />,

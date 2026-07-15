@@ -28,6 +28,11 @@ jobs:
   chromatic:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3010
+      NEXT_PUBLIC_AWS_REGION: ap-northeast-1
+      NEXT_PUBLIC_COGNITO_CLIENT_ID: dummy-client-id
+      NEXT_PUBLIC_COGNITO_USER_POOL_ID: ap-northeast-1_dummyPool
     steps:
       - uses: actions/checkout@v6
         with:

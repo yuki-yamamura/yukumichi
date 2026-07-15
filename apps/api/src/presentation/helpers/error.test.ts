@@ -19,16 +19,8 @@ describe("toApiError", () => {
       { code: "SPOT_DUPLICATED_ERROR", message: "Conflict occurred" },
     ],
     [
-      { kind: "ACCOUNT_ALREADY_REGISTERED", message: "Already registered" },
-      { code: "ACCOUNT_ALREADY_REGISTERED_ERROR", message: "Already registered" },
-    ],
-    [
-      { kind: "AUTH_GATEWAY", message: "Cognito unavailable" },
-      { code: "AUTH_GATEWAY_ERROR", message: "Cognito unavailable" },
-    ],
-    [
-      { kind: "CODE_INVALID", message: "Wrong code" },
-      { code: "CODE_INVALID_ERROR", message: "Wrong code" },
+      { kind: "UNAUTHORIZED", message: "Missing bearer token" },
+      { code: "UNAUTHORIZED_ERROR", message: "Missing bearer token" },
     ],
     [
       { kind: "DATA_INTEGRITY", message: "Data integrity issue" },
@@ -50,11 +42,9 @@ describe("toApiError", () => {
 describe("toHttpStatus", () => {
   it.each<[ErrorCode, ContentfulStatusCode]>([
     ["BAD_REQUEST_ERROR", 400],
-    ["CODE_INVALID_ERROR", 400],
+    ["UNAUTHORIZED_ERROR", 401],
     ["NOT_FOUND_ERROR", 404],
-    ["ACCOUNT_ALREADY_REGISTERED_ERROR", 409],
     ["SPOT_DUPLICATED_ERROR", 409],
-    ["AUTH_GATEWAY_ERROR", 502],
     ["DATABASE_ERROR", 500],
     ["DATA_INTEGRITY_ERROR", 500],
     ["UNKNOWN_ERROR", 500],

@@ -22,6 +22,13 @@
       "when": 1782902594349,
       "tag": "0002_regular_enchantress",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784064904921,
+      "tag": "0003_foamy_violations",
+      "breakpoints": true
     }
   ]
 }

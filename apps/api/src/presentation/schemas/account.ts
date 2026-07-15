@@ -1,13 +1,11 @@
 import z from "zod";
 
+import { accountIdSchema } from "@/domain/account/models/account";
 import { emailSchema } from "@/domain/email";
 
-export const signUpRequestBodySchema = z.object({
-  email: emailSchema,
-  password: z.string().min(8),
-});
-
-export const confirmSignUpRequestBodySchema = z.object({
-  code: z.string().min(1),
-  email: emailSchema,
+export const accountResponseSchema = z.object({
+  account: z.object({
+    email: emailSchema,
+    id: accountIdSchema,
+  }),
 });

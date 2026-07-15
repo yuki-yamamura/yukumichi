@@ -17,19 +17,17 @@ export function toApiError<K extends ErrorKind>(error: {
 
 export function toHttpStatusCode(code: ErrorCode): ContentfulStatusCode {
   switch (code) {
-    case "BAD_REQUEST_ERROR":
-    case "CODE_INVALID_ERROR": {
+    case "BAD_REQUEST_ERROR": {
       return 400;
+    }
+    case "UNAUTHORIZED_ERROR": {
+      return 401;
     }
     case "NOT_FOUND_ERROR": {
       return 404;
     }
-    case "ACCOUNT_ALREADY_REGISTERED_ERROR":
     case "SPOT_DUPLICATED_ERROR": {
       return 409;
-    }
-    case "AUTH_GATEWAY_ERROR": {
-      return 502;
     }
     case "DATA_INTEGRITY_ERROR":
     case "DATABASE_ERROR":

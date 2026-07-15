@@ -1,25 +1,21 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { signUpFormSchema } from "@/features/account/form/sign-up-form";
-
 import { SignUpForm } from "./sign-up-form";
 
 import type { UserEvent } from "@testing-library/user-event";
 
 describe("SignUpForm", () => {
   const user: UserEvent = userEvent.setup();
-  const actionSpy = vi.fn();
   const onSubmitSpy = vi.fn();
 
   beforeEach(() => {
-    actionSpy.mockClear();
     onSubmitSpy.mockClear();
   });
 
-  it("can submit form with correct values", async () => {
+  it("passes the typed values to onSubmit", async () => {
     // Given
-    render(<SignUpForm action={actionSpy} isPending={false} onSubmit={onSubmitSpy} />);
+    render(<SignUpForm onSubmit={onSubmitSpy} />);
 
     await user.type(screen.getByLabelText("Email"), "you@example.com");
     await user.type(screen.getByLabelText("Password"), "Passw0rd!");
@@ -28,17 +24,24 @@ describe("SignUpForm", () => {
     await user.click(screen.getByRole("button", { name: "Sign up" }));
 
     // Then
-    expect(actionSpy).toHaveBeenCalledWithFormData(signUpFormSchema, {
+    expect(onSubmitSpy).toHaveBeenCalledExactlyOnceWith({
       email: "you@example.com",
       password: "Passw0rd!",
     });
-    expect(onSubmitSpy).toHaveBeenCalledOnce();
+  });
+
+  it("shows the submitError when provided", () => {
+    // When
+    render(<SignUpForm submitError="Something went wrong" onSubmit={onSubmitSpy} />);
+
+    // Then
+    expect(screen.getByRole("alert")).toHaveTextContent("Something went wrong");
   });
 
   describe("cannot submit form with invalid input", () => {
     it("shows an error when email is missing", async () => {
       // Given
-      render(<SignUpForm action={actionSpy} isPending={false} onSubmit={onSubmitSpy} />);
+      render(<SignUpForm onSubmit={onSubmitSpy} />);
 
       await user.type(screen.getByLabelText("Password"), "Passw0rd!");
 
@@ -52,7 +55,7 @@ describe("SignUpForm", () => {
 
     it("shows an error when email is malformed", async () => {
       // Given
-      render(<SignUpForm action={actionSpy} isPending={false} onSubmit={onSubmitSpy} />);
+      render(<SignUpForm onSubmit={onSubmitSpy} />);
 
       await user.type(screen.getByLabelText("Email"), "not-an-email");
       await user.type(screen.getByLabelText("Password"), "Passw0rd!");
@@ -67,7 +70,7 @@ describe("SignUpForm", () => {
 
     it("shows an error when password is shorter than 8 characters", async () => {
       // Given
-      render(<SignUpForm action={actionSpy} isPending={false} onSubmit={onSubmitSpy} />);
+      render(<SignUpForm onSubmit={onSubmitSpy} />);
 
       await user.type(screen.getByLabelText("Email"), "you@example.com");
       await user.type(screen.getByLabelText("Password"), "short");
