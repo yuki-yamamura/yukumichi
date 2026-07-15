@@ -1,6 +1,6 @@
 "use client";
 
-import { autoSignIn, confirmSignUp } from "aws-amplify/auth";
+import { autoSignIn, confirmSignUp, signOut } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -24,9 +24,20 @@ export function ConfirmSignUpFormContainer({ email }: Props) {
     return new Promise<void>((resolve) => {
       startTransition(async () => {
         try {
-          await confirmSignUp({
+          const { nextStep } = await confirmSignUp({
             confirmationCode: values.code,
             username: values.email,
+          });
+          if (nextStep.signUpStep !== "COMPLETE_AUTO_SIGN_IN") {
+            router.push(`/sign-in?email=${encodeURIComponent(values.email)}`);
+
+            return;
+          }
+          // Amplify's autoSignIn refuses to run when any signed-in session
+          // (even a stale one from a deleted Cognito user) is still cached in
+          // the browser, so we always clear it before completing the flow.
+          await signOut().catch(() => {
+            // no session to sign out from; safe to ignore
           });
           const { isSignedIn } = await autoSignIn();
           if (!isSignedIn) {

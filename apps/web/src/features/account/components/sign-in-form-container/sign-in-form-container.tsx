@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "aws-amplify/auth";
+import { signIn, signOut } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -24,6 +24,12 @@ export function SignInFormContainer({ defaultValues }: Props) {
     return new Promise<void>((resolve) => {
       startTransition(async () => {
         try {
+          // signIn throws UserAlreadyAuthenticatedException when a stale
+          // session lingers in the browser (e.g., the Cognito user was
+          // deleted server-side but tokens remain locally), so clear first.
+          await signOut().catch(() => {
+            // no session to sign out from; safe to ignore
+          });
           await signIn({
             options: { authFlowType: "USER_SRP_AUTH" },
             password: values.password,
