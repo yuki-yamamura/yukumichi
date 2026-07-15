@@ -61,7 +61,11 @@ jobs:
           echo "id=$ID" >> "$GITHUB_OUTPUT"
 
       - name: Start bastion and wait for SSM
+        id: bastion_state
         run: |
+          PREV=$(aws ec2 describe-instances --instance-ids "${{ steps.bastion.outputs.id }}" \
+            --query 'Reservations[0].Instances[0].State.Name' --output text)
+          echo "previous_state=$PREV" >> "$GITHUB_OUTPUT"
           aws ec2 start-instances --instance-ids "${{ steps.bastion.outputs.id }}" > /dev/null
           aws ec2 wait instance-running --instance-ids "${{ steps.bastion.outputs.id }}"
           for i in $(seq 1 60); do
@@ -115,7 +119,9 @@ jobs:
             --with-decryption \
             --query 'Parameter.Value' --output text)
           ENCODED=$(python3 -c "import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1], safe=''))" "$PASSWORD")
-          DATABASE_URL="postgresql://yukumichi:${ENCODED}@localhost:${RDS_LOCAL_PORT}/yukumichi" \
+          # RDS enforces SSL (rds.force_ssl = 1); postgres.js needs sslmode=require.
+          # Tunneled through localhost, so certificate hostname will not match: disable verification.
+          DATABASE_URL="postgresql://yukumichi:${ENCODED}@localhost:${RDS_LOCAL_PORT}/yukumichi?sslmode=no-verify" \
             pnpm --filter api run db:migrate
 
       - name: Close SSM port forward
@@ -156,7 +162,9 @@ jobs:
             --function-name ${{ env.LAMBDA_FUNCTION }}
 
       - name: Stop bastion
-        if: always()
+        # Only stop if the workflow started it. If someone was using it already
+        # (running / pending), leave it as we found it so we do not cut their tunnel.
+        if: always() && steps.bastion_state.outputs.previous_state == 'stopped'
         run: |
           if [ -n "${{ steps.bastion.outputs.id }}" ]; then
             aws ec2 stop-instances --instance-ids "${{ steps.bastion.outputs.id }}" > /dev/null || true
