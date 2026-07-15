@@ -1,12 +1,14 @@
 name: API Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - "apps/api/**"
       - "Dockerfile"
+      - ".github/workflows/api-deploy.yaml"
 
 permissions:
   id-token: write
@@ -19,14 +21,109 @@ jobs:
       AWS_REGION: ap-northeast-1
       ECR_REPOSITORY: api-production
       LAMBDA_FUNCTION: api-production
+      BASTION_NAME_TAG: ssm-production
+      RDS_IDENTIFIER: yukumichi-db
+      RDS_LOCAL_PORT: "15432"
+      DB_PASSWORD_SSM_PARAMETER: /yukumichi/production/db/password
     steps:
       - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+
+      - run: pnpm install --frozen-lockfile
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::730763715580:role/ci-production
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve bastion instance id
+        id: bastion
+        run: |
+          ID=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=${BASTION_NAME_TAG}" \
+                      "Name=instance-state-name,Values=pending,running,stopping,stopped" \
+            --query 'Reservations[0].Instances[0].InstanceId' --output text)
+          if [ -z "$ID" ] || [ "$ID" = "None" ]; then
+            echo "Bastion with tag Name=${BASTION_NAME_TAG} not found"
+            exit 1
+          fi
+          echo "id=$ID" >> "$GITHUB_OUTPUT"
+
+      - name: Start bastion and wait for SSM
+        run: |
+          aws ec2 start-instances --instance-ids "${{ steps.bastion.outputs.id }}" > /dev/null
+          aws ec2 wait instance-running --instance-ids "${{ steps.bastion.outputs.id }}"
+          for i in $(seq 1 60); do
+            STATUS=$(aws ssm describe-instance-information \
+              --filters "Key=InstanceIds,Values=${{ steps.bastion.outputs.id }}" \
+              --query 'InstanceInformationList[0].PingStatus' --output text 2>/dev/null || true)
+            if [ "$STATUS" = "Online" ]; then
+              echo "SSM Agent online after ${i}s"
+              break
+            fi
+            sleep 5
+          done
+          if [ "$STATUS" != "Online" ]; then
+            echo "SSM Agent never came online"
+            exit 1
+          fi
+
+      - name: Install session-manager-plugin
+        run: |
+          curl -sSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" \
+            -o /tmp/session-manager-plugin.deb
+          sudo dpkg -i /tmp/session-manager-plugin.deb
+
+      - name: Open SSM port forward to RDS
+        run: |
+          ENDPOINT=$(aws rds describe-db-instances \
+            --db-instance-identifier "${RDS_IDENTIFIER}" \
+            --query 'DBInstances[0].Endpoint.Address' --output text)
+          echo "RDS endpoint: $ENDPOINT"
+          aws ssm start-session \
+            --target "${{ steps.bastion.outputs.id }}" \
+            --document-name AWS-StartPortForwardingSessionToRemoteHost \
+            --parameters "host=$ENDPOINT,portNumber=5432,localPortNumber=${RDS_LOCAL_PORT}" \
+            > /tmp/ssm-session.log 2>&1 &
+          echo "SSM_PID=$!" >> "$GITHUB_ENV"
+          for i in $(seq 1 30); do
+            if (echo > "/dev/tcp/localhost/${RDS_LOCAL_PORT}") 2>/dev/null; then
+              echo "Tunnel ready after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Tunnel never opened; SSM session log:"
+          cat /tmp/ssm-session.log || true
+          exit 1
+
+      - name: Run migrations
+        run: |
+          PASSWORD=$(aws ssm get-parameter \
+            --name "${DB_PASSWORD_SSM_PARAMETER}" \
+            --with-decryption \
+            --query 'Parameter.Value' --output text)
+          ENCODED=$(python3 -c "import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1], safe=''))" "$PASSWORD")
+          DATABASE_URL="postgresql://yukumichi:${ENCODED}@localhost:${RDS_LOCAL_PORT}/yukumichi" \
+            pnpm --filter api run db:migrate
+
+      - name: Close SSM port forward
+        if: always()
+        run: |
+          if [ -n "${SSM_PID:-}" ]; then
+            kill "${SSM_PID}" 2>/dev/null || true
+          fi
 
       - name: Login to Amazon ECR
         id: ecr-login
@@ -57,3 +154,10 @@ jobs:
         run: |
           aws lambda wait function-updated-v2 \
             --function-name ${{ env.LAMBDA_FUNCTION }}
+
+      - name: Stop bastion
+        if: always()
+        run: |
+          if [ -n "${{ steps.bastion.outputs.id }}" ]; then
+            aws ec2 stop-instances --instance-ids "${{ steps.bastion.outputs.id }}" > /dev/null || true
+          fi
