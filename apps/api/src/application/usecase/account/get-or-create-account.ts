@@ -37,7 +37,7 @@ export function GetOrCreateAccountUsecase({
         });
       }
 
-      return accountRepository.upsertByCognitoSub({
+      return accountRepository.findOrCreateByCognitoSub({
         cognitoSub,
         email: emailResult.value,
         id: generateAccountId(),

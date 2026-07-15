@@ -7,7 +7,7 @@ export type AccountRepository = {
   findByCognitoSub: (
     cognitoSub: string,
   ) => ResultAsync<Account | undefined, DatabaseError | DataIntegrityError>;
-  upsertByCognitoSub: (params: {
+  findOrCreateByCognitoSub: (params: {
     cognitoSub: string;
     email: Email;
     id: AccountId;

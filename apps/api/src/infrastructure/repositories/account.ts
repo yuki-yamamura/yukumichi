@@ -48,7 +48,7 @@ export function AccountRepository(db: Database): AccountRepository {
         toDatabaseError,
       ).andThen((rows) => (rows.length === 0 ? ok(undefined) : toAccount(rows[0]))),
 
-    upsertByCognitoSub: ({ cognitoSub, email, id }) =>
+    findOrCreateByCognitoSub: ({ cognitoSub, email, id }) =>
       ResultAsync.fromPromise(
         db
           .insert(accounts)

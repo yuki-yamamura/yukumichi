@@ -48,13 +48,13 @@ describe("AccountRepository", () => {
     });
   });
 
-  describe("upsertByCognitoSub", () => {
+  describe("findOrCreateByCognitoSub", () => {
     it("should insert a row when the cognitoSub is new", async () => {
       // Given
       const account = createAccount();
 
       // When
-      const result = await repository.upsertByCognitoSub({
+      const result = await repository.findOrCreateByCognitoSub({
         cognitoSub: account.cognitoSub,
         email: account.email,
         id: account.id,
@@ -82,7 +82,7 @@ describe("AccountRepository", () => {
       const attempted = createAccount({ cognitoSub: existing.cognitoSub });
 
       // When
-      const result = await repository.upsertByCognitoSub({
+      const result = await repository.findOrCreateByCognitoSub({
         cognitoSub: attempted.cognitoSub,
         email: attempted.email,
         id: attempted.id,
