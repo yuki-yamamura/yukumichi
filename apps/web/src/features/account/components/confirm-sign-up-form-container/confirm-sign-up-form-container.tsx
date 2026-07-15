@@ -1,9 +1,10 @@
 "use client";
 
-import { confirmSignUp } from "aws-amplify/auth";
+import { autoSignIn, confirmSignUp } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+import { getMe } from "@/features/account/api/get-me";
 import { ConfirmSignUpForm } from "@/features/account/components/confirm-sign-up-form";
 
 import type { ConfirmSignUpFormInput } from "@/features/account/form/confirm-sign-up-form";
@@ -27,7 +28,19 @@ export function ConfirmSignUpFormContainer({ email }: Props) {
             confirmationCode: values.code,
             username: values.email,
           });
-          router.push(`/sign-in?email=${encodeURIComponent(values.email)}`);
+          const { isSignedIn } = await autoSignIn();
+          if (!isSignedIn) {
+            router.push(`/sign-in?email=${encodeURIComponent(values.email)}`);
+
+            return;
+          }
+          const meResult = await getMe();
+          if (meResult.isErr) {
+            setSubmitError(meResult.error.message);
+
+            return;
+          }
+          router.push("/spots");
         } catch (error) {
           setSubmitError(error instanceof Error ? error.message : "Confirmation failed");
         } finally {

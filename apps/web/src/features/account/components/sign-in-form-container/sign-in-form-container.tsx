@@ -4,6 +4,7 @@ import { signIn } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+import { getMe } from "@/features/account/api/get-me";
 import { SignInForm } from "@/features/account/components/sign-in-form";
 
 import type { SignInFormInput } from "@/features/account/form/sign-in-form";
@@ -28,7 +29,13 @@ export function SignInFormContainer({ defaultValues }: Props) {
             password: values.password,
             username: values.email,
           });
-          router.push("/");
+          const meResult = await getMe();
+          if (meResult.isErr) {
+            setSubmitError(meResult.error.message);
+
+            return;
+          }
+          router.push("/spots");
         } catch (error) {
           setSubmitError(error instanceof Error ? error.message : "Sign in failed");
         } finally {
