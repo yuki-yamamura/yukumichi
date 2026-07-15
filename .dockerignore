@@ -1,4 +1,5 @@
 .env
 Dockerfile
 compose.yaml
-
+node_modules
+**/node_modules
