@@ -20,7 +20,7 @@ export function SignUpFormContainer() {
       startTransition(async () => {
         try {
           await signUp({
-            options: { userAttributes: { email: values.email } },
+            options: { autoSignIn: true, userAttributes: { email: values.email } },
             password: values.password,
             username: values.email,
           });
