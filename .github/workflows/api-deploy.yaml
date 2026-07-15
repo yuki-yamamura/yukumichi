@@ -119,9 +119,13 @@ jobs:
             --with-decryption \
             --query 'Parameter.Value' --output text)
           ENCODED=$(python3 -c "import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1], safe=''))" "$PASSWORD")
-          # RDS enforces SSL (rds.force_ssl = 1); postgres.js needs sslmode=require.
-          # Tunneled through localhost, so certificate hostname will not match: disable verification.
-          DATABASE_URL="postgresql://yukumichi:${ENCODED}@localhost:${RDS_LOCAL_PORT}/yukumichi?sslmode=no-verify" \
+          # RDS enforces SSL (rds.force_ssl = 1); postgres.js needs sslmode=require
+          # to open a TLS connection. The RDS root CA is not in Node's default
+          # trust store, and we terminate at localhost so hostname verification
+          # would fail anyway — bypass TLS verification for this one process.
+          # (Runtime Lambda applies the same rejectUnauthorized: false policy.)
+          DATABASE_URL="postgresql://yukumichi:${ENCODED}@localhost:${RDS_LOCAL_PORT}/yukumichi?sslmode=require" \
+          NODE_TLS_REJECT_UNAUTHORIZED=0 \
             pnpm --filter api run db:migrate
 
       - name: Close SSM port forward
